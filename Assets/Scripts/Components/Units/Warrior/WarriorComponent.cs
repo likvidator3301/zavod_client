@@ -1,29 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace Components
 {
-    public class WarriorComponent : MonoBehaviour
+    public class WarriorComponent : IUnitInfo
     {
-        public readonly float AttackDamage;
-        public readonly float AttackSpeed;
-        public readonly float Defense;
-        public readonly float MoveSpeed;
+        public GUID PlayerGuid { get; }
+        public float AttackDamage => 10;
+        public float AttackSpeed => 15;
+        public float AttackRange => 10;
+        public float Defense => 10;
+        public float MoveSpeed => 10;
+        public float MaxHp => 50;
+        public float CurrentHp { get; set; }
+        public Vector3 Coords { get; set; }
 
-        public WarriorComponent()
+        public WarriorComponent(GUID playerGuid, Vector3 coords)
         {
-
-        }
-
-        private void Start()
-        {
-
-        }
-
-        private void Update()
-        {
-
+            this.PlayerGuid = playerGuid;
+            this.Coords = coords;
         }
     }
 }
