@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Components;
 using Entities;
-using UnityEditor;
 using UnityEngine;
 
 namespace Systems
@@ -17,13 +17,19 @@ namespace Systems
             {
                 var position = hitInfo.point;
                 position.y = Math.Min(position.y, minHeight);
-                player.PlayerUnits.Add(Instantiate(prefabs, position, Quaternion.identity));
+                var newUnit = Instantiate(prefabs, position, Quaternion.identity);
+                newUnit.gameObject.tag = "Unit";
+                player.Units.Add(new WarriorEntity(newUnit.transform.position));
+                player.Units.Last().Object = newUnit;
             }
         }
 
         public void CreateUnit(GameObject prefabs, Vector3 position, PlayerComponent player)
         {
-            player.PlayerUnits.Add(Instantiate(prefabs, position, Quaternion.identity));
+            var newUnit = Instantiate(prefabs, position, Quaternion.identity);
+            newUnit.gameObject.tag = "Unit";
+            player.Units.Add(new WarriorEntity(newUnit.transform.position));
+            player.Units.Last().Object = newUnit;
         }
     }
 }

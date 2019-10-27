@@ -1,4 +1,4 @@
-﻿namespace System
+﻿namespace Systems
 {
     public class DestroyingSystem
     {

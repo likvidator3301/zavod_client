@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Systems
+﻿namespace Systems
 {
     public class AttackSystem
     {

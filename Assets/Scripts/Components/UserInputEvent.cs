@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Systems;
 
 namespace Components
@@ -19,9 +18,17 @@ namespace Components
         {
             if (Input.GetMouseButtonDown(0))
             {
-                if (TryGetHitInfo(out var hitInfo, "Unit"))
+                if (TryGetHitInfo(out var hitInfo, "EnemyUnit"))
                 {
-                    //if (!playerComponent.Guid != hitInfo.collider.gameObject.GetComponent())
+                    foreach (var unit in playerComponent.Units)
+                    {
+                        if (Vector3.Distance(unit.UnitInfo.Coords, hitInfo.point) < unit.UnitInfo.AttackRange)
+                            unit.UnitInfo.NextCoords = hitInfo.point;
+                        else
+                        {
+                            //unitSystems.AttackSystem.Attack();
+                        }
+                    }
                 }
             }
 
@@ -30,9 +37,9 @@ namespace Components
 
             }
 
-            if (Input.GetKeyDown("u") && playerComponent.PlayerUnits.Count > 0)
+            if (Input.GetKeyDown("u") && playerComponent.Units.Count > 0)
             {
-                unitSystems.CreatingSystem.CreateUnit(playerComponent.PlayerUnits[0], playerComponent);
+                unitSystems.CreatingSystem.CreateUnit(playerComponent.Units[0].Prefabs, playerComponent);
             }
         }
 

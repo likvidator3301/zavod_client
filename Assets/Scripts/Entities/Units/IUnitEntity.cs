@@ -8,5 +8,6 @@ namespace Entities
     {
         IUnitInfo UnitInfo { get; }
         GameObject Prefabs { get; }
+        GameObject Object { get; set; }
     }
 }

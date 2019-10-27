@@ -9,7 +9,7 @@ namespace Components
     {
         public GUID Guid { get; }
         public long Score { get; set; } = 500;
-        public List<GameObject> PlayerUnits = new List<GameObject>();
+        public List<IUnitEntity> Units = new List<IUnitEntity>();
 
         public PlayerComponent(GUID guid)
         {
