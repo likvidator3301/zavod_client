@@ -2,9 +2,9 @@
 
 namespace Systems
 {
-    public class UnitAttackSystem
+    public class AttackSystem
     {
-        public UnitAttackSystem()
+        public AttackSystem()
         {
 
         }

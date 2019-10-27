@@ -2,9 +2,9 @@
 
 namespace Systems
 {
-    public class UnitMovementSystem
+    public class MovementSystem
     {
-        public UnitMovementSystem()
+        public MovementSystem()
         {
 
         }

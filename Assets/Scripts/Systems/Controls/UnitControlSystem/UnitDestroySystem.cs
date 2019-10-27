@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace System
+﻿namespace System
 {
-    public class UnitDestroySystem
+    public class DestroyingSystem
     {
-        public UnitDestroySystem()
+        public DestroyingSystem()
         {
 
         }
