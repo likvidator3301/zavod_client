@@ -6,10 +6,10 @@ namespace Systems
 {
     public class UnitSystems : MonoBehaviour
     {
-        public readonly CreatingSystem CreatingSystem;
         public readonly AttackSystem AttackSystem;
-        public readonly MovementSystem MovementSystem;
+        public readonly CreatingSystem CreatingSystem;
         public readonly DestroyingSystem DestroyingSystem;
+        public readonly MovementSystem MovementSystem;
 
         public UnitSystems(List<IUnitEntity> units)
         {

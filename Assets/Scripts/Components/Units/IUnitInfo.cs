@@ -3,7 +3,7 @@
     public interface IUnitInfo
     {
         float AttackDamage { get; }
-        float AttackSpeed { get; }
+        float AttackDelay { get; }
         float AttackRange { get; }
         float Defense { get; }
         float MoveSpeed { get; }

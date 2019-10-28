@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Components;
 using Entities;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Systems
 {
     public class StartupTestLevelSystem : MonoBehaviour
     {
-        private UserInputEvent userInputEvent;
-        private PlayerComponent playerComponent;
-        private UnitSystems unitSystems;
         private readonly Vector3 firstUnitPlace = new Vector3(400, 2.6f, 500);
         private readonly Vector3 secondUnitPlace = new Vector3(400, 2.6f, 525);
+        private PlayerComponent playerComponent;
+        private readonly Dictionary<GameObject, IUnitEntity> units = new Dictionary<GameObject, IUnitEntity>();
+        private UnitSystems unitSystems;
+        private UserInputEvent userInputEvent;
 
-        void Start()
+        private void Start()
         {
             var firstPlayerGuid = GUID.Generate();
             //var secondPlayerGuid = GUID.Generate();
@@ -34,15 +33,18 @@ namespace Systems
             secondObjectUnit.GetComponent<MeshRenderer>().material.color = Color.black;
             secondUnit.Object = secondObjectUnit;
 
+            units.Add(firstUnit.Object, firstUnit);
+            units.Add(secondUnit.Object, secondUnit);
             playerComponent.Units.Add(firstUnit);
 
             unitSystems = new UnitSystems(playerComponent.Units);
-            userInputEvent = new UserInputEvent(playerComponent, unitSystems);
+            userInputEvent = new UserInputEvent(playerComponent, unitSystems, units);
         }
 
-        void Update()
+        private void Update()
         {
             userInputEvent.HandleInput();
+            unitSystems.DestroyingSystem.HandleDestroy(units, playerComponent);
         }
     }
 }

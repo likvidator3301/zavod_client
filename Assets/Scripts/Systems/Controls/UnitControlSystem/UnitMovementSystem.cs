@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using Entities;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Systems
 {

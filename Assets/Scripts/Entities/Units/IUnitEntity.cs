@@ -4,7 +4,6 @@ using UnityEngine.AI;
 
 namespace Entities
 {
-
     public interface IUnitEntity
     {
         IUnitInfo Info { get; }
