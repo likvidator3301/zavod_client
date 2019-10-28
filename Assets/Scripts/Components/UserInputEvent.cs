@@ -11,7 +11,9 @@ namespace Components
         private readonly Dictionary<GameObject, IUnitEntity> units;
         private readonly UnitSystems unitSystems;
 
-        public UserInputEvent(PlayerComponent playerComponent, UnitSystems unitSystems,
+        public UserInputEvent(
+            PlayerComponent playerComponent,
+            UnitSystems unitSystems,
             Dictionary<GameObject, IUnitEntity> units)
         {
             this.unitSystems = unitSystems;

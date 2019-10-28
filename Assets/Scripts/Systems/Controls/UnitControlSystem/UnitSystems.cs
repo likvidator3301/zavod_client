@@ -12,25 +12,13 @@ namespace Systems
         public readonly DestroyingSystem DestroyingSystem;
         public readonly MovementSystem MovementSystem;
         private readonly UserInputEvent inputEvent;
-        private readonly PlayerComponent player;
 
-        public UnitSystems(
-            PlayerComponent player,
-            Dictionary<GameObject, IUnitEntity> allUnits,
-            UserInputEvent inputEvent)
+        public UnitSystems(PlayerComponent player, Dictionary<GameObject, IUnitEntity> allUnits)
         {
-            this.player = player;
             DestroyingSystem = new DestroyingSystem(allUnits);
             AttackSystem = new AttackSystem();
             MovementSystem = new MovementSystem(player.Units);
             CreatingSystem = new CreatingSystem();
-            this.inputEvent = inputEvent;
-        }
-
-        public void Handle()
-        {
-            inputEvent.HandleInput();
-            DestroyingSystem.HandleDestroy(player);
         }
     }
 }

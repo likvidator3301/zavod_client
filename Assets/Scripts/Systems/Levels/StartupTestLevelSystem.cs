@@ -15,6 +15,7 @@ namespace Systems
         private readonly Color enemyUnitColor = Color.black;
         private PlayerComponent playerComponent;
         private UnitSystems unitSystems;
+        private UserInputEvent userInput;
 
         private void Start()
         {
@@ -37,13 +38,14 @@ namespace Systems
             units.Add(secondUnit.Object, secondUnit);
             playerComponent.Units.Add(firstUnit);
 
-            var userInputEvent = new UserInputEvent(playerComponent, unitSystems, units);
-            unitSystems = new UnitSystems(playerComponent, units, userInputEvent);
+            unitSystems = new UnitSystems(playerComponent, units);
+            userInput = new UserInputEvent(playerComponent, unitSystems, units);
         }
 
         private void Update()
         {
-            unitSystems.Handle();
+            userInput.HandleInput();
+            unitSystems.DestroyingSystem.HandleDestroy(playerComponent);
         }
     }
 }
