@@ -22,8 +22,8 @@ namespace Components
                 {
                     foreach (var unit in playerComponent.Units)
                     {
-                        if (Vector3.Distance(unit.UnitInfo.Coords, hitInfo.point) < unit.UnitInfo.AttackRange)
-                            unit.UnitInfo.NextCoords = hitInfo.point;
+                        if (Vector3.Distance(unit.Object.transform.position, hitInfo.point) > unit.Info.AttackRange)
+                            unitSystems.MovementSystem.UpdateTargets(hitInfo.point);
                         else
                         {
                             //unitSystems.AttackSystem.Attack();
@@ -34,7 +34,8 @@ namespace Components
 
             if (Input.GetMouseButtonDown(1))
             {
-
+                TryGetHitInfo(out var hitInfo);
+                unitSystems.MovementSystem.UpdateTargets(hitInfo.point);
             }
 
             if (Input.GetKeyDown("u") && playerComponent.Units.Count > 0)
@@ -43,7 +44,7 @@ namespace Components
             }
         }
 
-        private bool TryGetHitInfo(out RaycastHit hitInfo, string tagName = "", int range = 100)
+        private bool TryGetHitInfo(out RaycastHit hitInfo, string tagName = "Ground", int range = 1000)
         {
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             return Physics.Raycast(ray, out hitInfo, range) && hitInfo.collider.gameObject.CompareTag(tagName);

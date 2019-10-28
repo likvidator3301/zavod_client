@@ -13,13 +13,13 @@ namespace Systems
         public void CreateUnit(GameObject prefabs, PlayerComponent player)
         {
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out var hitInfo, 100) && hitInfo.collider.gameObject.CompareTag("Ground"))
+            if (Physics.Raycast(ray, out var hitInfo, 100))
             {
                 var position = hitInfo.point;
                 position.y = Math.Min(position.y, minHeight);
                 var newUnit = Instantiate(prefabs, position, Quaternion.identity);
                 newUnit.gameObject.tag = "Unit";
-                player.Units.Add(new WarriorEntity(newUnit.transform.position));
+                player.Units.Add(new WarriorEntity());
                 player.Units.Last().Object = newUnit;
             }
         }
@@ -28,7 +28,7 @@ namespace Systems
         {
             var newUnit = Instantiate(prefabs, position, Quaternion.identity);
             newUnit.gameObject.tag = "Unit";
-            player.Units.Add(new WarriorEntity(newUnit.transform.position));
+            player.Units.Add(new WarriorEntity());
             player.Units.Last().Object = newUnit;
         }
     }

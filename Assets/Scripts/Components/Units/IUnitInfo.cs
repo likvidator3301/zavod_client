@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Components
+﻿namespace Components
 {
     public interface IUnitInfo
     {
@@ -11,7 +9,5 @@ namespace Components
         float MoveSpeed { get; }
         float MaxHp { get; }
         float CurrentHp { get; set; }
-        Vector3 Coords { get; set; }
-        Vector3 NextCoords { get; set; }
     }
 }

@@ -1,12 +1,27 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using Entities;
+using UnityEditor.PackageManager;
+using UnityEngine;
+using UnityEngine.AI;
 
 namespace Systems
 {
     public class MovementSystem
     {
-        public MovementSystem()
-        {
+        private readonly List<IUnitEntity> units;
 
+        public MovementSystem(List<IUnitEntity> units)
+        {
+            this.units = units;
+        }
+
+        public void UpdateTargets(Vector3 targetPosition)
+        {
+            foreach (var unit in units)
+            {
+                unit.Agent.destination = targetPosition;
+                unit.Agent.speed = unit.Info.MoveSpeed;
+            }
         }
     }
 }

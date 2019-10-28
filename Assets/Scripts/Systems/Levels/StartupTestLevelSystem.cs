@@ -4,6 +4,7 @@ using Components;
 using Entities;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Systems
 {
@@ -12,28 +13,31 @@ namespace Systems
         private UserInputEvent userInputEvent;
         private PlayerComponent playerComponent;
         private UnitSystems unitSystems;
+        private readonly Vector3 firstUnitPlace = new Vector3(400, 2.6f, 500);
+        private readonly Vector3 secondUnitPlace = new Vector3(400, 2.6f, 525);
 
         void Start()
         {
-            unitSystems = new UnitSystems();
             var firstPlayerGuid = GUID.Generate();
             //var secondPlayerGuid = GUID.Generate();
             playerComponent = new PlayerComponent(firstPlayerGuid);
-            userInputEvent = new UserInputEvent(playerComponent, new UnitSystems());
 
-            var firstUnit = new WarriorEntity(new Vector3(400, 2.5f, 500));
-            var secondUnit = new WarriorEntity(new Vector3(400, 2.5f, 525));
-            var firstObjectUnit = Instantiate(firstUnit.Prefabs, firstUnit.UnitInfo.Coords, Quaternion.identity);
-            var secondObjectUnit = Instantiate(secondUnit.Prefabs, secondUnit.UnitInfo.Coords, Quaternion.identity);
+            var firstUnit = new WarriorEntity();
+            var secondUnit = new WarriorEntity();
+            var firstObjectUnit = Instantiate(firstUnit.Prefabs, firstUnitPlace, Quaternion.identity);
+            var secondObjectUnit = Instantiate(secondUnit.Prefabs, secondUnitPlace, Quaternion.identity);
 
             firstObjectUnit.gameObject.tag = "Unit";
-            firstObjectUnit.GetComponent<MeshRenderer>().material.color = Color.white;
+            firstObjectUnit.GetComponent<MeshRenderer>().material.color = Color.cyan;
             firstUnit.Object = firstObjectUnit;
             secondObjectUnit.gameObject.tag = "EnemyUnit";
             secondObjectUnit.GetComponent<MeshRenderer>().material.color = Color.black;
             secondUnit.Object = secondObjectUnit;
 
             playerComponent.Units.Add(firstUnit);
+
+            unitSystems = new UnitSystems(playerComponent.Units);
+            userInputEvent = new UserInputEvent(playerComponent, unitSystems);
         }
 
         void Update()
