@@ -7,69 +7,72 @@ using Components;
 
 namespace Systems
 {
-    public class BuildCreateSystem : IEcsRunSystem, IEcsInitSystem
+    public class BuildCreateSystem : IEcsRunSystem
     {
         EcsWorld world = null;
         EcsFilter<BuildCreateEvent> buildEvents = null;
         EcsFilter<ClickEvent> clickEvents = null;
         GameObject[] builds = null;
+
         private Camera camera;
-        //GameObject ground = null;
         private RaycastHit hitInfo;
         private Ray ray;
-        private GameObject current_build;
-
-        public void Init()
-        {
-            var ce = new BuildCreateEvent();
-            world.NewEntityWith(out ce);
-            ce.Type = "barracs";
-        }
+        private GameObject currentBuild;
 
         public void Run()
         {
-            if (camera == null)
-            {
-                camera = Camera.current;
+            if (Camera.current == null)
                 return;
-            }
+
+            camera = Camera.current;
 
             if (!buildEvents.IsEmpty())
             {
                 foreach (var build in builds)
                 {
                     if (build.tag.Equals(buildEvents.Get1[0].Type))
-                    {
-                        current_build = Object.Instantiate(build);
-                        buildEvents.Entities[0].Destroy();
-                    }
+                        CreateOrSwitchBuild(build);
                 }
             }
 
-            if(current_build != null)
+            if (currentBuild == null)
+                return;
+
+            ray = camera.ScreenPointToRay(Input.mousePosition);
+            Physics.Raycast(ray, out hitInfo, 400, 1);
+            currentBuild.transform.position = hitInfo.point;
+
+            if (!clickEvents.IsEmpty())
             {
-                ray = camera.ScreenPointToRay(Input.mousePosition);
-                
-                Physics.Raycast(ray, out hitInfo, 400, 1);
-                current_build.transform.position = hitInfo.point;
-
-                if (!clickEvents.IsEmpty())
+                for (var i = 0; i < clickEvents.GetEntitiesCount(); i++)
                 {
-                    for(var i = 0; i < clickEvents.GetEntitiesCount(); i++)
+                    if (clickEvents.Get1[i].ButtonNumber == 0)
                     {
-                        if (clickEvents.Get1[i].ButtonNumber == 0)
-                        {
-                            var newBuild = new Build();
-                            world.NewEntityWith(out newBuild);
-                            newBuild.obj = current_build;
-                            newBuild.Type = current_build.tag;
-
-                            current_build = null;
-                            //clickEvents.Entities[i].Destroy();
-                        }
+                        BuildSet(currentBuild);
+                        currentBuild = null;
                     }
                 }
             }
+        }
+
+        private void CreateOrSwitchBuild(GameObject build)
+        {
+            if (currentBuild == null)
+                currentBuild = Object.Instantiate(build);
+            else if (!currentBuild.tag.Equals(build.tag))
+            {
+                Object.Destroy(currentBuild);
+                currentBuild = Object.Instantiate(build);
+            }
+
+            buildEvents.Entities[0].Destroy();
+        }
+
+        private void BuildSet(GameObject build)
+        {
+            world.NewEntityWith(out Build newBuild);
+            newBuild.obj = build;
+            newBuild.Type = build.tag;
         }
     }
 }

@@ -8,10 +8,5 @@ namespace Components
     public class BuildCreateEvent
     {
         public string Type;
-
-        ~BuildCreateEvent()
-        {
-            Type = null;
-        }
     }
 }

@@ -8,7 +8,6 @@ using Systems;
 public class GameLoader : MonoBehaviour
 {
     public GameObject[] builds;
-    public GameObject ground;
 
     EcsWorld world;
     EcsSystems systems;
@@ -23,7 +22,6 @@ public class GameLoader : MonoBehaviour
             .Add(new BuildCreateSystem())
             .Add(new InputSystem())
             .Inject(builds);
-            //.Inject(ground);
 
         systems.Init();
 #if UNITY_EDITOR

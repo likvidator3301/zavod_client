@@ -8,13 +8,6 @@ namespace Components
     public class Build
     {
         public string Type;
-        [EcsIgnoreNullCheck]
         public GameObject obj;
-
-        ~Build()
-        {
-            obj = null;
-            Type = null;
-        }
     }
 }
