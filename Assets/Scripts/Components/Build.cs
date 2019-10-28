@@ -1,12 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Leopotam.Ecs;
 
 namespace Components
 {
     public class Build
     {
-        public Vector2 pos;
-        public float angle;
+        public string Type;
+        [EcsIgnoreNullCheck]
+        public GameObject obj;
+
+        ~Build()
+        {
+            obj = null;
+            Type = null;
+        }
     }
 }

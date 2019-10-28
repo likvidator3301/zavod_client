@@ -13,7 +13,7 @@ namespace Systems
         EcsFilter<BuildCreateEvent> buildEvents = null;
         EcsFilter<ClickEvent> clickEvents = null;
         GameObject[] builds = null;
-        Camera camera;
+        private Camera camera;
         //GameObject ground = null;
         private RaycastHit hitInfo;
         private Ray ray;
@@ -59,8 +59,13 @@ namespace Systems
                     {
                         if (clickEvents.Get1[i].ButtonNumber == 0)
                         {
+                            var newBuild = new Build();
+                            world.NewEntityWith(out newBuild);
+                            newBuild.obj = current_build;
+                            newBuild.Type = current_build.tag;
+
                             current_build = null;
-                            clickEvents.Entities[i].Destroy();
+                            //clickEvents.Entities[i].Destroy();
                         }
                     }
                 }
