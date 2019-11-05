@@ -1,54 +1,84 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using Systems;
-using Entities;
+using Component;
 using UnityEngine;
 
 namespace Components
 {
-    public class UserInputEvent
+    public class UserInputEvent : MonoBehaviour
     {
         private readonly PlayerComponent playerComponent;
-        private readonly Dictionary<GameObject, IUnitEntity> units;
-        private readonly UnitSystems unitSystems;
+        private readonly WorldComponent world;
+        private readonly UnitActionSystem unitActions;
+        private readonly UnitConditionChangeSystem unitConditions;
+        private readonly RaycastHelper raycastHelper;
+        private readonly PrefabsHolderComponent prefabsHolder;
 
         public UserInputEvent(
             PlayerComponent playerComponent,
-            UnitSystems unitSystems,
-            Dictionary<GameObject, IUnitEntity> units)
+            WorldComponent world,
+            UnitActionSystem unitActions,
+            UnitConditionChangeSystem unitConditions,
+            PrefabsHolderComponent prefabsHolder)
         {
-            this.unitSystems = unitSystems;
             this.playerComponent = playerComponent;
-            this.units = units;
+            this.world = world;
+            this.unitActions = unitActions;
+            this.unitConditions = unitConditions;
+            this.prefabsHolder = prefabsHolder;
+            raycastHelper = new RaycastHelper();
         }
 
         public void HandleInput()
         {
-            if (Input.GetMouseButtonDown(0))
-                if (TryGetHitInfo(out var hitInfo, "EnemyUnit"))
-                {
-                    foreach (var unit in playerComponent.Units)
-                    {
-                        if (Vector3.Distance(unit.Object.transform.position, hitInfo.point) > unit.Info.AttackRange)
-                            unitSystems.MovementSystem.UpdateTargets(hitInfo.point);
-                        else
-                            unitSystems.AttackSystem.Attack(unit, hitInfo, units);
-                    }
-                }
-
             if (Input.GetMouseButtonDown(1))
+                MoveHighlightedUnits();
+
+            if (Input.GetMouseButtonDown(0))
             {
-                TryGetHitInfo(out var hitInfo);
-                unitSystems.MovementSystem.UpdateTargets(hitInfo.point);
+                raycastHelper.TryGetHitInfo(out var hitInfo);
+                unitActions.UpdateTargets(hitInfo.point, playerComponent.HighlightedUnits);
             }
 
-            if (Input.GetKeyDown("u") && playerComponent.Units.Count > 0)
-                unitSystems.CreatingSystem.CreateUnit(playerComponent.Units[0].Prefabs, playerComponent, units);
+            if (Input.GetKeyDown("u"))
+            {
+                raycastHelper.TryGetHitInfo(out var hitInfo);
+                unitConditions.CreateUnit(
+                    prefabsHolder.WarriorPrefab,
+                    UnitTags.Warrior,
+                    hitInfo.point,
+                    playerComponent,
+                    raycastHelper,
+                    world.Units);
+            }
         }
 
-        private bool TryGetHitInfo(out RaycastHit hitInfo, string tagName = "Ground", int range = 1000)
+        private void MoveHighlightedUnits()
         {
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            return Physics.Raycast(ray, out hitInfo, range) && hitInfo.collider.gameObject.CompareTag(tagName);
+            if (!raycastHelper.TryGetHitInfo(out var hitInfo, UnitTags.EnemyWarrior.ToString()))
+                unitActions.UpdateTargets(hitInfo.point, world
+                    .Units
+                    .Values
+                    .Where(u => u.Tag == UnitTags.Warrior)
+                    .ToList());
+            else
+            {
+                //foreach (var unit in playerComponent.HighlightedUnits)
+                foreach (var unit in world
+                    .Units
+                    .Values
+                    .Where(unit => unit.Tag == UnitTags.Warrior))
+                {
+                    if (Vector3.Distance(unit.Object.transform.position, hitInfo.point) >
+                        unit.StatsComponent.AttackRange)
+                        unitActions.UpdateTargets(hitInfo.point, unit);
+                    else
+                    {
+                        var enemyUnit = world.Units[hitInfo.collider.gameObject];
+                        unitActions.Attack(unit, enemyUnit);
+                    }
+                }
+            }
         }
     }
 }
