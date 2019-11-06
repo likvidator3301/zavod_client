@@ -1,8 +1,12 @@
 ﻿using System;
 
-public class UnitAttackSystem
+namespace Systems
 {
-	public UnitAttackSystem()
-	{
-	}
+    public class UnitAttackSystem
+    {
+        public UnitAttackSystem()
+        {
+
+        }
+    }
 }

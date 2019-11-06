@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarriorEntity
+namespace Entities
 {
-    private readonly WarriorComponent = new WarriorComponent();
+    public class WarriorEntity
+    {
+        private readonly WarriorComponent = new WarriorComponent();
+    }
 }

@@ -2,25 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarriorComponent: MonoBehaviour
+namespace Components
 {
-    public readonly float AttackDamage;
-    public readonly float AttackSpeed;
-    public readonly float Defense;
-    public readonly float MoveSpeed;
-
-    public WarriorComponent()
+    public class WarriorComponent : MonoBehaviour
     {
+        public readonly float AttackDamage;
+        public readonly float AttackSpeed;
+        public readonly float Defense;
+        public readonly float MoveSpeed;
 
-    }
+        public WarriorComponent()
+        {
 
-    private void Start()
-    {
+        }
 
-    }
+        private void Start()
+        {
 
-    private void Update()
-    {
+        }
 
+        private void Update()
+        {
+
+        }
     }
 }

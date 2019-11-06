@@ -1,9 +1,12 @@
 ﻿using System;
 
-public class UnitMovementSystem
+namespace Systems
 {
-	public UnitMovementSystem()
-	{
+    public class UnitMovementSystem
+    {
+        public UnitMovementSystem()
+        {
 
-	}
+        }
+    }
 }
