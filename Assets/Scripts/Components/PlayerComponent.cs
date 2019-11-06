@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using Entities;
 using UnityEditor;
 
 namespace Components
 {
     public class PlayerComponent
     {
-        public List<IUnitEntity> Units = new List<IUnitEntity>();
+        public List<IUnitEntity> HighlightedUnits = new List<IUnitEntity>();
 
         public PlayerComponent(GUID guid)
         {

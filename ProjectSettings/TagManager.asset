@@ -4,6 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
+<<<<<<< 20feb1a9f8bcd9bf8bc5b91f6d37eff00679c2e0
 <<<<<<< 209ee64b96501d331e18f6bad4710804e3870853
   - barracs
   - ground
@@ -13,6 +14,13 @@ TagManager:
   - EnemyUnit
   - Ground
 >>>>>>> [refactoring] !Not working, but I have to save it
+=======
+  - EnemyUnit
+  - Ground
+  - Warrior
+  - EnemyWarrior
+  - PrefabsHolder
+>>>>>>> [refactoring] move Prefabs to "Resources" folder + Add EnemyWarriorPrefab + gitignored all meta files, cause it's so annoying
   layers:
   - Default
   - TransparentFX
