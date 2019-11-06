@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5446244958701103293}
   - component: {fileID: 6506438435274901104}
   m_Layer: 0
-  m_Name: EnemyWarriorPrefab 1
+  m_Name: EnemyWarriorPrefab
   m_TagString: EnemyWarrior
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

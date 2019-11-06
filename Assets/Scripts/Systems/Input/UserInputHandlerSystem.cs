@@ -1,36 +1,24 @@
 ﻿using System.Linq;
 using Component;
 using Components;
-using Leopotam.Ecs;
 using UnityEngine;
 
 namespace Systems
 {
-    public class UserInputHandlerSystem : IEcsSystem
+    public class UserInputHandlerSystem
     {
         private readonly PlayerComponent playerComponent;
         private readonly WorldComponent world;
-        private readonly UnitActionSystem unitActions;
-        private readonly UnitConditionChangeSystem unitConditions;
         private readonly RaycastHelper raycastHelper;
         private readonly PrefabsHolderComponent prefabsHolder;
-
-        public void Run()
-        {
-
-        }
 
         public UserInputHandlerSystem(
             PlayerComponent playerComponent,
             WorldComponent world,
-            UnitActionSystem unitActions,
-            UnitConditionChangeSystem unitConditions,
             PrefabsHolderComponent prefabsHolder)
         {
             this.playerComponent = playerComponent;
             this.world = world;
-            this.unitActions = unitActions;
-            this.unitConditions = unitConditions;
             this.prefabsHolder = prefabsHolder;
             raycastHelper = new RaycastHelper();
         }
@@ -42,14 +30,13 @@ namespace Systems
 
             if (Input.GetMouseButtonDown(0))
             {
-                raycastHelper.TryGetHitInfo(out var hitInfo);
-                unitActions.UpdateTargets(hitInfo.point, playerComponent.HighlightedUnits);
+
             }
 
             if (Input.GetKeyDown("u"))
             {
                 raycastHelper.TryGetHitInfo(out var hitInfo);
-                unitConditions.CreateUnit(
+                UnitConditionChangeSystem.CreateUnit(
                     prefabsHolder.WarriorPrefab,
                     UnitTags.Warrior,
                     hitInfo.point,
@@ -62,7 +49,7 @@ namespace Systems
         private void MoveHighlightedUnits()
         {
             if (!raycastHelper.TryGetHitInfo(out var hitInfo, UnitTags.EnemyWarrior.ToString()))
-                unitActions.UpdateTargets(hitInfo.point, world
+                UnitActionSystem.UpdateTargets(hitInfo.point, world
                     .Units
                     .Values
                     .Where(u => u.Tag == UnitTags.Warrior)
@@ -77,11 +64,11 @@ namespace Systems
                 {
                     if (Vector3.Distance(unit.Object.transform.position, hitInfo.point) >
                         unit.StatsComponent.AttackRange)
-                        unitActions.UpdateTargets(hitInfo.point, unit);
+                        UnitActionSystem.UpdateTargets(hitInfo.point, unit);
                     else
                     {
                         var enemyUnit = world.Units[hitInfo.collider.gameObject];
-                        unitActions.Attack(unit, enemyUnit);
+                        UnitActionSystem.Attack(unit, enemyUnit);
                     }
                 }
             }

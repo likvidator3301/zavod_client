@@ -14,7 +14,7 @@ namespace Systems
 
         }
 
-        public void Attack(IUnitEntity unit, IUnitEntity enemyUnit)
+        public static void Attack(IUnitEntity unit, IUnitEntity enemyUnit)
         {
             if (Time.time - unit.ConditionComponent.LastAttackTime >= unit.StatsComponent.AttackDelay &&
                 Vector3.Distance(enemyUnit.Object.transform.position, unit.Object.transform.position) <= unit.StatsComponent.AttackRange)
@@ -24,7 +24,7 @@ namespace Systems
             }
         }
 
-        public void UpdateTargets(Vector3 targetPosition, List<IUnitEntity> units)
+        public static void UpdateTargets(Vector3 targetPosition, List<IUnitEntity> units)
         {
             foreach (var unit in units)
             {
@@ -34,7 +34,7 @@ namespace Systems
             }
         }
 
-        public void UpdateTargets(Vector3 targetPosition, IUnitEntity unit)
+        public static void UpdateTargets(Vector3 targetPosition, IUnitEntity unit)
         {
             unit.Agent.SetDestination(targetPosition);
             unit.Agent.speed = unit.MovementComponent.MoveSpeed;

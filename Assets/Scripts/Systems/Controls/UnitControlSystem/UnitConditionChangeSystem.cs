@@ -19,7 +19,7 @@ namespace Systems
 
         }
 
-        public void CreateUnit(
+        public static void CreateUnit(
             GameObject prefab,
             UnitTags unitTag,
             Vector3 position,
@@ -50,7 +50,7 @@ namespace Systems
             }
         }
 
-        public void DestroyDeadUnits(PlayerComponent player, Dictionary<GameObject, IUnitEntity> units)
+        public static void DestroyDeadUnits(PlayerComponent player, Dictionary<GameObject, IUnitEntity> units)
         {
             var toDelete = new List<IUnitEntity>();
             foreach (var unit in units.Values)
@@ -64,7 +64,7 @@ namespace Systems
                 if (player.HighlightedUnits.Contains(unit))
                     player.HighlightedUnits.Remove(unit);
                 units.Remove(unit.Object);
-                Destroy(unit.Object);
+                Object.Destroy(unit.Object);
             }
         }
     }

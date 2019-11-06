@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Leopotam.Ecs;
 using Systems;
 using Components;
@@ -27,6 +25,9 @@ public class GameLoader : MonoBehaviour
             .Add(new BuildCreateSystem())
             .Add(new InputSystem())
             .Add(new CameraSystem())
+            .Add(new UnitActionSystem())
+            .Add(new UnitConditionChangeSystem())
+            .Add(new StartupTestLevelSystem())
             .Inject(builds)
             .Inject(gameDefs)
             .Inject(pressedKeys)
