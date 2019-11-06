@@ -23,6 +23,11 @@ namespace Systems
                     nextAttackTime[unit] = Time.time + unit.Info.AttackDelay;
                     enemyUnit.Info.CurrentHp -= unit.Info.AttackDamage;
                 }
+
+                if (unit.Info.CurrentHp <= 0)
+                {
+                    nextAttackTime.Remove(unit);
+                }
             }
         }
     }

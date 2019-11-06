@@ -23,11 +23,15 @@ namespace Components
         {
             if (Input.GetMouseButtonDown(0))
                 if (TryGetHitInfo(out var hitInfo, "EnemyUnit"))
+                {
                     foreach (var unit in playerComponent.Units)
+                    {
                         if (Vector3.Distance(unit.Object.transform.position, hitInfo.point) > unit.Info.AttackRange)
                             unitSystems.MovementSystem.UpdateTargets(hitInfo.point);
                         else
                             unitSystems.AttackSystem.Attack(unit, hitInfo, units);
+                    }
+                }
 
             if (Input.GetMouseButtonDown(1))
             {

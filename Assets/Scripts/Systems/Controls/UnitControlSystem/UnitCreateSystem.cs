@@ -22,11 +22,14 @@ namespace Systems
             }
         }
 
-        public void CreateUnit(GameObject prefabs, Vector3 position, PlayerComponent player,
+        public void CreateUnit(
+            GameObject prefabs,
+            Vector3 position,
+            PlayerComponent player,
             Dictionary<GameObject, IUnitEntity> units)
         {
             var newUnit = Instantiate(prefabs, position, Quaternion.identity);
-            newUnit.gameObject.tag = "Unit";
+            newUnit.gameObject.tag = prefabs.tag;
             player.Units.Add(new WarriorEntity());
             player.Units.Last().Object = newUnit;
             units.Add(newUnit, player.Units.Last());

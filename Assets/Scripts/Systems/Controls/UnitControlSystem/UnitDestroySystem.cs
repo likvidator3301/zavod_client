@@ -7,13 +7,19 @@ namespace Systems
 {
     public class DestroyingSystem : MonoBehaviour
     {
-        public void HandleDestroy(Dictionary<GameObject, IUnitEntity> units, PlayerComponent player)
+        private readonly Dictionary<GameObject, IUnitEntity> units;
+
+        public DestroyingSystem(Dictionary<GameObject, IUnitEntity> units)
+        {
+            this.units = units;
+        }
+
+        public void HandleDestroy(PlayerComponent player)
         {
             var toRemoveList = new List<(GameObject, IUnitEntity)>();
             foreach (var unitObj in units.Keys)
             {
                 var unit = units[unitObj];
-                Debug.Log(unit.Info.CurrentHp);
                 if (unit.Info.CurrentHp <= 0)
                     toRemoveList.Add((unitObj, unit));
             }

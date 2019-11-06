@@ -4,9 +4,15 @@
 TagManager:
   serializedVersion: 2
   tags:
+<<<<<<< 209ee64b96501d331e18f6bad4710804e3870853
   - barracs
   - ground
   - zikkurat
+=======
+  - Unit
+  - EnemyUnit
+  - Ground
+>>>>>>> [refactoring] !Not working, but I have to save it
   layers:
   - Default
   - TransparentFX

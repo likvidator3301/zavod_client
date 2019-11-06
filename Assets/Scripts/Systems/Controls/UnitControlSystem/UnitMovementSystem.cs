@@ -17,7 +17,7 @@ namespace Systems
         {
             foreach (var unit in units)
             {
-                unit.Agent.destination = targetPosition;
+                unit.Agent.SetDestination(targetPosition);
                 unit.Agent.speed = unit.Info.MoveSpeed;
             }
         }
