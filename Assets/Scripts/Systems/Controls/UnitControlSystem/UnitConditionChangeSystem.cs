@@ -1,16 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Component;
 using Components;
 using Entities;
+using Leopotam.Ecs;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Systems
 {
-    public class UnitConditionChangeSystem : MonoBehaviour
+    public class UnitConditionChangeSystem : IEcsRunSystem
     {
         private const float minHeight = 2.5f;
+
+
+        public void Run()
+        {
+
+        }
 
         public void CreateUnit(
             GameObject prefab,
@@ -21,7 +28,7 @@ namespace Systems
             Dictionary<GameObject, IUnitEntity> units)
         {
             position.y = Math.Min(position.y, minHeight);
-            var newUnit = Instantiate(prefab, position, Quaternion.identity);
+            var newUnit = Object.Instantiate(prefab, position, Quaternion.identity);
             switch (unitTag)
             {
                 case UnitTags.Warrior:

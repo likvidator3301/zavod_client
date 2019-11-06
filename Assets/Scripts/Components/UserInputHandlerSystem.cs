@@ -1,11 +1,12 @@
 ﻿using System.Linq;
-using Systems;
 using Component;
+using Components;
+using Leopotam.Ecs;
 using UnityEngine;
 
-namespace Components
+namespace Systems
 {
-    public class UserInputEvent : MonoBehaviour
+    public class UserInputHandlerSystem : IEcsSystem
     {
         private readonly PlayerComponent playerComponent;
         private readonly WorldComponent world;
@@ -14,7 +15,12 @@ namespace Components
         private readonly RaycastHelper raycastHelper;
         private readonly PrefabsHolderComponent prefabsHolder;
 
-        public UserInputEvent(
+        public void Run()
+        {
+
+        }
+
+        public UserInputHandlerSystem(
             PlayerComponent playerComponent,
             WorldComponent world,
             UnitActionSystem unitActions,

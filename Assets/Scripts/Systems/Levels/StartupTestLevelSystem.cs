@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Component;
+﻿using Component;
 using Components;
 using Entities;
 using UnityEditor;
@@ -11,7 +10,7 @@ namespace Systems
     {
         private PrefabsHolderComponent prefabsHolder;
         private PlayerComponent player;
-        private UserInputEvent userInput;
+        private UserInputHandlerSystem userInput;
         private UnitActionSystem unitActions;
         private UnitConditionChangeSystem unitConditions;
         private WorldComponent world;
@@ -43,7 +42,7 @@ namespace Systems
             world.Units.Add(allyUnit.Object, allyUnit);
             world.Units.Add(enemyUnit.Object, enemyUnit);
 
-            userInput = new UserInputEvent(player, world, unitActions, unitConditions, prefabsHolder);
+            userInput = new UserInputHandlerSystem(player, world, unitActions, unitConditions, prefabsHolder);
         }
 
         private void InitializeSystems()

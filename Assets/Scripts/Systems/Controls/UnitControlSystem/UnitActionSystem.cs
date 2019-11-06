@@ -1,13 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Components;
+using Leopotam.Ecs;
 using UnityEngine;
 
 namespace Systems
 {
-    public class UnitActionSystem
+    public class UnitActionSystem : IEcsRunSystem
     {
         private const float accelerationFactor = 3;
+
+        public void Run()
+        {
+
+        }
 
         public void Attack(IUnitEntity unit, IUnitEntity enemyUnit)
         {
