@@ -1,5 +1,6 @@
 namespace Components {
-    sealed class ClickEvent {
+    sealed class ClickEvent 
+    {
         public int ButtonNumber;
     }
 }

@@ -3,27 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using Leopotam.Ecs;
 using Systems;
-
+using Components;
 
 public class GameLoader : MonoBehaviour
 {
     public GameObject[] builds;
+    public GameDefinitions gameDefs;
 
     EcsWorld world;
     EcsSystems systems;
+    private PressedKeysBuffer pressedKeys;
 
     void Start()
     {
         world = new EcsWorld();
+        systems = new EcsSystems(world);
+        pressedKeys = new PressedKeysBuffer();
+
 #if UNITY_EDITOR
         Leopotam.Ecs.UnityIntegration.EcsWorldObserver.Create(world);
 #endif  
-        systems = new EcsSystems(world)
+        systems
             .Add(new BuildCreateSystem())
             .Add(new InputSystem())
-            .Inject(builds);
+            .Add(new CameraSystem())
+            .Inject(builds)
+            .Inject(gameDefs)
+            .Inject(pressedKeys)
+            .ProcessInjects()
+            .Init();
 
-        systems.Init();
 #if UNITY_EDITOR
         Leopotam.Ecs.UnityIntegration.EcsSystemsObserver.Create(systems);
 #endif
