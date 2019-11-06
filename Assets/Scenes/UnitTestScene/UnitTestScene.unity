@@ -472,7 +472,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1001 &791693596
+--- !u!1001 &717710436
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -624,6 +624,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!1 &1143717929 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3256452186461657237, guid: eda3e6f0c96eaff40a9090e47c5b2fe5,
+    type: 3}
+  m_PrefabInstance: {fileID: 717710436}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1143717930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1143717929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c54e4839d4c7be458744d6b04a004f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WarriorPrefab: {fileID: 40105298447790547, guid: cd61d61068284e748a1664c4ddc737c6,
+    type: 3}
+  EnemyWarriorPrefab: {fileID: 4649584932193353985, guid: 4263f36d6060aa04598b04482f6fb54f,
+    type: 3}
 --- !u!1 &1164638094
 GameObject:
   m_ObjectHideFlags: 0
