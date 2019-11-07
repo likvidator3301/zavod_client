@@ -5,7 +5,7 @@ namespace Components
 {
     public class PlayerComponent
     {
-        public List<IUnitEntity> HighlightedUnits = new List<IUnitEntity>();
+        public List<IUnitEntity> SelectedUnits = new List<IUnitEntity>();
 
         public PlayerComponent(GUID guid)
         {

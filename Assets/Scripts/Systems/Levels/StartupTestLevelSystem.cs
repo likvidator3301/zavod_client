@@ -11,7 +11,8 @@ namespace Systems
     {
         private PrefabsHolderComponent prefabsHolder;
         private PlayerComponent player;
-        private UserInputHandlerSystem userInput;
+        private UnitActionHandler unitAction;
+        private SelectionHandler selection;
         private WorldComponent world;
         private readonly Vector3 firstUnitPlace = new Vector3(400, 2.6f, 500);
         private readonly Vector3 secondUnitPlace = new Vector3(400, 2.6f, 525);
@@ -20,13 +21,16 @@ namespace Systems
         {
             world = new WorldComponent();
             prefabsHolder = GameObject.FindGameObjectWithTag("PrefabsHolder").GetComponent<PrefabsHolderComponent>();
-            userInput = new UserInputHandlerSystem(player, world, prefabsHolder);
+            player = new PlayerComponent(GUID.Generate());
+            unitAction = new UnitActionHandler(player, world, prefabsHolder);
+            selection = new SelectionHandler(world, player, prefabsHolder);
             InitializeLevel();
         }
 
         public void Run()
         {
-            userInput.HandleInput();
+            unitAction.HandleInput();
+            selection.HandleInput();
             UnitConditionChangeSystem.DestroyDeadUnits(player, world.Units);
         }
 

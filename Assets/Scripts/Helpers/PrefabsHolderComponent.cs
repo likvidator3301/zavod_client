@@ -6,5 +6,6 @@ namespace Components
     {
         public GameObject WarriorPrefab;
         public GameObject EnemyWarriorPrefab;
+        public GameObject Selection;
     }
 }

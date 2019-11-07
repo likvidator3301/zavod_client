@@ -1,23 +1,23 @@
-﻿using System.Linq;
-using Component;
+﻿using Component;
 using Components;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Systems
 {
-    public class UserInputHandlerSystem
+    public class UnitActionHandler : MonoBehaviour
     {
-        private readonly PlayerComponent playerComponent;
+        private readonly PlayerComponent player;
         private readonly WorldComponent world;
         private readonly RaycastHelper raycastHelper;
         private readonly PrefabsHolderComponent prefabsHolder;
 
-        public UserInputHandlerSystem(
-            PlayerComponent playerComponent,
+        public UnitActionHandler(
+            PlayerComponent player,
             WorldComponent world,
             PrefabsHolderComponent prefabsHolder)
         {
-            this.playerComponent = playerComponent;
+            this.player = player;
             this.world = world;
             this.prefabsHolder = prefabsHolder;
             raycastHelper = new RaycastHelper();
@@ -25,42 +25,38 @@ namespace Systems
 
         public void HandleInput()
         {
-            if (Input.GetMouseButtonDown(1))
-                MoveHighlightedUnits();
+            HandleCreatingUnits();
+            HandleMovingUnits();
+        }
 
-            if (Input.GetMouseButtonDown(0))
-            {
-
-            }
-
+        private void HandleCreatingUnits()
+        {
             if (Input.GetKeyDown("u"))
             {
-                raycastHelper.TryGetHitInfo(out var hitInfo);
+                RaycastHelper.TryGetHitInfo(out var hitInfo);
                 UnitConditionChangeSystem.CreateUnit(
                     prefabsHolder.WarriorPrefab,
                     UnitTags.Warrior,
                     hitInfo.point,
-                    playerComponent,
+                    player,
                     raycastHelper,
                     world.Units);
             }
         }
 
-        private void MoveHighlightedUnits()
+        private void HandleMovingUnits()
         {
-            if (!raycastHelper.TryGetHitInfo(out var hitInfo, UnitTags.EnemyWarrior.ToString()))
-                UnitActionSystem.UpdateTargets(hitInfo.point, world
-                    .Units
-                    .Values
-                    .Where(u => u.Tag == UnitTags.Warrior)
-                    .ToList());
+            if (Input.GetMouseButtonDown(1))
+                MoveSelectedUnits();
+        }
+
+        private void MoveSelectedUnits()
+        {
+            if (!RaycastHelper.TryGetHitInfo(out var hitInfo, UnitTags.EnemyWarrior.ToString()))
+                UnitActionSystem.UpdateTargets(hitInfo.point, player.SelectedUnits);
             else
             {
-                //foreach (var unit in playerComponent.HighlightedUnits)
-                foreach (var unit in world
-                    .Units
-                    .Values
-                    .Where(unit => unit.Tag == UnitTags.Warrior))
+                foreach (var unit in player.SelectedUnits)
                 {
                     if (Vector3.Distance(unit.Object.transform.position, hitInfo.point) >
                         unit.StatsComponent.AttackRange)

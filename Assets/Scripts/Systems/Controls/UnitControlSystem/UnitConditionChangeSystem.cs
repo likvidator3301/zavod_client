@@ -14,10 +14,7 @@ namespace Systems
         private const float minHeight = 2.5f;
 
 
-        public void Run()
-        {
-
-        }
+        public void Run(){}
 
         public static void CreateUnit(
             GameObject prefab,
@@ -61,8 +58,8 @@ namespace Systems
 
             foreach (var unit in toDelete)
             {
-                if (player.HighlightedUnits.Contains(unit))
-                    player.HighlightedUnits.Remove(unit);
+                if (player.SelectedUnits.Contains(unit))
+                    player.SelectedUnits.Remove(unit);
                 units.Remove(unit.Object);
                 Object.Destroy(unit.Object);
             }
