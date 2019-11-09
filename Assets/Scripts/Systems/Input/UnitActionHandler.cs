@@ -46,17 +46,21 @@ namespace Systems
                 UnitActionSystem.UpdateTargets(hitInfo.point, player.SelectedUnits);
             else
             {
-                foreach (var unit in player.SelectedUnits)
-                {
-                    if (Vector3.Distance(unit.Object.transform.position, hitInfo.point) >
-                        unit.StatsComponent.AttackRange)
-                        UnitActionSystem.UpdateTargets(hitInfo.point, unit);
-                    else
-                    {
-                        var enemyUnit = world.Units[hitInfo.collider.gameObject];
-                        UnitActionSystem.Attack(unit, enemyUnit);
-                    }
-                }
+                var enemyUnit = world.Units[hitInfo.collider.gameObject];
+                MoveToAttackUnits(enemyUnit);
+            }
+        }
+
+        private void MoveToAttackUnits(IUnitEntity enemyUnit)
+        {
+            var enemyPosition = enemyUnit.Object.transform.position;
+            foreach (var unit in player.SelectedUnits)
+            {
+                if (Vector3.Distance(unit.Object.transform.position, enemyPosition) >
+                    unit.StatsComponent.AttackRange)
+                    UnitActionSystem.UpdateTargets(enemyPosition, unit);
+                else
+                    UnitActionSystem.Attack(unit, enemyUnit);
             }
         }
     }
