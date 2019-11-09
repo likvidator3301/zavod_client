@@ -1,26 +1,18 @@
-﻿using Component;
-using Components;
+﻿using Components;
+using Leopotam.Ecs;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Systems
 {
-    public class UnitActionHandler : MonoBehaviour
+    public class UnitActionHandler : IEcsRunSystem
     {
-        private readonly PlayerComponent player;
-        private readonly WorldComponent world;
-        private readonly RaycastHelper raycastHelper;
-        private readonly PrefabsHolderComponent prefabsHolder;
+        private PlayerComponent player;
+        private WorldComponent world;
+        private PrefabsHolderComponent prefabsHolder;
 
-        public UnitActionHandler(
-            PlayerComponent player,
-            WorldComponent world,
-            PrefabsHolderComponent prefabsHolder)
+        public void Run()
         {
-            this.player = player;
-            this.world = world;
-            this.prefabsHolder = prefabsHolder;
-            raycastHelper = new RaycastHelper();
+            HandleInput();
         }
 
         public void HandleInput()
@@ -38,8 +30,6 @@ namespace Systems
                     prefabsHolder.WarriorPrefab,
                     UnitTags.Warrior,
                     hitInfo.point,
-                    player,
-                    raycastHelper,
                     world.Units);
             }
         }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Component;
 using Components;
 using Entities;
 using Leopotam.Ecs;
@@ -11,17 +10,19 @@ namespace Systems
 {
     public class UnitConditionChangeSystem : IEcsRunSystem
     {
+        private PlayerComponent player;
+        private WorldComponent world;
         private const float minHeight = 2.5f;
 
-
-        public void Run(){}
+        public void Run()
+        {
+            DestroyDeadUnits();
+        }
 
         public static void CreateUnit(
             GameObject prefab,
             UnitTags unitTag,
             Vector3 position,
-            PlayerComponent player,
-            RaycastHelper raycastHelper,
             Dictionary<GameObject, IUnitEntity> units)
         {
             position.y = Math.Min(position.y, minHeight);
@@ -40,15 +41,12 @@ namespace Systems
                         units.Add(newUnit, warriorEntity);
                         break;
                     }
-                default:
-                    {
-                        break;
-                    }
             }
         }
 
-        public static void DestroyDeadUnits(PlayerComponent player, Dictionary<GameObject, IUnitEntity> units)
+        public void DestroyDeadUnits()
         {
+            var units = world.Units;
             var toDelete = new List<IUnitEntity>();
             foreach (var unit in units.Values)
             {

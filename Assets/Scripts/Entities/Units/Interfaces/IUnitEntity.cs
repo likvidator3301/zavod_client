@@ -1,5 +1,4 @@
-﻿using Component;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 namespace Components

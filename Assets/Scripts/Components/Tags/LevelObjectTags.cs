@@ -1,4 +1,4 @@
-﻿namespace Component
+﻿namespace Components
 {
     public enum LevelObjectTags
     {

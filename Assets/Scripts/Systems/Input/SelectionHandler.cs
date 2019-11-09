@@ -1,39 +1,36 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Component;
 using Components;
+using Leopotam.Ecs;
 using UnityEngine;
 
 namespace Systems
 {
-    public class SelectionHandler
+    public class SelectionHandler : IEcsRunSystem, IEcsInitSystem
     {
         private List<IUnitEntity> selectedUnits;
         private Vector3 startPosition;
         private Vector3 endPosition;
-        private readonly PrefabsHolderComponent prefabsHolder;
-        private readonly PlayerComponent player;
-        private readonly WorldComponent world;
+        private PrefabsHolderComponent prefabsHolder;
+        private PlayerComponent player;
+        private WorldComponent world;
         private const int selectionDeletingDelayWhileSelecting = 5;
         private const int selectionDeletingDelay = 500;
         private const float minSelectionHeight = 0.5f;
 
-        public SelectionHandler(WorldComponent world, PlayerComponent player, PrefabsHolderComponent prefabsHolder)
-        {
-            selectedUnits = new List<IUnitEntity>();
-            startPosition = Vector3.zero;
-            endPosition = Vector3.zero;
-            this.player = player;
-            this.world = world;
-            this.prefabsHolder = prefabsHolder;
-        }
-
-        public void HandleInput()
+        public void Run()
         {
             HandleSelection();
         }
 
+        public void Init()
+        {
+            selectedUnits = new List<IUnitEntity>();
+            startPosition = Vector3.zero;
+            endPosition = Vector3.zero;
+        }
+        
         private void HandleSelection()
         {
             if (Input.GetMouseButtonDown(0))

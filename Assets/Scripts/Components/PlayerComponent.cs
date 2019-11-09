@@ -5,11 +5,16 @@ namespace Components
 {
     public class PlayerComponent
     {
-        public List<IUnitEntity> SelectedUnits = new List<IUnitEntity>();
+        public List<IUnitEntity> SelectedUnits;
 
         public PlayerComponent(GUID guid)
         {
             Guid = guid;
+        }
+
+        public PlayerComponent()
+        {
+            SelectedUnits = new List<IUnitEntity>();
         }
 
         public GUID Guid { get; }

@@ -5,14 +5,9 @@ using UnityEngine;
 
 namespace Systems
 {
-    public class UnitActionSystem : IEcsRunSystem
+    public class UnitActionSystem : IEcsSystem
     {
         private const float accelerationFactor = 3;
-
-        public void Run()
-        {
-
-        }
 
         public static void Attack(IUnitEntity unit, IUnitEntity enemyUnit)
         {

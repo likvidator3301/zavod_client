@@ -1,5 +1,4 @@
-﻿using Component;
-using Components;
+﻿using Components;
 using UnityEngine;
 using UnityEngine.AI;
 
