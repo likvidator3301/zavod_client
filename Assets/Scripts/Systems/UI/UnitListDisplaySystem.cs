@@ -25,6 +25,7 @@ public class UnitListDisplaySystem : IEcsRunSystem, IEcsInitSystem, IEcsDestroyS
             world.NewEntityWith<UnitCard>(out var card);
             card.unit = unitCreationFilter.Get1[creationEventId].unit;
             card.prefab.GetComponentInChildren<Text>().text = card.unit.id.ToString();
+
             var unitCard = Object.Instantiate(card.prefab);
             unitCard.GetComponent<Button>().onClick.AddListener(() => CreateSelectionEvent(card.unit));
 
@@ -38,7 +39,6 @@ public class UnitListDisplaySystem : IEcsRunSystem, IEcsInitSystem, IEcsDestroyS
             unitCreationFilter.Entities[creationEventId].Destroy();
         }
     }
-
     void CreateSelectionEvent(Unit unit)
     {
         world.NewEntityWith<UnitSelectionEvent>(out var selected);

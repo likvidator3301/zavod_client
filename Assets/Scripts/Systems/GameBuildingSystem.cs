@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Leopotam.Ecs;
 using UnityEngine;
 
-public class GameStart : MonoBehaviour
+public class GameBuildingSystem : MonoBehaviour
 {
     EcsWorld world;
 
@@ -18,7 +18,6 @@ public class GameStart : MonoBehaviour
         systems.Init();
     }
 
-    // Update is called once per frame
     void Update()
     {
         systems.Run();
