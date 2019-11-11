@@ -109,7 +109,7 @@ namespace Systems
             camera.transform.SetPositionAndRotation(camera.transform.position, angle);
 
             camera.transform.Translate(0, movement.y, 0, Space.World);
-            camera.transform.Rotate(Vector3.right, movement.y * 2);
+            camera.transform.Rotate(Vector3.right, movement.y * 50 / (maxHeigth - minHeigth));
         }
     }
 }

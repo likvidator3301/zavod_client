@@ -17,4 +17,4 @@ MonoBehaviour:
   rotateSpeed: 1
   maxHeigth: 27
   minHeigth: 2
-  upDownCoef: 0.17
+  upDownCoef: 0.2
