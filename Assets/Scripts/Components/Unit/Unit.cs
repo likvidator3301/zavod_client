@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit
+public class Unit // Класс-заглушка
 {
-    public float id;
+    public float Id;
 }

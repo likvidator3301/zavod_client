@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using Leopotam.Ecs;
 
 public class UnitSelectionEvent
 {
-    public Unit unit;
+    [EcsIgnoreNullCheck]
+    public Unit Unit;
 }

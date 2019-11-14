@@ -8,55 +8,51 @@ public class UnitListDisplaySystem : IEcsRunSystem, IEcsInitSystem, IEcsDestroyS
 {
     EcsWorld world = null;
     EcsFilter<UnitCreationEvent> unitCreationFilter = null;
-    EcsFilter<UnitList> unitListFilter = null;
+    EcsFilter<UnitPanel> unitListFilter = null;
     EcsFilter<UnitCard> unitCardFilter = null;
 
-    void IEcsInitSystem.Init()
+    public void Init()
     {
         var unitList = GameObject.FindGameObjectWithTag("UnitList");
-        world.NewEntityWith<UnitList>(out var ui);
-        ui.layout = unitList.GetComponent<GridLayoutGroup>();
+        world.NewEntityWith<UnitPanel>(out var ui);
+        ui.Layout = unitList.GetComponent<GridLayoutGroup>();
     }
 
-    void IEcsRunSystem.Run()
+    public void Run()
     {
         foreach (var creationEventId in unitCreationFilter)
         {
             world.NewEntityWith<UnitCard>(out var card);
-            card.unit = unitCreationFilter.Get1[creationEventId].unit;
-            card.prefab.GetComponentInChildren<Text>().text = card.unit.id.ToString();
+            card.Unit = unitCreationFilter.Get1[creationEventId].Unit;
+            card.Prefab.GetComponentInChildren<Text>().text = card.Unit.Id.ToString();
 
-            var unitCard = Object.Instantiate(card.prefab);
-            unitCard.GetComponent<Button>().onClick.AddListener(() => CreateSelectionEvent(card.unit));
+            var unitCard = Object.Instantiate(card.Prefab);
+            unitCard.GetComponent<Button>().onClick.AddListener(() => CreateSelectionEvent(card.Unit));
 
             foreach (var unitListId in unitListFilter)
             {
                 var unitList = unitListFilter.Get1[unitListId]; 
-                unitCard.transform.SetParent(unitList.layout.transform);
+                unitCard.transform.SetParent(unitList.Layout.transform);
             }
 
-            unitCreationFilter.Get1[creationEventId].unit = null;
             unitCreationFilter.Entities[creationEventId].Destroy();
         }
     }
     void CreateSelectionEvent(Unit unit)
     {
         world.NewEntityWith<UnitSelectionEvent>(out var selected);
-        selected.unit = unit;
+        selected.Unit = unit;
     }
 
-    void IEcsDestroySystem.Destroy()
+    public void Destroy()
     {
         foreach (var unitCardId in unitCardFilter)
         {
-            unitCardFilter.Get1[unitCardId].prefab = null;
-            unitCardFilter.Get1[unitCardId].unit = null;
             unitCardFilter.Entities[unitCardId].Destroy();
         }
 
         foreach (var unitListId in unitListFilter)
         {
-            unitListFilter.Get1[unitListId].layout = null;
             unitListFilter.Entities[unitListId].Destroy();
         }
     }

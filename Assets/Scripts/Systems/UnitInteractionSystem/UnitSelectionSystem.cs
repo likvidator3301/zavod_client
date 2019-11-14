@@ -3,36 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitSelectionSystem : IEcsRunSystem, IEcsInitSystem, IEcsDestroySystem
+public class UnitSelectionSystem : IEcsRunSystem, IEcsDestroySystem
 {
     EcsWorld world = null;
     EcsFilter<UnitSelectionEvent> unitSelectionFilter = null;
     EcsFilter<SelectedUnit> selectedUnitFilter= null;
 
-    void IEcsInitSystem.Init()
-    {
 
-    }
-
-    void IEcsRunSystem.Run()
+    public void Run()
     {
         foreach(var selectionEventId in unitSelectionFilter)
         {
             world.NewEntityWith<SelectedUnit>(out var selectedUnit);
-            selectedUnit.unit = unitSelectionFilter.Get1[selectionEventId].unit;
+            selectedUnit.Unit = unitSelectionFilter.Get1[selectionEventId].Unit;
 
-            Debug.Log("Unit " + selectedUnit.unit.id + " is chosen");
+            Debug.Log("Unit " + selectedUnit.Unit.Id + " is chosen");
 
-            unitSelectionFilter.Get1[selectionEventId].unit = null;
             unitSelectionFilter.Entities[selectionEventId].Destroy();
         }
     }
 
-    void IEcsDestroySystem.Destroy()
+    public void Destroy()
     {
         foreach(var selectedUnitId in selectedUnitFilter)
         {
-            selectedUnitFilter.Get1[selectedUnitId].unit = null;
             selectedUnitFilter.Entities[selectedUnitId].Destroy();
         }
     }

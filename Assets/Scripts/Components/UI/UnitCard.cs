@@ -1,10 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
+﻿using Leopotam.Ecs;
 using UnityEngine;
 
 public class UnitCard
 {
-    public GameObject prefab = Resources.Load<GameObject>("Prefabs/UnitIcon");
-    public Unit unit;
+    [EcsIgnoreNullCheck]
+    public GameObject Prefab = Resources.Load<GameObject>("Prefabs/UnitIcon");
+
+    [EcsIgnoreNullCheck]
+    public Unit Unit;
 }

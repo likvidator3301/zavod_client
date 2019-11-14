@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using Leopotam.Ecs;
 using UnityEngine.UI;
 
-public class UnitList
+public class UnitPanel
 {
-    public const int maxAmount = 10;
-    public GridLayoutGroup layout;
+    [EcsIgnoreNullCheck]
+    public GridLayoutGroup Layout;
 }

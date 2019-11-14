@@ -3,28 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitCreationSystem : IEcsRunSystem, IEcsInitSystem, IEcsDestroySystem
+public class UnitCreationSystem : IEcsRunSystem
 {
     EcsWorld world = null;
 
-    void IEcsInitSystem.Init()
-    {
-
-    }
-
-    void IEcsRunSystem.Run()
+    public void Run()
     {
         if (Input.GetKeyDown("q"))
         {
             world.NewEntityWith<Unit>(out var unit);
-            unit.id = Random.Range(1f, 10f);
+            unit.Id = Random.Range(1f, 10f); // setting random id for unit
             world.NewEntityWith<UnitCreationEvent>(out var createdUnit);
-            createdUnit.unit = unit;
+            createdUnit.Unit = unit;
         }
-    }
-    
-    void IEcsDestroySystem.Destroy()
-    {
-
     }
 }
