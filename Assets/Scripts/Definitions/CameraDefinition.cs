@@ -8,10 +8,10 @@ namespace Definitions
     public class CameraDefinition : ScriptableObject
     {
         public float speed;
-        public float upDownSpeed;
+        public float verticalMoveStepFactor;
         public float rotateSpeed;
         public float maxHeigth;
         public float minHeigth;
-        public float upDownCoef = 0.06f;
+        public float verticalMoveSpeed;
     }
 }

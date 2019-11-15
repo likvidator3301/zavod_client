@@ -11,24 +11,28 @@ namespace Systems
     class CameraSystem : IEcsRunSystem, IEcsInitSystem
     {
         private readonly GameDefinitions gameDefs = null;
-        private readonly PressedKeysBuffer pressedKeysBuffer = null;
+        private readonly EcsFilter<PressKeyEvent> pressedKeyEvents = null;
         private Camera camera;
-        private float error = 0;
+
+        private float distanceToTargetCameraHeigth = 0;
         private float speed;
-        private float upDownSpeed;
+        private float verticalMoveStepFactor;
         private float rotateSpeed;
         private float maxHeigth;
         private float minHeigth;
-        private float upDownCoef;
+        private float verticalMoveSpeed;
+
+        private static readonly int inertionCameraMultiplier = 22;
+        private static readonly int rotateCameraMultiplier = 50;
 
         public void Init()
         {
             speed = gameDefs.cameraDef.speed;
             rotateSpeed = gameDefs.cameraDef.rotateSpeed;
-            upDownSpeed = gameDefs.cameraDef.upDownSpeed;
+            verticalMoveStepFactor = gameDefs.cameraDef.verticalMoveStepFactor;
             maxHeigth = gameDefs.cameraDef.maxHeigth;
             minHeigth = gameDefs.cameraDef.minHeigth;
-            upDownCoef = gameDefs.cameraDef.upDownCoef;
+            verticalMoveSpeed = gameDefs.cameraDef.verticalMoveSpeed;
         }
 
         public void Run()
@@ -44,64 +48,75 @@ namespace Systems
 
         private void UpdateCamera()
         {
-            float LeftRightSpeed = 0;
-            float AheadBackSpeed = 0;
-            float upDownDir = 0;
-            float yRotateSpeed = 0;
+            var leftRightDirection = 0f;
+            var aheadBackDirection = 0f;
+            var verticalDirection = 0f;
+            var rotateDirection = 0f;
 
-            foreach (var key in pressedKeysBuffer.pressedKeys)
+            for (var i = 0; i < pressedKeyEvents.GetEntitiesCount(); i++)
             {
-                if (key == KeyCode.W)
-                    AheadBackSpeed++;
-                if (key == KeyCode.S)
-                    AheadBackSpeed--;
-                if (key == KeyCode.A)
-                    LeftRightSpeed--;
-                if (key == KeyCode.D)
-                    LeftRightSpeed++;
+                var key = pressedKeyEvents.Get1[i].Code;
 
-                if (key == KeyCode.Keypad8)
-                    upDownDir--;
-                if (key == KeyCode.Keypad2)
-                    upDownDir++;
+                aheadBackDirection += CalculateDirection(KeyCode.W, KeyCode.S, key);
+                leftRightDirection += CalculateDirection(KeyCode.D, KeyCode.A, key);
 
-                if (key == KeyCode.Q)
-                    yRotateSpeed--;
-                if (key == KeyCode.E)
-                    yRotateSpeed++;
+                verticalDirection += CalculateDirection(KeyCode.Keypad2, KeyCode.Keypad8, key);
+
+                rotateDirection += CalculateDirection(KeyCode.E, KeyCode.Q, key);
             }
 
-            CameraMover(yRotateSpeed, LeftRightSpeed, AheadBackSpeed, upDownDir * upDownCoef);
+            CalculateAndMoveCamera(rotateDirection, leftRightDirection, aheadBackDirection, verticalDirection);
         }
 
-        private void CameraMover(float rotateSpeed, float leftRightSpeed, float aheadBackSpeed, float upDownDir)
+        private int CalculateDirection(KeyCode positiveKey, KeyCode negativeKey, KeyCode inputKey)
         {
-            var movement = new Vector3(leftRightSpeed * speed,
-                                   0,
-                                   aheadBackSpeed * speed);
-            movement = Vector3.ClampMagnitude(movement, speed) * Time.deltaTime;
+            var direction = 0;
 
-            var dmY = upDownDir == 0 ? Input.mouseScrollDelta.y * upDownSpeed * Time.deltaTime : upDownDir;
-            if (Math.Abs(dmY) > upDownCoef)
+            if (inputKey == positiveKey)
+                direction++;
+            if (inputKey == negativeKey)
+                direction--;
+            
+            return direction;
+        }
+
+        private void CalculateAndMoveCamera(float rotateDirection, float leftRightDirection, float aheadBackDirection, float verticalDirection)
+        {
+            var movement = new Vector3(leftRightDirection, 0, aheadBackDirection) * speed;
+            movement = Vector3.ClampMagnitude(movement, speed) * Time.deltaTime;
+            var verticalDelta = verticalDirection == 0 
+                ? Input.mouseScrollDelta.y * verticalMoveStepFactor * Time.deltaTime 
+                : verticalDirection * verticalMoveStepFactor * Time.deltaTime;
+
+            if (Math.Abs(verticalDelta) > verticalMoveSpeed)
             {
-                movement.y = Math.Sign(dmY) * upDownCoef;
-                if (Math.Abs(error) < upDownCoef * 22)
-                    error += dmY - upDownCoef;
+                movement.y = Math.Sign(verticalDelta) * verticalMoveSpeed;
+                if (Math.Abs(distanceToTargetCameraHeigth) < verticalMoveSpeed * inertionCameraMultiplier)
+                    distanceToTargetCameraHeigth += verticalDelta - verticalMoveSpeed;
             }
             else
-                movement.y = dmY;
-            if (Math.Abs(error) > upDownCoef * 2)
             {
-                movement.y = Math.Sign(error) * upDownCoef;
-                error -= Math.Sign(error) * upDownCoef;
+                movement.y = verticalDelta;
             }
+
+            if (Math.Abs(distanceToTargetCameraHeigth) > verticalMoveSpeed * 2)
+            {
+                movement.y = Math.Sign(distanceToTargetCameraHeigth) * verticalMoveSpeed;
+                distanceToTargetCameraHeigth -= Math.Sign(distanceToTargetCameraHeigth) * verticalMoveSpeed;
+            }
+
             if (movement.y > 0 && camera.transform.position.y > maxHeigth)
                 movement.y = 0;
 
             if (movement.y < 0 && camera.transform.position.y < minHeigth)
                 movement.y = 0;
 
-            camera.transform.Rotate(Vector3.up * (rotateSpeed * this.rotateSpeed), Space.World);
+            MoveCamera(rotateDirection, movement);
+        }
+
+        private void MoveCamera(float rotateDirection, Vector3 movement)
+        {
+            camera.transform.Rotate(Vector3.up * rotateDirection * rotateSpeed, Space.World);
 
             var angle = camera.transform.rotation;
             camera.transform.SetPositionAndRotation(camera.transform.position, Quaternion.Euler(0, angle.eulerAngles.y, angle.eulerAngles.z));
@@ -109,7 +124,7 @@ namespace Systems
             camera.transform.SetPositionAndRotation(camera.transform.position, angle);
 
             camera.transform.Translate(0, movement.y, 0, Space.World);
-            camera.transform.Rotate(Vector3.right, movement.y * 50 / (maxHeigth - minHeigth));
+            camera.transform.Rotate(Vector3.right, movement.y * rotateCameraMultiplier / (maxHeigth - minHeigth));
         }
     }
 }

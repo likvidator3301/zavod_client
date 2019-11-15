@@ -12,13 +12,11 @@ public class GameLoader : MonoBehaviour
 
     EcsWorld world;
     EcsSystems systems;
-    private PressedKeysBuffer pressedKeys;
 
     void Start()
     {
         world = new EcsWorld();
         systems = new EcsSystems(world);
-        pressedKeys = new PressedKeysBuffer();
 
 #if UNITY_EDITOR
         Leopotam.Ecs.UnityIntegration.EcsWorldObserver.Create(world);
@@ -29,7 +27,6 @@ public class GameLoader : MonoBehaviour
             .Add(new CameraSystem())
             .Inject(builds)
             .Inject(gameDefs)
-            .Inject(pressedKeys)
             .ProcessInjects()
             .Init();
 

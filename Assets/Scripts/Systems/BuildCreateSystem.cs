@@ -1,6 +1,4 @@
 ﻿using Leopotam.Ecs;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Components;
 
@@ -9,10 +7,10 @@ namespace Systems
 {
     public class BuildCreateSystem : IEcsRunSystem
     {
-        EcsWorld world = null;
-        EcsFilter<BuildCreateEvent> buildEvents = null;
-        EcsFilter<ClickEvent> clickEvents = null;
-        GameObject[] builds = null;
+        private readonly EcsWorld world = null;
+        private readonly EcsFilter<BuildCreateEvent> buildEvents = null;
+        private readonly EcsFilter<ClickEvent> clickEvents = null;
+        private readonly GameObject[] builds = null;
 
         private Camera camera;
         private RaycastHit hitInfo;
@@ -21,10 +19,11 @@ namespace Systems
 
         public void Run()
         {
-            if (Camera.current == null)
+            if (camera is null)
+            {
+                camera = Camera.current;
                 return;
-
-            camera = Camera.current;
+            }
 
             if (!buildEvents.IsEmpty())
             {
@@ -32,6 +31,12 @@ namespace Systems
                 {
                     if (build.tag.Equals(buildEvents.Get1[0].Type))
                         CreateOrSwitchBuild(build);
+                }
+
+                foreach (var buildEvent in buildEvents.Entities)
+                {
+                    if (!buildEvent.IsNull() && buildEvent.IsAlive())
+                        buildEvent.Destroy();
                 }
             }
 
@@ -58,14 +63,14 @@ namespace Systems
         private void CreateOrSwitchBuild(GameObject build)
         {
             if (currentBuild == null)
+            {
                 currentBuild = Object.Instantiate(build);
+            }
             else if (!currentBuild.tag.Equals(build.tag))
             {
                 Object.Destroy(currentBuild);
                 currentBuild = Object.Instantiate(build);
             }
-
-            buildEvents.Entities[0].Destroy();
         }
 
         private void BuildSet(GameObject build)

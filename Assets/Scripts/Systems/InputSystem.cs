@@ -2,64 +2,72 @@ using Leopotam.Ecs;
 using UnityEngine;
 using Components;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Systems {
 
-    sealed class InputSystem : IEcsRunSystem {
+    class InputSystem : IEcsRunSystem {
         readonly EcsWorld world = null;
-        readonly PressedKeysBuffer pressedKeysBuffer = null;
 
-        private readonly EcsEntity[] previousClickEvents;
-        private readonly int mouseButtonCount = 3;
+        private static readonly int mouseButtonCount = 3;
 
-        public InputSystem()
-        {
-            previousClickEvents = new EcsEntity[mouseButtonCount];
-        }
+        private readonly EcsEntity[] previousClickEvents = new EcsEntity[mouseButtonCount];
+        private readonly Dictionary<KeyCode, EcsEntity> pressedKeyCodeEvents = new Dictionary<KeyCode, EcsEntity>();
         
         void IEcsRunSystem.Run () 
         {
+            // ƒл€ тестировани€ работы строительства зданий:
+            //if (Input.GetKeyDown(KeyCode.Space))           
+            //{                                                               
+            //    world.NewEntityWith(out BuildCreateEvent buildEvent);
+            //    buildEvent.Type = "barracs";
+            //}
+
+            //if (Input.GetKeyDown(KeyCode.LeftShift))
+            //{
+            //    world.NewEntityWith(out BuildCreateEvent buildEvent);
+            //    buildEvent.Type = "zikkurat";
+            //}
+
+            MouseHandle();
+            KeyboardHandle();
+        }
+
+        private void MouseHandle()
+        {
             for (var i = 0; i < mouseButtonCount; i++)
             {
-                if (!previousClickEvents[i].IsNull() && previousClickEvents[i].IsAlive())
-                    previousClickEvents[i].Destroy();
-
                 if (Input.GetMouseButtonDown(i))
                 {
                     previousClickEvents[i] = world.NewEntityWith(out ClickEvent click);
                     click.ButtonNumber = i;
                 }
-            }
 
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                world.NewEntityWith(out BuildCreateEvent buildEvent);
-                buildEvent.Type = "barracs";
+                if (Input.GetMouseButtonUp(i))
+                {
+                    previousClickEvents[i].Destroy();
+                }
             }
-
-            if (Input.GetKeyDown(KeyCode.LeftShift))
-            {
-                world.NewEntityWith(out BuildCreateEvent buildEvent);
-                buildEvent.Type = "zikkurat";
-            }
-
-            KeyboardHandler();
         }
 
-        private void KeyboardHandler()
+        private void KeyboardHandle()
         {
             foreach (var e in Enum.GetValues(typeof(KeyCode)))
             {
                 var key = (KeyCode)e;
 
-                if (Input.GetKeyDown(key))
-                {
-                    pressedKeysBuffer.pressedKeys.Add(key);
-                }
-
                 if (Input.GetKeyUp(key))
                 {
-                    pressedKeysBuffer.pressedKeys.Remove(key);
+                    pressedKeyCodeEvents[key].Destroy();
+                    pressedKeyCodeEvents.Remove(key);
+                }
+
+                if (Input.GetKeyDown(key))
+                {
+                    pressedKeyCodeEvents.Add(key, 
+                        world.NewEntityWith(out PressKeyEvent pressEvent));
+                    pressEvent.Code = key;
                 }
             }
         }

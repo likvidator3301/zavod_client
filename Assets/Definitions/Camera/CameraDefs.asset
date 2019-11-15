@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: CameraDefs
   m_EditorClassIdentifier: 
   speed: 35.7
-  upDownSpeed: 150
-  rotateSpeed: 1
+  verticalMoveStepFactor: 300
+  rotateSpeed: 1.5
   maxHeigth: 27
   minHeigth: 2
-  upDownCoef: 0.2
+  verticalMoveSpeed: 0.15
