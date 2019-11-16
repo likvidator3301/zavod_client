@@ -2,6 +2,7 @@
 using Leopotam.Ecs;
 using Systems;
 using Components;
+using UnityEditor;
 
 public class GameLoader : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class GameLoader : MonoBehaviour
         world = new EcsWorld();
         systems = new EcsSystems(world);
         pressedKeys = new PressedKeysBuffer();
+        var playerComponent = new PlayerComponent(GUID.Generate());
 
         var controlsSystems = new EcsSystems(world)
             .Add(new BuildCreateSystem())
@@ -29,7 +31,7 @@ public class GameLoader : MonoBehaviour
         var levelSystems = new EcsSystems(world)
             .Add(new StartupTestLevelSystem());
         var unitSystems = new EcsSystems(world)
-            .Add(new UnitConditionChangeSystem())
+            .Add(new UnitStateChangeSystem())
             .Add(new UnitActionSystem());
 
 #if UNITY_EDITOR
@@ -39,8 +41,7 @@ public class GameLoader : MonoBehaviour
             .Add(controlsSystems)
             .Add(unitSystems)
             .Add(levelSystems)
-            .Inject(new PlayerComponent())
-            .Inject(new WorldComponent())
+            .Inject(playerComponent)
             .Inject(PrefabsHolder)
             .Inject(builds)
             .Inject(gameDefs)
