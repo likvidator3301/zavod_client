@@ -2,38 +2,56 @@
 using Components;
 using Leopotam.Ecs;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Systems
 {
     public class UnitActionSystem : IEcsSystem
     {
-        private const float accelerationFactor = 3;
+        private const float inertiaEliminatorFactor = 3;
 
-        public static void Attack(IUnitEntity unit, IUnitEntity enemyUnit)
+        public static void Attack(UnitComponent attackingUnit, UnitComponent targetUnit)
         {
-            if (Time.time - unit.ConditionComponent.LastAttackTime >= unit.StatsComponent.AttackDelay &&
-                Vector3.Distance(enemyUnit.Object.transform.position, unit.Object.transform.position) <= unit.StatsComponent.AttackRange)
-            {
-                enemyUnit.ConditionComponent.CurrentHp -= unit.StatsComponent.AttackDamage;
-                unit.ConditionComponent.LastAttackTime = Time.time;
-            }
+            var attackComponent = attackingUnit.Object.GetComponent<AttackComponent>();
+            var targetHealthComponent = targetUnit.Object.GetComponent<HealthComponent>();
+            if (!CanAttack(attackingUnit, targetUnit))
+                return;
+            targetHealthComponent.CurrentHp -= attackComponent.AttackDamage;
+            attackComponent.LastAttackTime = Time.time;
         }
 
-        public static void UpdateTargets(Vector3 targetPosition, List<IUnitEntity> units)
+        public static void UpdateTargets(Vector3 targetPosition, List<UnitComponent> units)
         {
             foreach (var unit in units)
-            {
-                unit.Agent.SetDestination(targetPosition);
-                unit.Agent.speed = unit.MovementComponent.MoveSpeed;
-                unit.Agent.acceleration = unit.MovementComponent.MoveSpeed * accelerationFactor;
-            }
+                UpdateTarget(targetPosition, unit);
         }
 
-        public static void UpdateTargets(Vector3 targetPosition, IUnitEntity unit)
+        public static void UpdateTarget(Vector3 targetPosition, UnitComponent unit)
         {
-            unit.Agent.SetDestination(targetPosition);
-            unit.Agent.speed = unit.MovementComponent.MoveSpeed;
-            unit.Agent.acceleration = unit.MovementComponent.MoveSpeed * accelerationFactor;
+            var agent = unit.Object.GetComponent<NavMeshAgent>();
+            var movementComponent = unit.Object.GetComponent<MovementComponent>();
+            agent.SetDestination(targetPosition);
+            agent.speed = movementComponent.MoveSpeed;
+            agent.acceleration = movementComponent.MoveSpeed * inertiaEliminatorFactor;
+        }
+
+        private static bool CanAttack(UnitComponent attackingUnit, UnitComponent targetUnit)
+        {
+            var attackComponent = attackingUnit.Object.GetComponent<AttackComponent>();
+            var attackingPosition = attackingUnit.Object.transform.position;
+            var targetPosition = targetUnit.Object.transform.position;
+            return IsNotOnCooldown(attackComponent)
+                   && IsOnAttackRange(attackingPosition, targetPosition, attackComponent.AttackRange);
+        }
+
+        private static bool IsOnAttackRange(Vector3 attackingUnitPosition, Vector3 targetUnitPosition, float attackRange)
+        {
+            return Vector3.Distance(attackingUnitPosition, targetUnitPosition) <= attackRange;
+        }
+
+        private static bool IsNotOnCooldown(AttackComponent attackComponent)
+        {
+            return Time.time - attackComponent.LastAttackTime >= attackComponent.AttackDelay;
         }
     }
 }

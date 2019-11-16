@@ -1,6 +1,6 @@
 ﻿namespace Components
 {
-    public enum LevelObjectTags
+    public enum LevelObjectTag
     {
         Ground
     }

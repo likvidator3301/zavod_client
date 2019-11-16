@@ -5,19 +5,13 @@ namespace Components
 {
     public class PlayerComponent
     {
-        public List<IUnitEntity> SelectedUnits;
-
+        public List<UnitComponent> SelectedUnits = new List<UnitComponent>();
+        public GUID Guid { get; }
+        public long Score { get; set; } = 500;
+        
         public PlayerComponent(GUID guid)
         {
             Guid = guid;
         }
-
-        public PlayerComponent()
-        {
-            SelectedUnits = new List<IUnitEntity>();
-        }
-
-        public GUID Guid { get; }
-        public long Score { get; set; } = 500;
     }
 }

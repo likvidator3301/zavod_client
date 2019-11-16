@@ -1,6 +1,6 @@
 ﻿namespace Components
 {
-    public enum UnitTags
+    public enum UnitTag
     {
         Warrior,
         EnemyWarrior
