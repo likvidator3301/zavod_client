@@ -10,8 +10,8 @@ namespace Systems
         private EcsWorld ecsWorld;
         private EcsGrowList<UnitComponent> units;
         private PrefabsHolderComponent prefabsHolder;
-        private readonly Vector3 firstUnitPlace = new Vector3(400, minHeight, 500);
-        private readonly Vector3 secondUnitPlace = new Vector3(400, minHeight, 525);
+        private readonly Vector3 allyUnitPosition = new Vector3(375, minHeight, 515);
+        private readonly Vector3 enemyUnitPosition = new Vector3(375, minHeight, 527);
 
         public void Init()
         {
@@ -22,8 +22,8 @@ namespace Systems
         {            
             ecsWorld.NewEntityWith<UnitComponent>(out var allyUnit);
             ecsWorld.NewEntityWith<UnitComponent>(out var enemyUnit);
-            var allyObjectUnit = Object.Instantiate(prefabsHolder.WarriorPrefab, firstUnitPlace, Quaternion.identity);
-            var enemyObjectUnit = Object.Instantiate(prefabsHolder.EnemyWarriorPrefab, secondUnitPlace, Quaternion.identity);
+            var allyObjectUnit = Object.Instantiate(prefabsHolder.WarriorPrefab, allyUnitPosition, Quaternion.identity);
+            var enemyObjectUnit = Object.Instantiate(prefabsHolder.EnemyWarriorPrefab, enemyUnitPosition, Quaternion.identity);
             allyUnit.SetFields(allyObjectUnit, UnitTag.Warrior);
             allyUnit.AddWarriorComponents();
             enemyUnit.SetFields(enemyObjectUnit, UnitTag.EnemyWarrior);

@@ -41,20 +41,12 @@ namespace Systems
                     selectedUnits = selectionInfo.GetUnitsInFrame(units);
                     var selectionFrame = selectionInfo.GetSelectionFrame(prefabsHolder);
                     selectedUnits.HighlightObjects();
-                    await DeleteObjectWithDelay(selectionFrame, selectionDeletingDelayWhileSelecting);
+                    await selectionFrame.RemoveObjectWithDelay(selectionDeletingDelayWhileSelecting);
                 }
             }
 
             if (Input.GetMouseButtonUp(0))
                 player.SelectedUnits = selectedUnits;
-        }
-        
-        private async Task DeleteObjectWithDelay(GameObject obj, int waitForMilliseconds = 500)
-        {
-            if (obj == null)
-                return;
-            await Task.Delay(waitForMilliseconds);
-            Object.Destroy(obj);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Components;
 using Leopotam.Ecs;
 using UnityEngine;
@@ -18,10 +19,13 @@ namespace Systems
             newUnit.SetFields(newUnitObject, unitTag);
             newUnit.AddWarriorComponents();
         }
-        
-        public static void ChangeColorOn(this GameObject gameObject, Color color)
+
+        public static async Task RemoveObjectWithDelay(this GameObject obj, int waitForMilliseconds = 500)
         {
-            gameObject.GetComponent<Renderer>().material.color = color;
+            if (obj == null)
+                return;
+            await Task.Delay(waitForMilliseconds);
+            Object.Destroy(obj);
         }
     }
 }

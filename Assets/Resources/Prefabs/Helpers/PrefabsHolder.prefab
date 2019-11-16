@@ -43,9 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c54e4839d4c7be458744d6b04a004f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WarriorPrefab: {fileID: 40105298447790547, guid: cd61d61068284e748a1664c4ddc737c6,
+  WarriorPrefab: {fileID: 1193301868869138, guid: 0c6d87199f687400184146c841adf2bd,
     type: 3}
-  EnemyWarriorPrefab: {fileID: 4649584932193353985, guid: 4263f36d6060aa04598b04482f6fb54f,
+  EnemyWarriorPrefab: {fileID: 1615335249088072, guid: 2bdbc34c6abe44717aca1013ebad4f6e,
     type: 3}
   Selection: {fileID: 2194452412074875932, guid: 4ccdca0a704f55447b93e63e77ecf39d,
     type: 3}

@@ -5,19 +5,24 @@ namespace Systems
 {
     public static class GameObjectListExtensions
     {
-        private static Color highlightColor = Color.magenta;
-        private static Color standartColor = Color.white;
+        private const string selectionObjectName = "Selection";
         
         public static void HighlightObjects(this IEnumerable<GameObject> gameObjects)
         {
             foreach (var gameObject in gameObjects)
-                gameObject.ChangeColorOn(highlightColor);
+            {
+                var objectSelection = gameObject.transform.Find(selectionObjectName).GetComponent<Renderer>();
+                objectSelection.enabled = true;
+            }
         }
         
         public static void DehighlightObjects(this IEnumerable<GameObject> gameObjects)
         {
-            foreach (var unit in gameObjects)
-                unit.ChangeColorOn(standartColor);
+            foreach (var gameObject in gameObjects)
+            {
+                var objectSelection = gameObject.transform.Find(selectionObjectName).GetComponent<Renderer>();
+                objectSelection.enabled = false;
+            }
         }
     }
 }
