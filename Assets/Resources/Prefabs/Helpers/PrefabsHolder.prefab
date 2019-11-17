@@ -40,12 +40,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8243205655303629623}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c54e4839d4c7be458744d6b04a004f7, type: 3}
+  m_Script: {fileID: 11500000, guid: d2e34be15d9cee64ea1c8258259f9475, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WarriorPrefab: {fileID: 1193301868869138, guid: 0c6d87199f687400184146c841adf2bd,
+  WarriorPrefab: {fileID: 1193301868869138, guid: 00ecfc25898dec94f9572a25f887f985,
     type: 3}
-  EnemyWarriorPrefab: {fileID: 1615335249088072, guid: 2bdbc34c6abe44717aca1013ebad4f6e,
+  EnemyWarriorPrefab: {fileID: 1615335249088072, guid: 6c1dcd07b9286bc4ab01832e2d1a753a,
     type: 3}
-  Selection: {fileID: 2194452412074875932, guid: 4ccdca0a704f55447b93e63e77ecf39d,
+  Selection: {fileID: 2194452412074875932, guid: 7c55debf805a37f4db2a2ab50630a134,
     type: 3}

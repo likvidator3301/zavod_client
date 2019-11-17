@@ -34,7 +34,7 @@ public class GameLoader : MonoBehaviour
         var unitSystems = new EcsSystems(world)
             .Add(new UnitStateChangeSystem())
             .Add(new UnitActionSystem());
-        var systems = new EcsSystems(world)
+        systems = new EcsSystems(world)
             .Add(controlsSystems)
             .Add(unitSystems)
             .Add(levelSystems)
@@ -42,8 +42,9 @@ public class GameLoader : MonoBehaviour
             .Inject(PrefabsHolder)
             .Inject(builds)
             .Inject(gameDefs)
-            .ProcessInjects()
-            .Init();
+            .ProcessInjects();
+
+        systems.Init();
 
 #if UNITY_EDITOR
         Leopotam.Ecs.UnityIntegration.EcsSystemsObserver.Create(systems);
