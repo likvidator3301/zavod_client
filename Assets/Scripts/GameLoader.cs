@@ -1,30 +1,45 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Leopotam.Ecs;
 using Systems;
 using Components;
+using UnityEditor;
 
 public class GameLoader : MonoBehaviour
 {
     public GameObject[] builds;
     public GameDefinitions gameDefs;
+    public PrefabsHolderComponent PrefabsHolder;
 
-    EcsWorld world;
-    EcsSystems systems;
+    private EcsWorld world;
+    private EcsSystems systems;
 
-    void Start()
+
+    public void Start()
     {
         world = new EcsWorld();
-        systems = new EcsSystems(world);
+        var playerComponent = new PlayerComponent(GUID.Generate());
 
 #if UNITY_EDITOR
         Leopotam.Ecs.UnityIntegration.EcsWorldObserver.Create(world);
 #endif  
-        systems
+
+        var controlsSystems = new EcsSystems(world)
             .Add(new BuildCreateSystem())
             .Add(new InputSystem())
             .Add(new CameraSystem())
+            .Add(new UnitActionHandler())
+            .Add(new SelectionHandler());
+        var levelSystems = new EcsSystems(world)
+            .Add(new StartupTestLevelSystem());
+        var unitSystems = new EcsSystems(world)
+            .Add(new UnitStateChangeSystem())
+            .Add(new UnitActionSystem());
+        var systems = new EcsSystems(world)
+            .Add(controlsSystems)
+            .Add(unitSystems)
+            .Add(levelSystems)
+            .Inject(playerComponent)
+            .Inject(PrefabsHolder)
             .Inject(builds)
             .Inject(gameDefs)
             .ProcessInjects()

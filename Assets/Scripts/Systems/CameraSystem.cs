@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Leopotam.Ecs;
 using UnityEngine;
 using Components;
-using Definitions;
 
 namespace Systems
 {
