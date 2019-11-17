@@ -6,5 +6,6 @@ namespace Components
     {
         public GameObject Object { get; set; }
         public UnitTag Tag { get; set; }
+        public Animation CurrentAnimation { get; set; }
     }
 }
