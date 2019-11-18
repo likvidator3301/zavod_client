@@ -4,17 +4,19 @@ using Components;
 using System;
 using System.Collections.Generic;
 
-namespace Systems {
+namespace Systems
+{
 
-    class InputSystem : IEcsRunSystem {
+    class InputSystem : IEcsRunSystem
+    {
         readonly EcsWorld world = null;
 
         private static readonly int mouseButtonCount = 3;
 
         private readonly EcsEntity[] previousClickEvents = new EcsEntity[mouseButtonCount];
         private readonly Dictionary<KeyCode, EcsEntity> pressedKeyCodeEvents = new Dictionary<KeyCode, EcsEntity>();
-        
-        void IEcsRunSystem.Run () 
+
+        void IEcsRunSystem.Run()
         {
             MouseHandle();
             KeyboardHandle();
@@ -52,7 +54,13 @@ namespace Systems {
 
                 if (Input.GetKeyDown(key))
                 {
-                    pressedKeyCodeEvents.Add(key, 
+                    if (pressedKeyCodeEvents.ContainsKey(key))
+                    {
+                        pressedKeyCodeEvents[key].Destroy();
+                        pressedKeyCodeEvents.Remove(key);
+                    }
+
+                    pressedKeyCodeEvents.Add(key,
                         world.NewEntityWith(out PressKeyEvent pressEvent));
                     pressEvent.Code = key;
                 }
