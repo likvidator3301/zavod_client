@@ -24,12 +24,12 @@ namespace Systems
 
         public void Init()
         {
-            speed = gameDefs.cameraDef.speed;
-            rotateSpeed = gameDefs.cameraDef.rotateSpeed;
-            verticalMoveStepFactor = gameDefs.cameraDef.verticalMoveStepFactor;
-            maxHeigth = gameDefs.cameraDef.maxHeigth;
-            minHeigth = gameDefs.cameraDef.minHeigth;
-            verticalMoveSpeed = gameDefs.cameraDef.verticalMoveSpeed;
+            speed = gameDefs.CameraDefinitions.speed;
+            rotateSpeed = gameDefs.CameraDefinitions.rotateSpeed;
+            verticalMoveStepFactor = gameDefs.CameraDefinitions.verticalMoveStepFactor;
+            maxHeigth = gameDefs.CameraDefinitions.maxHeigth;
+            minHeigth = gameDefs.CameraDefinitions.minHeigth;
+            verticalMoveSpeed = gameDefs.CameraDefinitions.verticalMoveSpeed;
         }
 
         public void Run()

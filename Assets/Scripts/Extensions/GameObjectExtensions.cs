@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Components;
 using Leopotam.Ecs;
 using UnityEngine;
+using UnityEngine.AI;
 using Object = UnityEngine.Object;
 
 namespace Systems

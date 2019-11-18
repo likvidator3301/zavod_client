@@ -6,8 +6,7 @@ using UnityEditor;
 
 public class GameLoader : MonoBehaviour
 {
-    public GameObject[] builds;
-    public GameDefinitions gameDefs;
+    public GameDefinitions gameDefinitions;
     public PrefabsHolderComponent PrefabsHolder;
 
     private EcsWorld world;
@@ -28,20 +27,23 @@ public class GameLoader : MonoBehaviour
             .Add(new InputSystem())
             .Add(new CameraSystem())
             .Add(new UnitActionHandler())
-            .Add(new SelectionHandler());
+            .Add(new SelectionHandler())
+            .Add(new CheckClickOnBuildsSystem());
         var levelSystems = new EcsSystems(world)
             .Add(new StartupTestLevelSystem());
         var unitSystems = new EcsSystems(world)
             .Add(new UnitStateChangeSystem())
-            .Add(new UnitActionSystem());
+            .Add(new UnitActionSystem())
+            .Add(new UnitCreateSystem());
+
         systems = new EcsSystems(world)
+            .Add(new GUISystem())
             .Add(controlsSystems)
             .Add(unitSystems)
             .Add(levelSystems)
             .Inject(playerComponent)
             .Inject(PrefabsHolder)
-            .Inject(builds)
-            .Inject(gameDefs)
+            .Inject(gameDefinitions)
             .ProcessInjects();
 
         systems.Init();

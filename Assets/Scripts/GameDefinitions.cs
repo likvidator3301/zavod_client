@@ -1,9 +1,10 @@
 ﻿using Components;
 using UnityEngine;
-using Definitions;
 
-[CreateAssetMenu(menuName = "zavod_client/GameDef", fileName = "GameDefs")]
+[CreateAssetMenu(menuName = "zavod_client/GameDefinitions", fileName = "GameDefinitions")]
 public class GameDefinitions : ScriptableObject
 {
-    public CameraDefinition cameraDef;
+    public CameraDefinition CameraDefinitions;
+    public GUIDefinitions GuiDefinitions;
+    public BuildingsDefinitions BuildingDefinitions;
 }

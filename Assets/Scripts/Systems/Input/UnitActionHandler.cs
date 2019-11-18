@@ -20,13 +20,13 @@ namespace Systems
 
         private void HandleInput()
         {
-            HandleCreatingUnits();
+            //HandleCreatingUnits();
             HandleMovingUnits();
         }
 
         private void HandleCreatingUnits()
         {
-            if (!Input.GetKeyDown("u"))
+            if (!Input.GetKeyDown(KeyCode.U))
                 return;
             if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfo))
                 prefabsHolder.WarriorPrefab.AddNewEntityOnPositionWithTag(ecsWorld, hitInfo.point, UnitTag.Warrior);

@@ -3,7 +3,6 @@ using UnityEngine;
 using Components;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Systems {
 
@@ -17,19 +16,6 @@ namespace Systems {
         
         void IEcsRunSystem.Run () 
         {
-            // ƒл€ тестировани€ работы строительства зданий:
-            //if (Input.GetKeyDown(KeyCode.Space))           
-            //{                                                               
-            //    world.NewEntityWith(out BuildCreateEvent buildEvent);
-            //    buildEvent.Type = "barracs";
-            //}
-
-            //if (Input.GetKeyDown(KeyCode.LeftShift))
-            //{
-            //    world.NewEntityWith(out BuildCreateEvent buildEvent);
-            //    buildEvent.Type = "zikkurat";
-            //}
-
             MouseHandle();
             KeyboardHandle();
         }
@@ -42,6 +28,7 @@ namespace Systems {
                 {
                     previousClickEvents[i] = world.NewEntityWith(out ClickEvent click);
                     click.ButtonNumber = i;
+                    click.IsBlocked = false;
                 }
 
                 if (Input.GetMouseButtonUp(i))
