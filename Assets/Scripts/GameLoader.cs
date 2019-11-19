@@ -3,11 +3,11 @@ using Leopotam.Ecs;
 using Systems;
 using Components;
 using UnityEditor;
+using UnityEngine.Serialization;
 
 public class GameLoader : MonoBehaviour
 {
     public GameDefinitions gameDefinitions;
-    public PrefabsHolderComponent PrefabsHolder;
 
     private EcsWorld world;
     private EcsSystems systems;
@@ -42,7 +42,6 @@ public class GameLoader : MonoBehaviour
             .Add(unitSystems)
             .Add(levelSystems)
             .Inject(playerComponent)
-            .Inject(PrefabsHolder)
             .Inject(gameDefinitions)
             .ProcessInjects();
 

@@ -10,6 +10,9 @@ namespace Systems
         public static bool TryGetHitInfoForMousePosition(
             out RaycastHit hitInfo, string collisionTagName = defaultCollisionTag, int range = defaultRange)
         {
+            hitInfo = default(RaycastHit);
+            if (Camera.main == null)
+                return false;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             return Physics.Raycast(ray, out hitInfo, range) && hitInfo.collider.gameObject.CompareTag(collisionTagName);
         }

@@ -19,11 +19,9 @@ namespace Systems
 
         private void DestroyDeadUnits()
         {
-            foreach (var unitEntity in units
-                .Entities
-                .Where(u => !u.IsNull() && u.IsAlive() && u.Get<UnitComponent>()
-                                .Object.GetComponent<HealthComponent>()
-                                .CurrentHp <= 0))
+            foreach (var unitEntity in units.Entities
+                .Where(u => !u.IsNull() && u.IsAlive() 
+                                        && u.Get<HealthComponent>().CurrentHp <= 0))
             {
                 Object.Destroy(unitEntity.Get<UnitComponent>().Object);
                 unitEntity.Destroy();

@@ -9,12 +9,8 @@ namespace Systems
         {
             try
             {
-                using (var file = File.OpenText(pathToJson))
-                {
-                    var serializer = new JsonSerializer();
-                    var component = (T) serializer.Deserialize(file, typeof(T));
-                    return component;
-                }
+                var file = File.ReadAllText(pathToJson);
+                return JsonConvert.DeserializeObject<T>(file);
             }
             catch (JsonException e)
             {

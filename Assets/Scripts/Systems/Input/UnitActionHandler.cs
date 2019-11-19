@@ -9,28 +9,10 @@ namespace Systems
     public class UnitActionHandler : IEcsRunSystem
     {
         private PlayerComponent player;
-        private PrefabsHolderComponent prefabsHolder;
         private EcsFilter<UnitComponent> units;
         private EcsWorld ecsWorld;
 
-        public void Run()
-        {
-            HandleInput();
-        }
-
-        private void HandleInput()
-        {
-            //HandleCreatingUnits();
-            HandleMovingUnits();
-        }
-
-        private void HandleCreatingUnits()
-        {
-            if (!Input.GetKeyDown(KeyCode.U))
-                return;
-            if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfo))
-                prefabsHolder.WarriorPrefab.AddNewEntityOnPositionWithTag(ecsWorld, hitInfo.point, UnitTag.Warrior);
-        }
+        public void Run() => HandleMovingUnits();
 
         private void HandleMovingUnits()
         {
@@ -41,33 +23,33 @@ namespace Systems
         private void MoveSelectedUnits()
         {
             if (!RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfo, UnitTag.EnemyWarrior.ToString()))
-                UnitActionSystem.UpdateTargets(hitInfo.point, player.SelectedUnits);
+                UnitActionSystem.UpdateTargetForUnits(player.SelectedUnits, hitInfo.point);
             else
             {
-                var enemyUnit = GetUnitByRaycastHit(hitInfo);
-                if (enemyUnit == null)
-                    return;
+                var enemyUnit = GetUnitEntityByRaycastHit(hitInfo);
                 MoveToAttackUnits(enemyUnit);
             }
         }
 
-        private UnitComponent GetUnitByRaycastHit(RaycastHit hitInfo)
+        private EcsEntity GetUnitEntityByRaycastHit(RaycastHit hitInfo)
         {
-            var enemyUnit = units.Get1.FirstOrDefault(u => u.Object.Equals(hitInfo.collider.gameObject));
+            var enemyUnit = units.Entities.FirstOrDefault(
+                u => !u.IsNull() && u.IsAlive()
+                                 && u.Get<UnitComponent>().Object.Equals(hitInfo.collider.gameObject));
             return enemyUnit;
         }
 
-        private void MoveToAttackUnits(UnitComponent enemyUnit)
+        private void MoveToAttackUnits(EcsEntity enemyUnitEntity)
         {
-            var enemyPosition = enemyUnit.Object.transform.position;
+            var enemyPosition = enemyUnitEntity.Get<UnitComponent>().Object.transform.position;
             foreach (var unit in player.SelectedUnits)
             {
-                var attackComponent = unit.Object.GetComponent<AttackComponent>();
-                if (Vector3.Distance(unit.Object.transform.position, enemyPosition) >
+                var attackComponent = unit.Get<AttackComponent>();
+                if (Vector3.Distance(unit.Get<UnitComponent>().Object.transform.position, enemyPosition) >
                     attackComponent.AttackRange)
-                    UnitActionSystem.UpdateTarget(enemyPosition, unit);
+                    UnitActionSystem.UpdateTargetForUnit(unit, enemyPosition);
                 else
-                    UnitActionSystem.Attack(unit, enemyUnit);
+                    UnitActionSystem.Attack(unit, enemyUnitEntity);
             }
         }
     }

@@ -24,7 +24,10 @@ namespace Systems
             RightBottom = new Vector2(Center.x +SizeX / 2, Center.z + SizeZ / 2);
         }
 
-        public static SelectionRectangle GetNew(Vector3 startPosition, Vector3 endPosition, float minHeight = minSelectionHeight)
+        public static SelectionRectangle GetNew(
+            Vector3 startPosition,
+            Vector3 endPosition,
+            float minHeight = minSelectionHeight)
         {
             var squareStartScreen = startPosition;
             var center = (squareStartScreen + endPosition) / 2f;
@@ -34,9 +37,9 @@ namespace Systems
             return new SelectionRectangle(center, sizeX, sizeZ);
         }
         
-        public GameObject GetSelectionFrame(PrefabsHolderComponent prefabs)
+        public GameObject GetSelectionFrame()
         {
-            var selectionObject = Object.Instantiate(prefabs.Selection);
+            var selectionObject = Object.Instantiate(UnitsInterfacesHolder.SelectionFrame);
             var selectionFrame = selectionObject.GetComponent<RectTransform>();
 
             selectionFrame.RotateAround(selectionFrame.transform.position, Vector3.left, 90);
@@ -46,18 +49,15 @@ namespace Systems
             return selectionObject;
         }
 
-        public List<UnitComponent> GetUnitsInFrame(EcsFilter<UnitComponent> units)
-        {
-            var existedUnits = units.Get1.Where(u => u != null);
-            return GetUnitsInFrame(existedUnits);
-        }
+        public List<EcsEntity> GetUnitsInFrame(EcsFilter<UnitComponent> units) =>
+            GetUnitsInFrame(units.Entities.Where(u => !u.IsNull() && u.IsAlive()));
 
-        public List<UnitComponent> GetUnitsInFrame(IEnumerable<UnitComponent> units)
+        public List<EcsEntity> GetUnitsInFrame(IEnumerable<EcsEntity> units)
         {
             var selection = this;
             return units
-                .Where(u => u.Tag != UnitTag.EnemyWarrior 
-                            && selection.IsWithinFrame(u.Object.transform.position))
+                .Where(u => u.Get<UnitComponent>().Tag != UnitTag.EnemyWarrior 
+                            && selection.IsWithinFrame(u.Get<UnitComponent>().Object.transform.position))
                 .ToList();
         }
         

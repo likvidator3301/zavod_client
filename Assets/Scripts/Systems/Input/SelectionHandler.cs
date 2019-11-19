@@ -8,10 +8,9 @@ namespace Systems
     public class SelectionHandler : IEcsRunSystem
     {
         private EcsFilter<UnitComponent> units;
-        private List<UnitComponent> selectedUnits = new List<UnitComponent>();
+        private List<EcsEntity> selectedUnits = new List<EcsEntity>();
         private Vector3 startPosition = Vector3.zero;
         private Vector3 endPosition = Vector3.zero;
-        private PrefabsHolderComponent prefabsHolder;
         private PlayerComponent player;
         private const int selectionDeletingDelayWhileSelecting = 5;
 
@@ -37,7 +36,7 @@ namespace Systems
                     endPosition = hitInfoEnd.point;
                     var selectionInfo = SelectionRectangle.GetNew(startPosition, endPosition);
                     selectedUnits = selectionInfo.GetUnitsInFrame(units);
-                    var selectionFrame = selectionInfo.GetSelectionFrame(prefabsHolder);
+                    var selectionFrame = selectionInfo.GetSelectionFrame();
                     selectedUnits.HighlightObjects();
                     await selectionFrame.RemoveObjectWithDelay(selectionDeletingDelayWhileSelecting);
                 }

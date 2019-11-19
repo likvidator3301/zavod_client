@@ -2,7 +2,7 @@
 
 namespace Components
 {
-    public class AttackComponent : MonoBehaviour
+    public class AttackComponent
     {
         public float AttackDamage { get; set; }
         public float AttackDelay { get; set; }

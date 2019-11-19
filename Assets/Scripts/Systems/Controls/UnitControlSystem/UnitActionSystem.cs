@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Components;
 using Leopotam.Ecs;
 using UnityEngine;
@@ -10,36 +11,37 @@ namespace Systems
     {
         private const float inertiaEliminatorFactor = 3;
 
-        public static void Attack(UnitComponent attackingUnit, UnitComponent targetUnit)
+        public static void Attack(EcsEntity attackingUnit, EcsEntity targetUnit)
         {
-            var attackComponent = attackingUnit.Object.GetComponent<AttackComponent>();
-            var targetHealthComponent = targetUnit.Object.GetComponent<HealthComponent>();
+            var attackComponent = attackingUnit.Get<AttackComponent>();
+            var targetHealthComponent = targetUnit.Get<HealthComponent>();
             if (!CanAttack(attackingUnit, targetUnit))
                 return;
             targetHealthComponent.CurrentHp -= attackComponent.AttackDamage;
             attackComponent.LastAttackTime = Time.time;
         }
-
-        public static void UpdateTargets(Vector3 targetPosition, List<UnitComponent> units)
+        
+        public static void UpdateTargetForUnit(EcsEntity unitEntity, Vector3 targetPosition)
         {
-            foreach (var unit in units)
-                UpdateTarget(targetPosition, unit);
-        }
-
-        public static void UpdateTarget(Vector3 targetPosition, UnitComponent unit)
-        {
-            var agent = unit.Object.GetComponent<NavMeshAgent>();
-            var movementComponent = unit.Object.GetComponent<MovementComponent>();
+            var agent = unitEntity.Get<UnitComponent>().Object.GetComponent<NavMeshAgent>();
+            var movementComponent = unitEntity.Get<MovementComponent>();
             agent.SetDestination(targetPosition);
             agent.speed = movementComponent.MoveSpeed;
             agent.acceleration = movementComponent.MoveSpeed * inertiaEliminatorFactor;
         }
 
-        private static bool CanAttack(UnitComponent attackingUnit, UnitComponent targetUnit)
+        public static void UpdateTargetForUnits(IEnumerable<EcsEntity> units, Vector3 targetPosition)
         {
-            var attackComponent = attackingUnit.Object.GetComponent<AttackComponent>();
-            var attackingPosition = attackingUnit.Object.transform.position;
-            var targetPosition = targetUnit.Object.transform.position;
+            var existedUnits = units.Where(u => !u.IsNull() && u.IsAlive());
+            foreach (var unit in existedUnits)
+                UpdateTargetForUnit(unit, targetPosition);
+        }
+
+        private static bool CanAttack(EcsEntity attackingUnit, EcsEntity targetUnit)
+        {
+            var attackComponent = attackingUnit.Get<AttackComponent>();
+            var attackingPosition = attackingUnit.Get<UnitComponent>().Object.transform.position;
+            var targetPosition = targetUnit.Get<UnitComponent>().Object.transform.position;
             return IsNotOnCooldown(attackComponent)
                    && IsOnAttackRange(attackingPosition, targetPosition, attackComponent.AttackRange);
         }
