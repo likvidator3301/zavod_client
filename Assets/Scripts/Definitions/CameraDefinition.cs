@@ -12,4 +12,5 @@ public class CameraDefinition : ScriptableObject
     public float maxHeigth;
     public float minHeigth;
     public float verticalMoveSpeed;
+    public Camera mainCameraPrefab;
 }
