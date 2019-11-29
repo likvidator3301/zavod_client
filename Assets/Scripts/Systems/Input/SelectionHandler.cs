@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Components;
 using Leopotam.Ecs;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Systems
 {
@@ -21,20 +24,20 @@ namespace Systems
         
         private async void HandleSelection()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown((int)MouseButton.LeftMouse))
             {
                 if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoStart))
                     startPosition = hitInfoStart.point;
             }
 
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton((int)MouseButton.LeftMouse))
             {
+                selectedUnits.DehighlightObjects();
+                selectedUnits.Clear();
                 if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoEnd))
                 {
-                    selectedUnits.DehighlightObjects();
-                    selectedUnits.Clear();
                     endPosition = hitInfoEnd.point;
-                    var selectionInfo = SelectionRectangle.GetNew(startPosition, endPosition);
+                    var selectionInfo = new SelectionRectangle(startPosition, endPosition);
                     selectedUnits = selectionInfo.GetUnitsInFrame(units);
                     var selectionFrame = selectionInfo.GetSelectionFrame();
                     selectedUnits.HighlightObjects();
@@ -43,7 +46,15 @@ namespace Systems
             }
 
             if (Input.GetMouseButtonUp(0))
+            {
+                if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoUnit, UnitTag.Warrior.ToString()))
+                {
+                    var selectedUnit = RaycastHelper.GetUnitEntityByRaycastHit(hitInfoUnit, units);
+                    selectedUnits.Add(selectedUnit);
+                }
                 player.SelectedUnits = selectedUnits;
+                selectedUnits.HighlightObjects();
+            }
         }
     }
 }

@@ -87,7 +87,6 @@ namespace Systems
                 world.NewEntityWith(out ButtonComponent buttonComponent);
                 buttonComponent.buttonName = button.name;
                 buttonComponent.bounds = button.GetButtonBounds();
-                Debug.Log(buttonComponent.bounds);
                 buttonComponent.button = button;
             }
 

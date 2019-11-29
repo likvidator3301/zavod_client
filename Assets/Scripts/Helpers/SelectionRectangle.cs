@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Systems
 {
-    public struct SelectionRectangle
+    public class SelectionRectangle
     {
         public Vector3 Center { get; set; }
         public float SizeX { get; set; }
@@ -15,26 +15,16 @@ namespace Systems
         public Vector2 RightBottom { get; set; }
         private const float minSelectionHeight = 0.5f;
 
-        public SelectionRectangle(Vector3 center, float sizeX, float sizeZ)
-        {
-            Center = center;
-            SizeX = sizeX;
-            SizeZ = sizeZ;
-            LeftTop = new Vector2(Center.x - SizeX / 2, Center.z - SizeZ / 2);
-            RightBottom = new Vector2(Center.x +SizeX / 2, Center.z + SizeZ / 2);
-        }
-
-        public static SelectionRectangle GetNew(
-            Vector3 startPosition,
-            Vector3 endPosition,
-            float minHeight = minSelectionHeight)
+        public SelectionRectangle(Vector3 startPosition, Vector3 endPosition, float minHeight = minSelectionHeight)
         {
             var squareStartScreen = startPosition;
             var center = (squareStartScreen + endPosition) / 2f;
             center.y = minSelectionHeight;
-            var sizeX = Mathf.Abs(squareStartScreen.x - endPosition.x);
-            var sizeZ = Mathf.Abs(squareStartScreen.z - endPosition.z);
-            return new SelectionRectangle(center, sizeX, sizeZ);
+            Center = center;
+            SizeX = Mathf.Abs(squareStartScreen.x - endPosition.x);
+            SizeZ = Mathf.Abs(squareStartScreen.z - endPosition.z);
+            LeftTop = new Vector2(Center.x - SizeX / 2, Center.z - SizeZ / 2);
+            RightBottom = new Vector2(Center.x +SizeX / 2, Center.z + SizeZ / 2);
         }
         
         public GameObject GetSelectionFrame()
@@ -49,8 +39,10 @@ namespace Systems
             return selectionObject;
         }
 
-        public List<EcsEntity> GetUnitsInFrame(EcsFilter<UnitComponent> units) =>
-            GetUnitsInFrame(units.Entities.Where(u => !u.IsNull() && u.IsAlive()));
+        public List<EcsEntity> GetUnitsInFrame(EcsFilter<UnitComponent> units)
+        {
+            return GetUnitsInFrame(units.Entities.Where(u => u.IsNotNullAndAlive()));
+        }
 
         public List<EcsEntity> GetUnitsInFrame(IEnumerable<EcsEntity> units)
         {

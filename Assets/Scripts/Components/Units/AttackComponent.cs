@@ -8,6 +8,7 @@ namespace Components
         public float AttackDelay { get; set; }
         public float AttackRange { get; set; }
         public float LastAttackTime { get; set; }
+        public bool IsAttacking { get; set; }
 
         public void InitializeComponent(AttackComponent attackComponent)
         {

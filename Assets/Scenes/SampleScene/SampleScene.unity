@@ -150,8 +150,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameDefinitions: {fileID: 11400000, guid: 0ab68f16ab9d21f4baebd18494bcd154, type: 2}
-  PrefabsHolder: {fileID: 8243205655303629620, guid: fea9e37d0ac5d8b4082b22296bea83ca,
-    type: 3}
 --- !u!4 &287049569
 Transform:
   m_ObjectHideFlags: 0

@@ -134,7 +134,6 @@ namespace Systems
             newBuild.Type = build.tag;
             newBuild.InBuildCanvas = canvas;
             newBuild.AllButtons = canvas.GetComponentsInChildren<Button>();
-            Debug.Log(newBuild.InBuildCanvas.GetInstanceID());
         }
     }
 }

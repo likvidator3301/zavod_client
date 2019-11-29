@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Components;
+using Components.UnitsEvents;
 using Leopotam.Ecs;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Systems
 {
@@ -16,40 +18,50 @@ namespace Systems
 
         private void HandleMovingUnits()
         {
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown((int)MouseButton.RightMouse))
                 MoveSelectedUnits();
         }
 
         private void MoveSelectedUnits()
         {
             if (!RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfo, UnitTag.EnemyWarrior.ToString()))
-                UnitActionSystem.UpdateTargetForUnits(player.SelectedUnits, hitInfo.point);
+            {
+                foreach (var unit in player.SelectedUnits)
+                {
+                    ecsWorld.NewEntityWith<MoveEvent>(out var movementEvent);
+                    movementEvent.MovingObject = unit;
+                    movementEvent.NextPosition = hitInfo.point;
+                }
+            }
             else
             {
-                var enemyUnit = GetUnitEntityByRaycastHit(hitInfo);
+                var enemyUnit = RaycastHelper.GetUnitEntityByRaycastHit(hitInfo, units);
                 MoveToAttackUnits(enemyUnit);
             }
-        }
-
-        private EcsEntity GetUnitEntityByRaycastHit(RaycastHit hitInfo)
-        {
-            var enemyUnit = units.Entities.FirstOrDefault(
-                u => !u.IsNull() && u.IsAlive()
-                                 && u.Get<UnitComponent>().Object.Equals(hitInfo.collider.gameObject));
-            return enemyUnit;
         }
 
         private void MoveToAttackUnits(EcsEntity enemyUnitEntity)
         {
             var enemyPosition = enemyUnitEntity.Get<UnitComponent>().Object.transform.position;
-            foreach (var unit in player.SelectedUnits)
+            foreach (var unitEntity in player.SelectedUnits)
             {
-                var attackComponent = unit.Get<AttackComponent>();
-                if (Vector3.Distance(unit.Get<UnitComponent>().Object.transform.position, enemyPosition) >
-                    attackComponent.AttackRange)
-                    UnitActionSystem.UpdateTargetForUnit(unit, enemyPosition);
+                var attackComponent = unitEntity.Get<AttackComponent>();
+                var unitComponent = unitEntity.Get<UnitComponent>();
+                if (!AttackHelper.IsOnAttackRange(
+                    unitComponent.Object.transform.position,
+                    enemyPosition,
+                    attackComponent.AttackRange))
+                {
+                    ecsWorld.NewEntityWith<FollowEvent>(out var followEvent);
+                    followEvent.MovingObject = unitEntity;
+                    followEvent.Target = enemyUnitEntity;
+                }
                 else
-                    UnitActionSystem.Attack(unit, enemyUnitEntity);
+                {
+                    ecsWorld.NewEntityWith<AttackEvent>(out var attackEvent);
+                    attackEvent.AttackingUnit = unitEntity;
+                    attackEvent.Target = enemyUnitEntity;
+                }
             }
         }
     }

@@ -49,5 +49,10 @@ namespace Systems
                 .Select(u => u.Get<UnitComponent>().Object)
                 .DehighlightObjects();
         }
+
+        public static bool IsNotNullAndAlive(this EcsEntity entity)
+        {
+            return !entity.IsNull() && entity.IsAlive();
+        }
     }
 }

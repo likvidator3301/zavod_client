@@ -9,8 +9,8 @@ namespace Systems
         private const float minHeight = 2.6f;
         private EcsWorld ecsWorld;
         private EcsGrowList<UnitComponent> units;
-        private readonly Vector3 allyUnitPosition = new Vector3(375, minHeight, 515);
-        private readonly Vector3 enemyUnitPosition = new Vector3(375, minHeight, 527);
+        private readonly Vector3 allyUnitPosition = new Vector3(44, minHeight, 40);
+        private readonly Vector3 enemyUnitPosition = new Vector3(44, minHeight, 45);
 
         public void Init()
         {
