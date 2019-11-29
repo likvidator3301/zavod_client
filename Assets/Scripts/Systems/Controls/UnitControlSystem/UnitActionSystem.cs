@@ -51,7 +51,6 @@ namespace Systems
 
             targetHealthComponent.CurrentHp -= attackComponent.AttackDamage;
             attackComponent.LastAttackTime = Time.time;
-            Debug.Log(targetHealthComponent.CurrentHp);
             if (targetHealthComponent.CurrentHp <= 0)
             {
                 ecsWorld.NewEntityWith<DeadEvent>(out var deadEvent);
@@ -103,6 +102,11 @@ namespace Systems
             {
                 var movingObject = followEventEntity.Get<FollowEvent>().MovingObject;
                 var target = followEventEntity.Get<FollowEvent>().Target;
+                if (!target.IsNotNullAndAlive())
+                {
+                    followEventEntity.Destroy();
+                    continue;
+                }
                 if (target.Get<UnitComponent>().Tag == UnitTag.EnemyWarrior
                     && AttackHelper.CanAttack(movingObject, target))
                 {
