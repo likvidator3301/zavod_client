@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Components;
 using Leopotam.Ecs;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using Object = UnityEngine.Object;
@@ -22,7 +23,7 @@ namespace Systems
             newEntity.AddWarriorComponents();
         }
 
-        public static async Task RemoveObjectWithDelay(this GameObject obj, int waitForMilliseconds = 500)
+        public static async Task DestroyObjectWithDelay(this GameObject obj, int waitForMilliseconds = 500)
         {
             if (obj == null)
                 return;

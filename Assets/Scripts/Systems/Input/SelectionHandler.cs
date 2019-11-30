@@ -41,7 +41,7 @@ namespace Systems
                     selectedUnits = selectionInfo.GetUnitsInFrame(units);
                     var selectionFrame = selectionInfo.GetSelectionFrame();
                     selectedUnits.HighlightObjects();
-                    await selectionFrame.RemoveObjectWithDelay(selectionDeletingDelayWhileSelecting);
+                    await selectionFrame.DestroyObjectWithDelay(selectionDeletingDelayWhileSelecting);
                 }
             }
 
@@ -49,7 +49,7 @@ namespace Systems
             {
                 if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoUnit, UnitTag.Warrior.ToString()))
                 {
-                    var selectedUnit = RaycastHelper.GetUnitEntityByRaycastHit(hitInfoUnit, units);
+                    var selectedUnit = RaycastHelper.GetUnitEntityByRaycastHit(hitInfoUnit, units.Entities);
                     selectedUnits.Add(selectedUnit);
                 }
                 player.SelectedUnits = selectedUnits;

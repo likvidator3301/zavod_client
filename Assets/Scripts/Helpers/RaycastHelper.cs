@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Components;
 using Leopotam.Ecs;
 using UnityEngine;
@@ -28,12 +29,26 @@ namespace Systems
             return Physics.Raycast(ray, out hitInfo, range) && hitInfo.collider.gameObject.CompareTag(tagName);
         }
         
-        public static EcsEntity GetUnitEntityByRaycastHit(RaycastHit hitInfo, EcsFilter<UnitComponent> units)
+        public static EcsEntity GetUnitEntityByRaycastHit(RaycastHit hitInfo, EcsEntity[] units)
         {
-            var unitEntity = units.Entities.FirstOrDefault(
-                u => !u.IsNull() && u.IsAlive()
-                                 && u.Get<UnitComponent>().Object.Equals(hitInfo.collider.gameObject));
-            return unitEntity;
+            if (units == null)
+                return default;
+            
+            return units
+                .FirstOrDefault(u => !u.IsNull()
+                                     && u.IsAlive()
+                                     && u.Get<UnitComponent>().Object.Equals(hitInfo.collider.gameObject));
+        }
+        
+        public static EcsEntity GetBuildingEntityByRaycastHit(RaycastHit hitInfo, EcsEntity[] buildings)
+        {
+            if (buildings == null)
+                return default;
+            
+            return buildings
+                .FirstOrDefault(u => !u.IsNull()
+                                     && u.IsAlive()
+                                     && u.Get<BuildingComponent>().obj.Equals(hitInfo.collider.gameObject));
         }
     }
 }

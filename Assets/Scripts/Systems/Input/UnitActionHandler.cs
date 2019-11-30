@@ -12,6 +12,7 @@ namespace Systems
     {
         private PlayerComponent player;
         private EcsFilter<UnitComponent> units;
+        private EcsFilter<BuildingComponent> buildings;
         private EcsWorld ecsWorld;
 
         public void Run() => HandleMovingUnits();
@@ -24,7 +25,7 @@ namespace Systems
 
         private void MoveSelectedUnits()
         {
-            if (!RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfo, UnitTag.EnemyWarrior.ToString()))
+            if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfo, LevelObjectTag.Ground.ToString()))
             {
                 foreach (var unit in player.SelectedUnits)
                 {
@@ -35,32 +36,13 @@ namespace Systems
             }
             else
             {
-                var enemyUnit = RaycastHelper.GetUnitEntityByRaycastHit(hitInfo, units);
-                MoveToAttackUnits(enemyUnit);
-            }
-        }
-
-        private void MoveToAttackUnits(EcsEntity enemyUnitEntity)
-        {
-            var enemyPosition = enemyUnitEntity.Get<UnitComponent>().Object.transform.position;
-            foreach (var unitEntity in player.SelectedUnits)
-            {
-                var attackComponent = unitEntity.Get<AttackComponent>();
-                var unitComponent = unitEntity.Get<UnitComponent>();
-                if (!AttackHelper.IsOnAttackRange(
-                    unitComponent.Object.transform.position,
-                    enemyPosition,
-                    attackComponent.AttackRange))
+                foreach (var unit in player.SelectedUnits)
                 {
+                    var unitTarget = RaycastHelper.GetUnitEntityByRaycastHit(hitInfo, units.Entities);
+                    
                     ecsWorld.NewEntityWith<FollowEvent>(out var followEvent);
-                    followEvent.MovingObject = unitEntity;
-                    followEvent.Target = enemyUnitEntity;
-                }
-                else
-                {
-                    ecsWorld.NewEntityWith<AttackEvent>(out var attackEvent);
-                    attackEvent.AttackingUnit = unitEntity;
-                    attackEvent.Target = enemyUnitEntity;
+                    followEvent.MovingObject = unit;
+                    followEvent.Target = unitTarget;
                 }
             }
         }

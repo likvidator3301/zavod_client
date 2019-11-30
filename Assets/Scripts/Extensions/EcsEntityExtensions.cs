@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Components;
 using Leopotam.Ecs;
-using UnityEngine.AI;
 
 namespace Systems
 {
@@ -11,6 +11,7 @@ namespace Systems
     {
         private const string pathToInfo = @"./Assets/Data/Units";
         private const string fileType = "json";
+        private const int destroyingDelay = 1000;
 
         public static void AddWarriorComponents(this EcsEntity entity)
         {
@@ -53,6 +54,12 @@ namespace Systems
         public static bool IsNotNullAndAlive(this EcsEntity entity)
         {
             return !entity.IsNull() && entity.IsAlive();
+        }
+
+        public static async Task DestroyEntityWithDelay(this EcsEntity entity, int waitForMilliseconds = destroyingDelay)
+        {
+            await Task.Delay(waitForMilliseconds);
+            entity.Destroy();
         }
     }
 }

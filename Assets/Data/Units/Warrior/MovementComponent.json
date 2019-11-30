@@ -1,5 +1,4 @@
 ﻿{
   "MoveSpeed": 5,
-  "Acceleration": 3,
-  "IsMoving": false
+  "Acceleration": 3
 }

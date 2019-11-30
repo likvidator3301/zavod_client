@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Components;
 using Components.UnitsEvents;
 using Leopotam.Ecs;
@@ -23,6 +22,7 @@ namespace Systems
             {
                 var deadEvent = deadEventEntity.Get<DeadEvent>();
                 Object.Destroy(deadEvent.DeadUnit.Get<UnitComponent>().Object);
+                //await deadEvent.DeadUnit.DestroyEntityWithDelay();
                 deadEvent.DeadUnit.Destroy();
                 deadEventEntity.Destroy();
             }
