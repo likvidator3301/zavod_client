@@ -31,18 +31,11 @@ namespace Systems
                 if (unit.IsNotNullAndAlive())
                 {
                     var animator = unit.Get<UnitComponent>().Animator;
-                    SetFieldForAnimatorFromComponent(animator, animationComponent);
+                    UnitAnimationHelper.SetFieldForAnimatorFromComponent(animator, animationComponent);
                 }
                 
                 animationEventEntity.Destroy();
             }
-        }
-
-        private void SetFieldForAnimatorFromComponent(Animator animator, UnitAnimationComponent animationComponent)
-        {
-            animator.SetBool(UnitAnimationState.IsAttacking.ToString(), animationComponent.IsAttacking);
-            animator.SetBool(UnitAnimationState.IsMoving.ToString(), animationComponent.IsMoving);
-            animator.SetFloat(UnitAnimationState.CurrentHp.ToString(), animationComponent.CurrentHp);
         }
 
         private void ChangeMovingStateIfIsOnTargetPosition()

@@ -3,7 +3,6 @@ using Components;
 using Components.UnitsEvents;
 using Leopotam.Ecs;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Systems
 {
@@ -59,11 +58,7 @@ namespace Systems
             attackComponent.LastAttackTime = Time.time;
             if (targetHealthComponent.CurrentHp <= 0)
             {
-                ecsWorld.NewEntityWith<DeadEvent>(out var deadEvent);
-                deadEvent.DeadUnit = targetUnit;
-                
-                UnitAnimationHelper.CreateDieEvent(ecsWorld, targetUnit);
-                
+                ChangeStateHelper.CreateDieEvent(ecsWorld, targetUnit);
                 attackEventEntity.Destroy();
             }
         }
@@ -157,15 +152,12 @@ namespace Systems
             var enemyUnits = units.Entities
                 .Where(u => u.IsNotNullAndAlive() && u.Get<UnitComponent>().Tag == UnitTag.EnemyWarrior);
             
-            foreach (var unit in allyUnits)
+            foreach (var attackingUnitEntity in allyUnits)
             {
-                var unitToAttack = enemyUnits.FirstOrDefault(enemy => CanAttackAndNotInAttackEvents(unit, enemy));
-                if (unitToAttack != default)
-                {
-                    ecsWorld.NewEntityWith<AttackEvent>(out var attackEvent);
-                    attackEvent.AttackingUnit = unit;
-                    attackEvent.Target = unitToAttack;
-                }
+                var targetUnitEntity = enemyUnits
+                    .FirstOrDefault(enemy => CanAttackAndNotInAttackEvents(attackingUnitEntity, enemy));
+                if (targetUnitEntity != default)
+                    AttackHelper.CreateAttackEvent(ecsWorld, attackingUnitEntity, targetUnitEntity);
             }
         }
 

@@ -1,6 +1,7 @@
 using Components;
 using Components.UnitsEvents;
 using Leopotam.Ecs;
+using UnityEngine;
 
 namespace Systems
 {
@@ -44,6 +45,13 @@ namespace Systems
                 UnitAnimationState.CurrentHp.ToString());
             var attackCancelEvent = GetEventWithUnit(ecsWorld, unitEntity);
             attackCancelEvent.AnimationComponent.SetFields(false, previousMovingState, previousHpState);
+        }
+        
+        public static void SetFieldForAnimatorFromComponent(Animator animator, UnitAnimationComponent animationComponent)
+        {
+            animator.SetBool(UnitAnimationState.IsAttacking.ToString(), animationComponent.IsAttacking);
+            animator.SetBool(UnitAnimationState.IsMoving.ToString(), animationComponent.IsMoving);
+            animator.SetFloat(UnitAnimationState.CurrentHp.ToString(), animationComponent.CurrentHp);
         }
 
         private static UnitAnimationEvent GetEventWithUnit(EcsWorld ecsWorld, EcsEntity unitEntity)

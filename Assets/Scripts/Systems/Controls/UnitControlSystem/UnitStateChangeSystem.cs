@@ -20,10 +20,11 @@ namespace Systems
                 .Where(e => e.IsNotNullAndAlive());
             foreach (var deadEventEntity in deadEventEntities)
             {
-                var deadEvent = deadEventEntity.Get<DeadEvent>();
-                Object.Destroy(deadEvent.DeadUnit.Get<UnitComponent>().Object);
+                var dieEvent = deadEventEntity.Get<DeadEvent>();
+                UnitAnimationHelper.CreateDieEvent(ecsWorld, dieEvent.DeadUnit);
+                Object.Destroy(dieEvent.DeadUnit.Get<UnitComponent>().Object);
                 //await deadEvent.DeadUnit.DestroyEntityWithDelay();
-                deadEvent.DeadUnit.Destroy();
+                dieEvent.DeadUnit.Destroy();
                 deadEventEntity.Destroy();
             }
         }

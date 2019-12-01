@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using Components;
-using Components.UnitsEvents;
+﻿using Components;
 using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -28,21 +25,14 @@ namespace Systems
             if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfo, LevelObjectTag.Ground.ToString()))
             {
                 foreach (var unit in player.SelectedUnits)
-                {
-                    ecsWorld.NewEntityWith<MoveEvent>(out var movementEvent);
-                    movementEvent.MovingObject = unit;
-                    movementEvent.NextPosition = hitInfo.point;
-                }
+                    MoveHelper.CreateMoveEvent(ecsWorld, unit, hitInfo.point);
             }
             else
             {
                 foreach (var unit in player.SelectedUnits)
                 {
                     var unitTarget = RaycastHelper.GetUnitEntityByRaycastHit(hitInfo, units.Entities);
-                    
-                    ecsWorld.NewEntityWith<FollowEvent>(out var followEvent);
-                    followEvent.MovingObject = unit;
-                    followEvent.Target = unitTarget;
+                    MoveHelper.CreateFollowEvent(ecsWorld, unit, unitTarget);
                 }
             }
         }
