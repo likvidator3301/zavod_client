@@ -2,9 +2,7 @@ using System.Linq;
 using Components;
 using Components.UnitsEvents;
 using Leopotam.Ecs;
-using UnityEditor.Animations;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Systems
 {
@@ -14,6 +12,7 @@ namespace Systems
         private EcsFilter<UnitAnimationEvent> animationEvents;
         private EcsFilter<UnitComponent> units;
         private EcsFilter<AttackEvent> attackEvents;
+        private const float StopMovingAnimationDistance = 1.5f;
 
         public void Run()
         {
@@ -53,15 +52,8 @@ namespace Systems
             {
                 var unit = unitEntity.Get<UnitComponent>();
                 var currentPosition = unit.Object.transform.position;
-                if (Vector3.Distance(unit.Agent.destination, currentPosition) <= 1.5)
-                {
-                    var previousAttackingState = unit.Animator.GetBool(UnitAnimationState.IsAttacking.ToString());
-                    var previousHpState = unit.Animator.GetFloat(UnitAnimationState.CurrentHp.ToString());
-                    ecsWorld.NewEntityWith<UnitAnimationEvent>(out var animationEvent);
-                    animationEvent.Unit = unitEntity;
-                    animationEvent.AnimationComponent = new UnitAnimationComponent();
-                    animationEvent.AnimationComponent.SetFields(previousAttackingState, false, previousHpState);
-                }
+                if (Vector3.Distance(unit.Agent.destination, currentPosition) <= StopMovingAnimationDistance)
+                    UnitAnimationHelper.CreateStopMovingEvent(ecsWorld, unitEntity);
             }
         }
         
@@ -70,23 +62,12 @@ namespace Systems
             var unitEntities = units.Entities.Where(u => u.IsNotNullAndAlive());
             foreach (var unitEntity in unitEntities)
             {
-                var unit = unitEntity.Get<UnitComponent>();
                 var isAttacking = attackEvents.Entities
                                       .FirstOrDefault(attackEntity => 
                                           attackEntity.IsNotNullAndAlive()
                                           && attackEntity.Get<AttackEvent>().AttackingUnit == unitEntity) != default;
                 if (!isAttacking)
-                {
-                    ecsWorld.NewEntityWith<UnitAnimationEvent>(out var attackCancelEvent);
-                    var previousMovingState = unit.Animator.GetBool(UnitAnimationState.IsMoving.ToString());
-                    var previousHpState = unit.Animator.GetFloat(UnitAnimationState.CurrentHp.ToString());
-                    attackCancelEvent.Unit = unitEntity;
-                    attackCancelEvent.AnimationComponent = new UnitAnimationComponent();
-                    attackCancelEvent.AnimationComponent.SetFields(
-                        false,
-                        previousMovingState,
-                        previousHpState);
-                }
+                    UnitAnimationHelper.CreateStopAttackingEvent(ecsWorld, unitEntity);
             }
         }
     }
