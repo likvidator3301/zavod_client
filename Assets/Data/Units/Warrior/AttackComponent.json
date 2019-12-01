@@ -1,6 +1,6 @@
 ﻿{
   "AttackDamage": 10.0,
   "AttackDelay": 1.0,
-  "AttackRange": 15.0,
+  "AttackRange": 1.5,
   "LastAttackTime": 0.0
 }

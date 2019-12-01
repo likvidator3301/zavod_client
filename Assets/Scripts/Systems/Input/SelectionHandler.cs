@@ -1,17 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Components;
 using Leopotam.Ecs;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Systems
 {
     public class SelectionHandler : IEcsRunSystem
     {
         private EcsFilter<UnitComponent> units;
-        private List<UnitComponent> selectedUnits = new List<UnitComponent>();
+        private List<EcsEntity> selectedUnits = new List<EcsEntity>();
         private Vector3 startPosition = Vector3.zero;
         private Vector3 endPosition = Vector3.zero;
-        private PrefabsHolderComponent prefabsHolder;
         private PlayerComponent player;
         private const int selectionDeletingDelayWhileSelecting = 5;
 
@@ -22,29 +24,37 @@ namespace Systems
         
         private async void HandleSelection()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown((int)MouseButton.LeftMouse))
             {
                 if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoStart))
                     startPosition = hitInfoStart.point;
             }
 
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton((int)MouseButton.LeftMouse))
             {
+                selectedUnits.DehighlightObjects();
+                selectedUnits.Clear();
                 if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoEnd))
                 {
-                    selectedUnits.DehighlightObjects();
-                    selectedUnits.Clear();
                     endPosition = hitInfoEnd.point;
-                    var selectionInfo = SelectionRectangle.GetNew(startPosition, endPosition);
+                    var selectionInfo = new SelectionRectangle(startPosition, endPosition);
                     selectedUnits = selectionInfo.GetUnitsInFrame(units);
-                    var selectionFrame = selectionInfo.GetSelectionFrame(prefabsHolder);
+                    var selectionFrame = selectionInfo.GetSelectionFrame();
                     selectedUnits.HighlightObjects();
-                    await selectionFrame.RemoveObjectWithDelay(selectionDeletingDelayWhileSelecting);
+                    await selectionFrame.DestroyObjectWithDelay(selectionDeletingDelayWhileSelecting);
                 }
             }
 
             if (Input.GetMouseButtonUp(0))
+            {
+                if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoUnit, UnitTag.Warrior.ToString()))
+                {
+                    var selectedUnit = RaycastHelper.GetUnitEntityByRaycastHit(hitInfoUnit, units.Entities);
+                    selectedUnits.Add(selectedUnit);
+                }
                 player.SelectedUnits = selectedUnits;
+                selectedUnits.HighlightObjects();
+            }
         }
     }
 }
