@@ -45,7 +45,7 @@ namespace Systems
                 }
             }
 
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp((int)MouseButton.LeftMouse))
             {
                 if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoUnit, UnitTag.Warrior.ToString()))
                 {

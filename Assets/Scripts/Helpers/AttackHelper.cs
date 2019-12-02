@@ -1,4 +1,5 @@
 using Components;
+using Components.UnitsEvents;
 using Leopotam.Ecs;
 using UnityEngine;
 
@@ -23,6 +24,13 @@ namespace Systems
             var targetPosition = targetUnit.Get<UnitComponent>().Object.transform.position;
             return IsNotOnCooldown(attackComponent)
                    && IsOnAttackRange(attackingPosition, targetPosition, attackComponent.AttackRange);
+        }
+
+        public static void CreateAttackEvent(EcsWorld ecsWorld, EcsEntity attackingUnitEntity, EcsEntity targetUnitEntity)
+        {
+            ecsWorld.NewEntityWith<AttackEvent>(out var attackEvent);
+            attackEvent.AttackingUnit = attackingUnitEntity;
+            attackEvent.Target = targetUnitEntity;
         }
     }
 }

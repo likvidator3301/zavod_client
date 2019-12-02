@@ -3,7 +3,6 @@ using Components;
 using Components.UnitsEvents;
 using Leopotam.Ecs;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Systems
 {
@@ -52,24 +51,14 @@ namespace Systems
                 attackEventEntity.Destroy();
                 return;
             }
-
-            ecsWorld.NewEntityWith<UnitAnimationEvent>(out var attackAnimationEvent);
-            attackAnimationEvent.Unit = attackingUnit;
-            attackAnimationEvent.AnimationComponent = new UnitAnimationComponent();
-            attackAnimationEvent.AnimationComponent.SetFields(true, false, 1);
             
+            UnitAnimationHelper.CreateAttackEvent(ecsWorld, attackingUnit);
+
             targetHealthComponent.CurrentHp -= attackComponent.AttackDamage;
             attackComponent.LastAttackTime = Time.time;
             if (targetHealthComponent.CurrentHp <= 0)
             {
-                ecsWorld.NewEntityWith<DeadEvent>(out var deadEvent);
-                deadEvent.DeadUnit = targetUnit;
-                
-                ecsWorld.NewEntityWith<UnitAnimationEvent>(out var dieAnimationEvent);
-                dieAnimationEvent.Unit = targetUnit;
-                dieAnimationEvent.AnimationComponent = new UnitAnimationComponent();
-                dieAnimationEvent.AnimationComponent.SetFields(false, false, 0);
-                
+                ChangeStateHelper.CreateDieEvent(ecsWorld, targetUnit);
                 attackEventEntity.Destroy();
             }
         }
@@ -81,10 +70,7 @@ namespace Systems
             foreach (var moveEventEntity in moveEventEntities)
             {
                 var moveEvent = moveEventEntity.Get<MoveEvent>();
-                ecsWorld.NewEntityWith<UnitAnimationEvent>(out var moveAnimationEvent);
-                moveAnimationEvent.Unit = moveEvent.MovingObject;
-                moveAnimationEvent.AnimationComponent = new UnitAnimationComponent();
-                moveAnimationEvent.AnimationComponent.SetFields(false, true, 1);
+                UnitAnimationHelper.CreateMovingEvent(ecsWorld, moveEvent.MovingObject);
                 
                 UpdateTargetForUnit(moveEvent.MovingObject, moveEvent.NextPosition);
                 moveEventEntity.Destroy();
@@ -152,10 +138,7 @@ namespace Systems
                     continue;
                 }
 
-                ecsWorld.NewEntityWith<UnitAnimationEvent>(out var movingEvent);
-                movingEvent.Unit = followEvent.MovingObject;
-                movingEvent.AnimationComponent = new UnitAnimationComponent();
-                movingEvent.AnimationComponent.SetFields(false, true, 1);
+                UnitAnimationHelper.CreateMovingEvent(ecsWorld, followEvent.MovingObject);
                 
                 var targetObjectPosition = targetComponent.Object.transform.position;
                 UpdateTargetForUnit(followEvent.MovingObject, targetObjectPosition);
@@ -169,15 +152,12 @@ namespace Systems
             var enemyUnits = units.Entities
                 .Where(u => u.IsNotNullAndAlive() && u.Get<UnitComponent>().Tag == UnitTag.EnemyWarrior);
             
-            foreach (var unit in allyUnits)
+            foreach (var attackingUnitEntity in allyUnits)
             {
-                var unitToAttack = enemyUnits.FirstOrDefault(enemy => CanAttackAndNotInAttackEvents(unit, enemy));
-                if (unitToAttack != default)
-                {
-                    ecsWorld.NewEntityWith<AttackEvent>(out var attackEvent);
-                    attackEvent.AttackingUnit = unit;
-                    attackEvent.Target = unitToAttack;
-                }
+                var targetUnitEntity = enemyUnits
+                    .FirstOrDefault(enemy => CanAttackAndNotInAttackEvents(attackingUnitEntity, enemy));
+                if (targetUnitEntity != default)
+                    AttackHelper.CreateAttackEvent(ecsWorld, attackingUnitEntity, targetUnitEntity);
             }
         }
 

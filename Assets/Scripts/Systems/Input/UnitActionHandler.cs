@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using Components;
-using Components.UnitsEvents;
+﻿using Components;
 using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -36,21 +33,14 @@ namespace Systems
                                                                   gameDefinitions.UnitsDefinitions.MaxUnitsInRow, 
                                                                   player.SelectedUnits[0].Get<UnitComponent>().Object.transform.lossyScale.x);
                 for (var i = 0; i < player.SelectedUnits.Count; i++)
-                {
-                    ecsWorld.NewEntityWith<MoveEvent>(out var movementEvent);
-                    movementEvent.MovingObject = player.SelectedUnits[i];
-                    movementEvent.NextPosition = unitsPlace[i];
-                }
+                    MoveHelper.CreateMoveEvent(ecsWorld, player.SelectedUnits[i], unitsPlace[i]);
             }
             else
             {
                 foreach (var unit in player.SelectedUnits)
                 {
                     var unitTarget = RaycastHelper.GetUnitEntityByRaycastHit(hitInfo, units.Entities);
-                    
-                    ecsWorld.NewEntityWith<FollowEvent>(out var followEvent);
-                    followEvent.MovingObject = unit;
-                    followEvent.Target = unitTarget;
+                    MoveHelper.CreateFollowEvent(ecsWorld, unit, unitTarget);
                 }
             }
         }
