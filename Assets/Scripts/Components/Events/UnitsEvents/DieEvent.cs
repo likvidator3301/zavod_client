@@ -2,7 +2,7 @@ using Leopotam.Ecs;
 
 namespace Components.UnitsEvents
 {
-    public class DeadEvent
+    public class DieEvent
     {
         public EcsEntity DeadUnit { get; set; }
     }
