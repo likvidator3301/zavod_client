@@ -12,6 +12,8 @@ TagManager:
   - Selection
   - ground
   - barraks
+  - UnitButton
+  - UnitButtonsContainer
   layers:
   - Default
   - TransparentFX

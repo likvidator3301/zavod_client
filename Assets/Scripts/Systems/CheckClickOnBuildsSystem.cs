@@ -27,7 +27,6 @@ namespace Systems
 
             if (MouseClickHelper.IsPressClick(clickEvents, 0))
             {
-                Debug.Log(Input.mousePosition);
                 for (var i = 0; i < buttons.GetEntitiesCount(); i++)
                 {
                     if (buttons.Get1[i].bounds.Contains(Input.mousePosition))

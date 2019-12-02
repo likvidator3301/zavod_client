@@ -7,34 +7,25 @@ using System.Collections.Generic;
 
 namespace Systems
 {
-    public class BuildCreateSystem : IEcsRunSystem, IEcsInitSystem
+    public class BuildCreateSystem : IEcsRunSystem
     {
         private readonly EcsWorld world = null;
         private readonly EcsFilter<BuildCreateEvent> buildEvents = null;
         private readonly EcsFilter<ClickEvent> clickEvents = null;
         private readonly EcsFilter<BuildingComponent> buildings = null;
+        private readonly EcsFilter<BuildingAssietComponent> buildingsAssets = null;
+        private readonly EcsFilter<CameraComponent> cameras = null;
         private readonly GameDefinitions gameDefinitions = null;
 
-        private List<GameObject> builds;
-        private Camera camera;
         private RaycastHit hitInfo;
         private Ray ray;
         private GameObject currentBuild;
         private Canvas newCanvas;
 
-        public void Init()
-        {
-            builds = new List<GameObject>();
-            builds.Add(gameDefinitions.BuildingDefinitions.BarracsAsset);
-        }
-
         public void Run()
         {
-            if (camera is null)
-            {
-                camera = Camera.current;
+            if (cameras.GetEntitiesCount() < 1)
                 return;
-            }
 
             HandleInputEvents();
 
@@ -76,10 +67,10 @@ namespace Systems
         {
             if (!buildEvents.IsEmpty())
             {
-                foreach (var build in builds)
+                foreach (var buildId in buildingsAssets)
                 {
-                    if (build.tag.Equals(buildEvents.Get1[0].Type))
-                        CreateOrSwitchBuild(build);
+                    if (buildingsAssets.Get1[buildId].buildingAsset.tag.Equals(buildEvents.Get1[0].Type))
+                        CreateOrSwitchBuild(buildingsAssets.Get1[buildId].buildingAsset);
                 }
 
                 newCanvas = buildEvents.Get1[0].buildingCanvas;
@@ -95,7 +86,7 @@ namespace Systems
         private bool TryMovingTheBuildingToMousePosition()
         {
             var isBuildMove = false;
-            ray = camera.ScreenPointToRay(Input.mousePosition);
+            ray = cameras.Get1[0].Camera.ScreenPointToRay(Input.mousePosition);
 
             foreach (var terrain in Object.FindObjectsOfType<Terrain>())
             {
@@ -134,7 +125,6 @@ namespace Systems
             newBuild.Type = build.tag;
             newBuild.InBuildCanvas = canvas;
             newBuild.AllButtons = canvas.GetComponentsInChildren<Button>();
-            Debug.Log(newBuild.InBuildCanvas.GetInstanceID());
         }
     }
 }

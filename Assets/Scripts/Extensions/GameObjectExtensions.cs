@@ -19,6 +19,9 @@ namespace Systems
             var newUnitObject = Object.Instantiate(prefab, minimumHeightPosition, Quaternion.identity);
             newUnit.SetFields(newUnitObject, unitTag);
             newUnit.AddWarriorComponents();
+
+            ecsWorld.NewEntityWith<UnitSpawnedEvent>(out var spawnedUnit);
+            spawnedUnit.Unit = newUnit;
         }
 
         public static async Task RemoveObjectWithDelay(this GameObject obj, int waitForMilliseconds = 500)

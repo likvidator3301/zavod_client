@@ -5,54 +5,32 @@ using Components;
 
 namespace Systems
 {
-    class CameraSystem : IEcsRunSystem, IEcsInitSystem
+    class CameraSystem : IEcsRunSystem
     {
         private readonly GameDefinitions gameDefs = null;
-        private readonly EcsFilter<PressKeyEvent> pressedKeyEvents = null;
-        private Camera camera;
-
-        private float distanceToTargetCameraHeigth = 0;
-        private float speed;
-        private float verticalMoveStepFactor;
-        private float rotateSpeed;
-        private float maxHeigth;
-        private float minHeigth;
-        private float verticalMoveSpeed;
-
-        private static readonly int inertionCameraMultiplier = 22;
-        private static readonly int rotateCameraMultiplier = 50;
-
-        public void Init()
-        {
-            speed = gameDefs.CameraDefinitions.speed;
-            rotateSpeed = gameDefs.CameraDefinitions.rotateSpeed;
-            verticalMoveStepFactor = gameDefs.CameraDefinitions.verticalMoveStepFactor;
-            maxHeigth = gameDefs.CameraDefinitions.maxHeigth;
-            minHeigth = gameDefs.CameraDefinitions.minHeigth;
-            verticalMoveSpeed = gameDefs.CameraDefinitions.verticalMoveSpeed;
-        }
+        private readonly EcsFilter<PressKeyEvent> pressedKeyEventsFilter = null;
+        private readonly EcsFilter<CameraComponent> cameraComponentsFilter = null;
 
         public void Run()
         {
-            if (camera is null)
+            foreach (var cameraId in cameraComponentsFilter)
             {
-                camera = Camera.current;
-                return;
+                var cameraEntity = cameraComponentsFilter.Entities[cameraId];
+                var cameraComponent = cameraEntity.Get<CameraComponent>();
+                UpdateCamera(cameraComponent);
             }
-
-            UpdateCamera();
         }
 
-        private void UpdateCamera()
+        private void UpdateCamera(CameraComponent cameraComponent)
         {
             var leftRightDirection = 0f;
             var aheadBackDirection = 0f;
             var verticalDirection = 0f;
             var rotateDirection = 0f;
 
-            for (var i = 0; i < pressedKeyEvents.GetEntitiesCount(); i++)
+            foreach (var pressedKeysId in pressedKeyEventsFilter)
             {
-                var key = pressedKeyEvents.Get1[i].Code;
+                var key = pressedKeyEventsFilter.Get1[pressedKeysId].Code;
 
                 aheadBackDirection += CalculateDirection(KeyCode.W, KeyCode.S, key);
                 leftRightDirection += CalculateDirection(KeyCode.D, KeyCode.A, key);
@@ -62,7 +40,7 @@ namespace Systems
                 rotateDirection += CalculateDirection(KeyCode.E, KeyCode.Q, key);
             }
 
-            CalculateAndMoveCamera(rotateDirection, leftRightDirection, aheadBackDirection, verticalDirection);
+            CalculateAndMoveCamera(rotateDirection, leftRightDirection, aheadBackDirection, verticalDirection, cameraComponent);
         }
 
         private int CalculateDirection(KeyCode positiveKey, KeyCode negativeKey, KeyCode inputKey)
@@ -73,55 +51,59 @@ namespace Systems
                 direction++;
             if (inputKey == negativeKey)
                 direction--;
-            
+
             return direction;
         }
 
-        private void CalculateAndMoveCamera(float rotateDirection, float leftRightDirection, float aheadBackDirection, float verticalDirection)
+        private void CalculateAndMoveCamera(float rotateDirection, float leftRightDirection, float aheadBackDirection,
+            float verticalDirection, CameraComponent cameraComponent)
         {
-            var movement = new Vector3(leftRightDirection, 0, aheadBackDirection) * speed;
-            movement = Vector3.ClampMagnitude(movement, speed) * Time.deltaTime;
-            var verticalDelta = verticalDirection == 0 
-                ? Input.mouseScrollDelta.y * verticalMoveStepFactor * Time.deltaTime 
-                : verticalDirection * verticalMoveStepFactor * Time.deltaTime;
+            var movement = new Vector3(leftRightDirection, 0, aheadBackDirection) * cameraComponent.speed;
+            movement = Vector3.ClampMagnitude(movement, cameraComponent.speed) * Time.deltaTime;
+            var verticalDelta = verticalDirection == 0
+                ? Input.mouseScrollDelta.y * cameraComponent.verticalMoveStepFactor * Time.deltaTime
+                : verticalDirection * cameraComponent.verticalMoveStepFactor * Time.deltaTime;
 
-            if (Math.Abs(verticalDelta) > verticalMoveSpeed)
+            if (Math.Abs(verticalDelta) > cameraComponent.verticalMoveSpeed)
             {
-                movement.y = Math.Sign(verticalDelta) * verticalMoveSpeed;
-                if (Math.Abs(distanceToTargetCameraHeigth) < verticalMoveSpeed * inertionCameraMultiplier)
-                    distanceToTargetCameraHeigth += verticalDelta - verticalMoveSpeed;
+                movement.y = Math.Sign(verticalDelta) * cameraComponent.verticalMoveSpeed;
+                if (Math.Abs(cameraComponent.distanceToTargetCameraHeigth) <
+                    cameraComponent.verticalMoveSpeed * CameraComponent.InertionCameraMultiplier)
+                    cameraComponent.distanceToTargetCameraHeigth += verticalDelta - cameraComponent.verticalMoveSpeed;
             }
             else
             {
                 movement.y = verticalDelta;
             }
 
-            if (Math.Abs(distanceToTargetCameraHeigth) > verticalMoveSpeed * 2)
+            if (Math.Abs(cameraComponent.distanceToTargetCameraHeigth) > cameraComponent.verticalMoveSpeed * 2)
             {
-                movement.y = Math.Sign(distanceToTargetCameraHeigth) * verticalMoveSpeed;
-                distanceToTargetCameraHeigth -= Math.Sign(distanceToTargetCameraHeigth) * verticalMoveSpeed;
+                movement.y = Math.Sign(cameraComponent.distanceToTargetCameraHeigth) * cameraComponent.verticalMoveSpeed;
+                cameraComponent.distanceToTargetCameraHeigth -= Math.Sign(cameraComponent.distanceToTargetCameraHeigth) * cameraComponent.verticalMoveSpeed;
             }
 
-            if (movement.y > 0 && camera.transform.position.y > maxHeigth)
+            if (movement.y > 0 && cameraComponent.Camera.transform.position.y > cameraComponent.maxHeigth)
                 movement.y = 0;
 
-            if (movement.y < 0 && camera.transform.position.y < minHeigth)
+            if (movement.y < 0 && cameraComponent.Camera.transform.position.y < cameraComponent.minHeigth)
                 movement.y = 0;
 
-            MoveCamera(rotateDirection, movement);
+            MoveCamera(rotateDirection, movement, cameraComponent);
         }
 
-        private void MoveCamera(float rotateDirection, Vector3 movement)
+        private void MoveCamera(float rotateDirection, Vector3 movement, CameraComponent cameraComponent)
         {
-            camera.transform.Rotate(Vector3.up * rotateDirection * rotateSpeed, Space.World);
+            cameraComponent.Camera.transform.Rotate(Vector3.up * rotateDirection * cameraComponent.rotateSpeed, Space.World);
 
-            var angle = camera.transform.rotation;
-            camera.transform.SetPositionAndRotation(camera.transform.position, Quaternion.Euler(0, angle.eulerAngles.y, angle.eulerAngles.z));
-            camera.transform.Translate(movement.x, 0, movement.z, Space.Self);
-            camera.transform.SetPositionAndRotation(camera.transform.position, angle);
+            var angle = cameraComponent.Camera.transform.rotation;
+            cameraComponent.Camera.transform.SetPositionAndRotation(cameraComponent.Camera.transform.position,
+                Quaternion.Euler(0, angle.eulerAngles.y, angle.eulerAngles.z));
+            cameraComponent.Camera.transform.Translate(movement.x, 0, movement.z, Space.Self);
+            cameraComponent.Camera.transform.SetPositionAndRotation(cameraComponent.Camera.transform.position, angle);
 
-            camera.transform.Translate(0, movement.y, 0, Space.World);
-            camera.transform.Rotate(Vector3.right, movement.y * rotateCameraMultiplier / (maxHeigth - minHeigth));
+            cameraComponent.Camera.transform.Translate(0, movement.y, 0, Space.World);
+            cameraComponent.Camera.transform.Rotate(Vector3.right,
+                movement.y * CameraComponent.rotateCameraMultiplier / (cameraComponent.maxHeigth - cameraComponent.minHeigth));
         }
     }
 }

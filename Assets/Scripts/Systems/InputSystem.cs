@@ -9,38 +9,42 @@ namespace Systems
 
     class InputSystem : IEcsRunSystem
     {
-        readonly EcsWorld world = null;
-
-        private static readonly int mouseButtonCount = 3;
-
-        private readonly EcsEntity[] previousClickEvents = new EcsEntity[mouseButtonCount];
-        private readonly Dictionary<KeyCode, EcsEntity> pressedKeyCodeEvents = new Dictionary<KeyCode, EcsEntity>();
+        private readonly EcsWorld world = null;
+        private readonly EcsFilter<PressedKeysKeeperComponent> keysKeeperFilter = null; 
 
         void IEcsRunSystem.Run()
         {
-            MouseHandle();
-            KeyboardHandle();
+            if (keysKeeperFilter.GetEntitiesCount() < 1)
+            {
+                world.NewEntityWith(out PressedKeysKeeperComponent keysKeeper);
+            }
+
+            foreach (var keysKeeperId in keysKeeperFilter)
+            {
+                MouseHandle(keysKeeperFilter.Get1[keysKeeperId]);
+                KeyboardHandle(keysKeeperFilter.Get1[keysKeeperId]);
+            }
         }
 
-        private void MouseHandle()
+        private void MouseHandle(PressedKeysKeeperComponent keysKeeper)
         {
-            for (var i = 0; i < mouseButtonCount; i++)
+            for (var i = 0; i < keysKeeper.mouseButtonCount; i++)
             {
                 if (Input.GetMouseButtonDown(i))
                 {
-                    previousClickEvents[i] = world.NewEntityWith(out ClickEvent click);
+                    keysKeeper.previousClickEvents[i] = world.NewEntityWith(out ClickEvent click);
                     click.ButtonNumber = i;
                     click.IsBlocked = false;
                 }
 
                 if (Input.GetMouseButtonUp(i))
                 {
-                    previousClickEvents[i].Destroy();
+                    keysKeeper.previousClickEvents[i].Destroy();
                 }
             }
         }
 
-        private void KeyboardHandle()
+        private void KeyboardHandle(PressedKeysKeeperComponent keysKeeper)
         {
             foreach (var e in Enum.GetValues(typeof(KeyCode)))
             {
@@ -48,19 +52,19 @@ namespace Systems
 
                 if (Input.GetKeyUp(key))
                 {
-                    pressedKeyCodeEvents[key].Destroy();
-                    pressedKeyCodeEvents.Remove(key);
+                    keysKeeper.pressedKeyCodeEvents[key].Destroy();
+                    keysKeeper.pressedKeyCodeEvents.Remove(key);
                 }
 
                 if (Input.GetKeyDown(key))
                 {
-                    if (pressedKeyCodeEvents.ContainsKey(key))
+                    if (keysKeeper.pressedKeyCodeEvents.ContainsKey(key))
                     {
-                        pressedKeyCodeEvents[key].Destroy();
-                        pressedKeyCodeEvents.Remove(key);
+                        keysKeeper.pressedKeyCodeEvents[key].Destroy();
+                        keysKeeper.pressedKeyCodeEvents.Remove(key);
                     }
 
-                    pressedKeyCodeEvents.Add(key,
+                    keysKeeper.pressedKeyCodeEvents.Add(key,
                         world.NewEntityWith(out PressKeyEvent pressEvent));
                     pressEvent.Code = key;
                 }

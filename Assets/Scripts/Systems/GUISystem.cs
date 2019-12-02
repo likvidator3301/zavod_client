@@ -8,7 +8,7 @@ using System;
 
 namespace Systems
 {
-    class GUISystem : IEcsInitSystem, IEcsRunSystem
+    class GuiSystem : IEcsInitSystem, IEcsRunSystem
     {
         private readonly GameDefinitions gameDefinitions = null;
         private readonly EcsWorld world = null;
@@ -87,7 +87,6 @@ namespace Systems
                 world.NewEntityWith(out ButtonComponent buttonComponent);
                 buttonComponent.buttonName = button.name;
                 buttonComponent.bounds = button.GetButtonBounds();
-                Debug.Log(buttonComponent.bounds);
                 buttonComponent.button = button;
             }
 
