@@ -7,7 +7,7 @@ namespace Systems
     {
         public static void CreateDieEvent(EcsWorld ecsWorld, EcsEntity unitEntity)
         {
-            ecsWorld.NewEntityWith<DeadEvent>(out var deadEvent);
+            ecsWorld.NewEntityWith<DieEvent>(out var deadEvent);
             deadEvent.DeadUnit = unitEntity;
         }
     }
