@@ -10,7 +10,7 @@ namespace Systems
     {
         private EcsWorld ecsWorld;
         private PlayerComponent player;
-        private EcsFilter<DeadEvent> deadEvents;
+        private EcsFilter<DieEvent> deadEvents;
 
         public void Run() => DestroyDeadUnits();
 
@@ -20,7 +20,7 @@ namespace Systems
                 .Where(e => e.IsNotNullAndAlive());
             foreach (var deadEventEntity in deadEventEntities)
             {
-                var dieEvent = deadEventEntity.Get<DeadEvent>();
+                var dieEvent = deadEventEntity.Get<DieEvent>();
                 UnitAnimationHelper.CreateDieEvent(ecsWorld, dieEvent.DeadUnit);
                 Object.Destroy(dieEvent.DeadUnit.Get<UnitComponent>().Object);
                 //await deadEvent.DeadUnit.DestroyEntityWithDelay();
