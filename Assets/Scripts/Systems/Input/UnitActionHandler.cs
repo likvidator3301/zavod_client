@@ -10,10 +10,10 @@ namespace Systems
 {
     public class UnitActionHandler : IEcsRunSystem
     {
-        private PlayerComponent player;
-        private EcsFilter<UnitComponent> units;
-        private EcsFilter<BuildingComponent> buildings;
-        private EcsWorld ecsWorld;
+        private readonly PlayerComponent player = null;
+        private readonly GameDefinitions gameDefinitions = null;
+        private readonly EcsFilter<UnitComponent> units = null;
+        private readonly EcsWorld ecsWorld = null;
 
         public void Run() => HandleMovingUnits();
 
@@ -27,11 +27,19 @@ namespace Systems
         {
             if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfo, LevelObjectTag.Ground.ToString()))
             {
-                foreach (var unit in player.SelectedUnits)
+                if (player.SelectedUnits.Count < 1)
+                    return;
+                
+                var unitsPlace = UnitsPlacementHelpert.PlaceUnits(CalculateApproximateCenterOfSelectedUnits(), 
+                                                                  hitInfo.point, 
+                                                                  player.SelectedUnits.Count, 
+                                                                  gameDefinitions.UnitsDefinitions.MaxUnitsInRow, 
+                                                                  player.SelectedUnits[0].Get<UnitComponent>().Object.transform.lossyScale.x);
+                for (var i = 0; i < player.SelectedUnits.Count; i++)
                 {
                     ecsWorld.NewEntityWith<MoveEvent>(out var movementEvent);
-                    movementEvent.MovingObject = unit;
-                    movementEvent.NextPosition = hitInfo.point;
+                    movementEvent.MovingObject = player.SelectedUnits[i];
+                    movementEvent.NextPosition = unitsPlace[i];
                 }
             }
             else
@@ -46,5 +54,16 @@ namespace Systems
                 }
             }
         }
+
+        private Vector3 CalculateApproximateCenterOfSelectedUnits()
+        {
+            var sumAllUnitsPositions = Vector3.zero;
+
+            foreach (var unit in player.SelectedUnits)
+                sumAllUnitsPositions += unit.Get<UnitComponent>().Object.transform.position;
+
+            return sumAllUnitsPositions / player.SelectedUnits.Count;
+        }
+
     }
 }

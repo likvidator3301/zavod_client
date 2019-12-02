@@ -13,7 +13,7 @@ namespace Systems
         public float SizeZ { get; set; }
         public Vector2 LeftTop { get; set; }
         public Vector2 RightBottom { get; set; }
-        private const float minSelectionHeight = 0.5f;
+        private const float minSelectionHeight = 0.005f;
 
         public SelectionRectangle(Vector3 startPosition, Vector3 endPosition, float minHeight = minSelectionHeight)
         {

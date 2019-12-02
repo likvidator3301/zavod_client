@@ -7,4 +7,5 @@ public class GameDefinitions : ScriptableObject
     public CameraDefinition CameraDefinitions;
     public GUIDefinitions GuiDefinitions;
     public BuildingsDefinitions BuildingDefinitions;
+    public UnitsDefinitions UnitsDefinitions;
 }

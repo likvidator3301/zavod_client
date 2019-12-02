@@ -14,7 +14,7 @@ namespace Systems
         public static bool TryGetHitInfoForMousePosition(
             out RaycastHit hitInfo, string collisionTagName = defaultCollisionTag, int range = defaultRange)
         {
-            hitInfo = default(RaycastHit);
+            hitInfo = default;
             if (Camera.main == null)
                 return false;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
