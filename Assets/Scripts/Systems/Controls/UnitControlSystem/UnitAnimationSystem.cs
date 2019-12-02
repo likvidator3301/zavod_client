@@ -8,10 +8,10 @@ namespace Systems
 {
     public class UnitAnimationSystem : IEcsRunSystem
     {
-        private EcsWorld ecsWorld;
-        private EcsFilter<UnitAnimationEvent> animationEvents;
-        private EcsFilter<UnitComponent> units;
-        private EcsFilter<AttackEvent> attackEvents;
+        private readonly EcsWorld ecsWorld = null;
+        private readonly EcsFilter<UnitAnimationEvent> animationEvents = null;
+        private readonly EcsFilter<UnitComponent> units = null;
+        private readonly EcsFilter<AttackEvent> attackEvents = null;
         private const float StopMovingAnimationDistance = 1.5f;
 
         public void Run()

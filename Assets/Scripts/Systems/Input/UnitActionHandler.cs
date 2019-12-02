@@ -40,6 +40,9 @@ namespace Systems
                 foreach (var unit in player.SelectedUnits)
                 {
                     var unitTarget = RaycastHelper.GetUnitEntityByRaycastHit(hitInfo, units.Entities);
+                    if (unitTarget.IsNull())
+                        break;
+
                     MoveHelper.CreateFollowEvent(ecsWorld, unit, unitTarget);
                 }
             }

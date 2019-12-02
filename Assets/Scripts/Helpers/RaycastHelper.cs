@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Systems
 {
-    public class RaycastHelper
+    public static class RaycastHelper
     {
         private const int defaultRange = 1000;
         private const string defaultCollisionTag = "Ground";
@@ -31,7 +31,7 @@ namespace Systems
         
         public static EcsEntity GetUnitEntityByRaycastHit(RaycastHit hitInfo, EcsEntity[] units)
         {
-            if (units == null)
+            if (units is null || hitInfo.collider is null)
                 return default;
             
             return units
