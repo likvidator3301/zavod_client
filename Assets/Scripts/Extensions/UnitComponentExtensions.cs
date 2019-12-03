@@ -8,7 +8,7 @@ namespace Systems
 {
     public static class UnitComponentExtensions
     {
-        public static void SetFields(this UnitComponent unitComponent, GameObject obj, UnitTag tag, GUID guid)
+        public static void SetFields(this UnitComponent unitComponent, GameObject obj, UnitTag tag, Guid guid)
         {
             unitComponent.Object = obj;
             unitComponent.Tag = tag;
@@ -21,7 +21,7 @@ namespace Systems
         {
             unitComponent.Object = obj;
             unitComponent.Tag = tag;
-            unitComponent.Guid = GUID.Generate();
+            unitComponent.Guid = Guid.NewGuid();
             unitComponent.Animator = obj.GetComponent<Animator>();
             unitComponent.Agent = obj.GetComponent<NavMeshAgent>();
         }
