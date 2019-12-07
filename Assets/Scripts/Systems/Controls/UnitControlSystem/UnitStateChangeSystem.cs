@@ -10,22 +10,20 @@ namespace Systems
     {
         private EcsWorld ecsWorld;
         private PlayerComponent player;
-        private EcsFilter<DieEvent> deadEvents;
+        private EcsFilter<DieEvent> dieEvents;
 
         public void Run() => DestroyDeadUnits();
 
         private void DestroyDeadUnits()
         {
-            var deadEventEntities = deadEvents.Entities
+            var dieEventEntities = dieEvents.Entities
                 .Where(e => e.IsNotNullAndAlive());
-            foreach (var deadEventEntity in deadEventEntities)
+            foreach (var dieEventEntity in dieEventEntities)
             {
-                var dieEvent = deadEventEntity.Get<DieEvent>();
-                UnitAnimationHelper.CreateDieEvent(ecsWorld, dieEvent.DeadUnit);
-                Object.Destroy(dieEvent.DeadUnit.Get<UnitComponent>().Object);
+                UnitAnimationHelper.CreateDieEvent(dieEventEntity);
+                Object.Destroy(dieEventEntity.Get<UnitComponent>().Object);
                 //await deadEvent.DeadUnit.DestroyEntityWithDelay();
-                dieEvent.DeadUnit.Destroy();
-                deadEventEntity.Destroy();
+                dieEventEntity.Destroy();
             }
         }
     }

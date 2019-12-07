@@ -41,15 +41,15 @@ namespace Systems
 
         public List<EcsEntity> GetUnitsInFrame(EcsFilter<UnitComponent> units)
         {
-            return GetUnitsInFrame(units.Entities.Where(u => u.IsNotNullAndAlive()));
+            return GetUnitsInFrame(units.Entities
+                .Where(u => u.IsNotNullAndAlive()));
         }
 
         public List<EcsEntity> GetUnitsInFrame(IEnumerable<EcsEntity> units)
         {
-            var selection = this;
             return units
-                .Where(u => u.Get<UnitComponent>().Tag != UnitTag.EnemyWarrior 
-                            && selection.IsWithinFrame(u.Get<UnitComponent>().Object.transform.position))
+                .Where(u => u.Get<UnitComponent>().Tag == UnitTag.Warrior
+                            && IsWithinFrame(u.Get<UnitComponent>().Object.transform.position))
                 .ToList();
         }
         

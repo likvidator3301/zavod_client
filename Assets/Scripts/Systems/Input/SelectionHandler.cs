@@ -2,7 +2,6 @@
 using System.Linq;
 using Components;
 using Leopotam.Ecs;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -17,10 +16,7 @@ namespace Systems
         private PlayerComponent player;
         private const int selectionDeletingDelayWhileSelecting = 5;
 
-        public void Run()
-        {
-            HandleSelection();
-        }
+        public void Run() => HandleSelection();
         
         private async void HandleSelection()
         {

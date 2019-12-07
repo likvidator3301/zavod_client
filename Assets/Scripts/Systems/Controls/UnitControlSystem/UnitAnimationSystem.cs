@@ -8,17 +8,15 @@ namespace Systems
 {
     public class UnitAnimationSystem : IEcsRunSystem
     {
-        private readonly EcsWorld ecsWorld = null;
         private readonly EcsFilter<UnitAnimationEvent> animationEvents = null;
         private readonly EcsFilter<UnitComponent> units = null;
-        private readonly EcsFilter<AttackEvent> attackEvents = null;
-        private const float StopMovingAnimationDistance = 1.5f;
+        private const float stopMovingAnimationDistance = 1.5f;
 
         public void Run()
         {
             RunAnimations();
-            ChangeMovingStateIfIsOnTargetPosition();
-            ChangeAttackStateIfNotAttacking();
+            StopUnitIfIsOnTargetPosition();
+            StopAttackingIfNotAttacking();
         }
 
         private void RunAnimations()
@@ -26,41 +24,41 @@ namespace Systems
             var animationEventEntities = animationEvents.Entities.Where(a => a.IsNotNullAndAlive());
             foreach (var animationEventEntity in animationEventEntities)
             {
-                var unit = animationEventEntity.Get<UnitAnimationEvent>().Unit;
+                var unitComponent = animationEventEntity.Get<UnitComponent>();
                 var animationComponent = animationEventEntity.Get<UnitAnimationEvent>().AnimationComponent;
-                if (unit.IsNotNullAndAlive())
+                if (unitComponent != null)
                 {
-                    var animator = unit.Get<UnitComponent>().Animator;
+                    var animator = unitComponent.Animator;
                     UnitAnimationHelper.SetFieldForAnimatorFromComponent(animator, animationComponent);
                 }
                 
-                animationEventEntity.Destroy();
+                animationEventEntity.Unset<AnimationEvent>();
             }
         }
 
-        private void ChangeMovingStateIfIsOnTargetPosition()
+        private void StopUnitIfIsOnTargetPosition()
         {
-            var unitEntities = units.Entities.Where(u => u.IsNotNullAndAlive());
+            var unitEntities = units.Entities
+                .Where(u => u.IsNotNullAndAlive());
             foreach (var unitEntity in unitEntities)
             {
-                var unit = unitEntity.Get<UnitComponent>();
-                var currentPosition = unit.Object.transform.position;
-                if (Vector3.Distance(unit.Agent.destination, currentPosition) <= StopMovingAnimationDistance)
-                    UnitAnimationHelper.CreateStopMovingEvent(ecsWorld, unitEntity);
+                var unitComponent = unitEntity.Get<UnitComponent>();
+                var currentPosition = unitComponent.Object.transform.position;
+                if (Vector3.Distance(unitComponent.Agent.pathEndPosition, currentPosition) <= stopMovingAnimationDistance)
+                    UnitAnimationHelper.CreateStopMovingEvent(unitEntity);
             }
         }
         
-        private void ChangeAttackStateIfNotAttacking()
+        private void StopAttackingIfNotAttacking()
         {
-            var unitEntities = units.Entities.Where(u => u.IsNotNullAndAlive());
+            var unitEntities = units.Entities
+                .Where(u => u.IsNotNullAndAlive());
             foreach (var unitEntity in unitEntities)
             {
-                var isAttacking = attackEvents.Entities
-                                      .FirstOrDefault(attackEntity => 
-                                          attackEntity.IsNotNullAndAlive()
-                                          && attackEntity.Get<AttackEvent>().AttackingUnit == unitEntity) != default;
+                var isAttacking = unitEntity.Get<AttackEvent>() != null;
+                
                 if (!isAttacking)
-                    UnitAnimationHelper.CreateStopAttackingEvent(ecsWorld, unitEntity);
+                    UnitAnimationHelper.CreateStopAttackingEvent(unitEntity);
             }
         }
     }

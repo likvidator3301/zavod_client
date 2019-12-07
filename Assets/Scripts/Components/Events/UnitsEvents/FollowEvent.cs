@@ -1,10 +1,7 @@
-using Leopotam.Ecs;
-
-namespace Components.UnitsEvents
+namespace Components
 {
     public class FollowEvent
     {
-        public EcsEntity MovingObject { get; set; }
-        public EcsEntity Target { get; set; }
+        public UnitComponent TargetUnitComponent { get; set; }
     }
 }

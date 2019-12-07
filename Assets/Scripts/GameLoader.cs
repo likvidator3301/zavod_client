@@ -36,7 +36,8 @@ public class GameLoader : MonoBehaviour
             .Add(new UnitStateChangeSystem())
             .Add(new UnitActionSystem())
             .Add(new UnitCreateSystem())
-            .Add(new UnitAnimationSystem());
+            .Add(new UnitAnimationSystem())
+            .Add(new UnitHealthSystem());
 
         systems = new EcsSystems(world)
             .Add(new GuiSystem())

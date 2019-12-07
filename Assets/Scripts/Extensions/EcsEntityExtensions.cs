@@ -38,7 +38,7 @@ namespace Systems
         public static void HighlightObjects(this IEnumerable<EcsEntity> unitsEntities)
         {
             unitsEntities
-                .Where(u => !u.IsNull() && u.IsAlive())
+                .Where(u => u.IsNotNullAndAlive())
                 .Select(u => u.Get<UnitComponent>().Object)
                 .HighlightObjects();
         }

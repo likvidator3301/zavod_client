@@ -1,4 +1,5 @@
-﻿using Components;
+﻿using System.Linq;
+using Components;
 using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -24,7 +25,7 @@ namespace Systems
         {
             if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfo, LevelObjectTag.Ground.ToString()))
             {
-                if (player.SelectedUnits.Count < 1)
+                if (player.SelectedUnits.Count == 0)
                     return;
                 
                 var unitsPlace = UnitsPlacementHelpert.PlaceUnits(CalculateApproximateCenterOfSelectedUnits(), 
@@ -33,7 +34,7 @@ namespace Systems
                                                                   gameDefinitions.UnitsDefinitions.MaxUnitsInRow, 
                                                                   player.SelectedUnits[0].Get<UnitComponent>().Object.transform.lossyScale.x);
                 for (var i = 0; i < player.SelectedUnits.Count; i++)
-                    MoveHelper.CreateMoveEvent(ecsWorld, player.SelectedUnits[i], unitsPlace[i]);
+                    MoveHelper.CreateMoveEvent(player.SelectedUnits[i], unitsPlace[i]);
             }
             else
             {
@@ -43,7 +44,7 @@ namespace Systems
                     if (unitTarget.IsNull())
                         break;
 
-                    MoveHelper.CreateFollowEvent(ecsWorld, unit, unitTarget);
+                    MoveHelper.CreateFollowEvent(unit, unitTarget);
                 }
             }
         }
