@@ -7,4 +7,5 @@ public class GUIDefinitions : ScriptableObject
 {
     public Canvas buildMenu;
     public Canvas inBuildingMenu;
+    public Canvas PlayerInfo;
 }

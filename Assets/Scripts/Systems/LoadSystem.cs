@@ -14,6 +14,7 @@ namespace Systems
         {
             LoadMainCamera();
             LoadBuildingAssets();
+            LoadUiAssets();
         }
 
         private void LoadMainCamera()
@@ -32,6 +33,12 @@ namespace Systems
         {
             world.NewEntityWith(out BuildingAssietComponent barrak);
             barrak.buildingAsset = definitions.BuildingDefinitions.BarracsAsset;
+        }
+
+        private void LoadUiAssets()
+        {
+            world.NewEntityWith(out PlayerResourcesComponent playerAsset);
+            playerAsset.ResoursesUiDisplay = Canvas.Instantiate(definitions.GuiDefinitions.PlayerInfo);
         }
     }
 }

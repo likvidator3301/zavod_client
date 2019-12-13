@@ -52,8 +52,11 @@ namespace Systems
 
                 if (Input.GetKeyUp(key))
                 {
-                    keysKeeper.pressedKeyCodeEvents[key].Destroy();
-                    keysKeeper.pressedKeyCodeEvents.Remove(key);
+                    if (keysKeeper.pressedKeyCodeEvents.ContainsKey(key))
+                    {
+                        keysKeeper.pressedKeyCodeEvents[key].Destroy();
+                        keysKeeper.pressedKeyCodeEvents.Remove(key);
+                    }
                 }
 
                 if (Input.GetKeyDown(key))

@@ -16,3 +16,5 @@ MonoBehaviour:
     type: 3}
   inBuildingMenu: {fileID: 2559180388796972013, guid: e08035956c081df4697ca338ce6260ab,
     type: 3}
+  PlayerInfo: {fileID: 1783083583824724785, guid: daf364a806f12c04d9023cdda588cc88,
+    type: 3}

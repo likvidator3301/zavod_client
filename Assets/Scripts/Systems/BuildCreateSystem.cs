@@ -15,7 +15,6 @@ namespace Systems
         private readonly EcsFilter<BuildingComponent> buildings = null;
         private readonly EcsFilter<BuildingAssietComponent> buildingsAssets = null;
         private readonly EcsFilter<CameraComponent> cameras = null;
-        private readonly GameDefinitions gameDefinitions = null;
 
         private RaycastHit hitInfo;
         private Ray ray;
