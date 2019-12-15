@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using Components;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 namespace Systems
 {
@@ -54,7 +55,7 @@ namespace Systems
 
             for (var i = 0; i < clickEvents.GetEntitiesCount(); i++)
             {
-                if (clickEvents.Get1[i].ButtonNumber == 0 && !clickEvents.Get1[i].IsBlocked)
+                if (clickEvents.Get1[i].ButtonNumber == 0 && !EventSystem.current.IsPointerOverGameObject())
                 {
                     BuildSet(currentBuild, newCanvas);
                     currentBuild = null;
@@ -69,7 +70,10 @@ namespace Systems
                 foreach (var buildId in buildingsAssets)
                 {
                     if (buildingsAssets.Get1[buildId].buildingAsset.tag.Equals(buildEvents.Get1[0].Type))
+                    {
                         CreateOrSwitchBuild(buildingsAssets.Get1[buildId].buildingAsset);
+                        buildEvents.Entities[0].Destroy();
+                    }
                 }
 
                 newCanvas = buildEvents.Get1[0].buildingCanvas;
@@ -77,7 +81,10 @@ namespace Systems
                 foreach (var buildEvent in buildEvents.Entities)
                 {
                     if (!buildEvent.IsNull() && buildEvent.IsAlive())
+                    {
+                        Canvas.Destroy(buildEvent.Get<BuildCreateEvent>().buildingCanvas);
                         buildEvent.Destroy();
+                    }
                 }
             }
         }

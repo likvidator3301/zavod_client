@@ -2,6 +2,7 @@
 using Leopotam.Ecs;
 using Components;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Systems
 {
@@ -10,6 +11,7 @@ namespace Systems
         private readonly EcsFilter<ClickEvent> clickEvents = null;
         private readonly EcsFilter<BuildingComponent> buildings = null;
         private readonly EcsFilter<ButtonComponent> buttons = null;
+        private readonly EcsFilter<ButtonClickEvent> btnClicks = null;
 
         private Camera camera;
         private RaycastHit hitInfo;
@@ -29,7 +31,7 @@ namespace Systems
             {
                 for (var i = 0; i < buttons.GetEntitiesCount(); i++)
                 {
-                    if (buttons.Get1[i].bounds.Contains(Input.mousePosition))
+                    if (btnClicks.GetEntitiesCount() > 0 || EventSystem.current.IsPointerOverGameObject())
                         return;
                 }
 

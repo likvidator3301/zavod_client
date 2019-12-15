@@ -15,6 +15,7 @@ namespace Systems
             LoadMainCamera();
             LoadBuildingAssets();
             LoadUiAssets();
+            LoadUi();
         }
 
         private void LoadMainCamera()
@@ -39,6 +40,11 @@ namespace Systems
         {
             world.NewEntityWith(out PlayerResourcesComponent playerAsset);
             playerAsset.ResoursesUiDisplay = Canvas.Instantiate(definitions.GuiDefinitions.PlayerInfo);
+        }
+
+        private void LoadUi()
+        {
+            GuiHelper.InstantiateAllButtons(definitions.GuiDefinitions.buildMenu, world);
         }
     }
 }

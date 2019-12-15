@@ -1,6 +1,6 @@
 namespace Components 
 {
-    class ClickEvent 
+    internal class ClickEvent 
     {
         public int ButtonNumber;
         public bool IsBlocked;

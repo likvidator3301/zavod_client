@@ -4,7 +4,7 @@ using Leopotam.Ecs;
 
 namespace Components
 {
-    public class BuildCreateEvent
+    internal class BuildCreateEvent
     {
         public string Type;
 
