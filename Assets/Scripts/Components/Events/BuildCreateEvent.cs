@@ -9,6 +9,6 @@ namespace Components
         public string Type;
 
         [EcsIgnoreNullCheck]
-        public Canvas buildingCanvas;
+        public Canvas buildingCanvasAsset;
     }
 }

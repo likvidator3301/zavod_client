@@ -10,7 +10,7 @@ namespace Systems
     {
         public static Canvas InstantiateAllButtons(Canvas canvasAsset, EcsWorld world)
         {
-            var newCanvas = UnityEngine.Object.Instantiate(canvasAsset, Vector3.zero, Quaternion.AngleAxis(0, Vector3.zero));
+            var newCanvas = UnityEngine.Object.Instantiate(canvasAsset);
 
             foreach (var button in newCanvas.GetComponentsInChildren<Button>())
             {

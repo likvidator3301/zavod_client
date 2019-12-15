@@ -77,13 +77,13 @@ namespace Systems
                     }
                 }
 
-                newCanvas = buildEvents.Get1[0].buildingCanvas;
+                newCanvas = buildEvents.Get1[0].buildingCanvasAsset;
 
                 foreach (var buildEvent in buildEvents.Entities)
                 {
                     if (!buildEvent.IsNull() && buildEvent.IsAlive())
                     {
-                        Canvas.Destroy(buildEvent.Get<BuildCreateEvent>().buildingCanvas);
+                        Canvas.Destroy(buildEvent.Get<BuildCreateEvent>().buildingCanvasAsset);
                         buildEvent.Destroy();
                     }
                 }
@@ -130,8 +130,9 @@ namespace Systems
             world.NewEntityWith(out BuildingComponent newBuild);
             newBuild.obj = build;
             newBuild.Type = build.tag;
-            newBuild.InBuildCanvas = canvas;
-            newBuild.AllButtons = canvas.GetComponentsInChildren<Button>();
+            newBuild.InBuildCanvas = GuiHelper.InstantiateAllButtons(canvas, world);
+            newBuild.InBuildCanvas.enabled = false;
+            newBuild.AllButtons = newBuild.InBuildCanvas.GetComponentsInChildren<Button>();
 
         }
     }

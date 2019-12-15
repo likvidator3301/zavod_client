@@ -47,8 +47,7 @@ namespace Systems
         {
             world.NewEntityWith(out BuildCreateEvent buildEvent);
             buildEvent.Type = "barraks";
-            buildEvent.buildingCanvas = GuiHelper.InstantiateAllButtons(gameDefinitions.GuiDefinitions.inBuildingMenu, world);
-            buildEvent.buildingCanvas.enabled = false;
+            buildEvent.buildingCanvasAsset = gameDefinitions.GuiDefinitions.inBuildingMenu;
         }
 
         private void CreateWarrior(ButtonComponent button)
@@ -68,6 +67,7 @@ namespace Systems
             {
                 foreach (var inBuildButton in builds.Get1[i].AllButtons)
                 {
+                    Debug.Log(inBuildButton.GetInstanceID());
                     if (inBuildButton.GetInstanceID() == button.GetInstanceID())
                         return builds.Get1[i].obj;
                 }
