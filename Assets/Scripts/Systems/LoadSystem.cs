@@ -34,6 +34,9 @@ namespace Systems
         {
             world.NewEntityWith(out BuildingAssetComponent barrak);
             barrak.buildingAsset = definitions.BuildingDefinitions.BarracsAsset;
+
+            world.NewEntityWith(out BuildingAssetComponent kiosk);
+            kiosk.buildingAsset = definitions.BuildingDefinitions.KioskAsset;
         }
 
         private void LoadUiAssets()
@@ -44,7 +47,7 @@ namespace Systems
 
         private void LoadUi()
         {
-            GuiHelper.InstantiateAllButtons(definitions.GuiDefinitions.buildMenu, world);
+            GuiHelper.InstantiateAllButtons(definitions.GuiDefinitions.BuildMenu, world);
         }
     }
 }

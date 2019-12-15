@@ -38,16 +38,26 @@ namespace Systems
                 case "Warrior":
                     CreateWarrior(btn);
                     break;
+                case "CreateKiosk":
+                    CreateKiosk();
+                    break;
                 default:
                     break;
             }
+        }
+
+        private void CreateKiosk()
+        {
+            world.NewEntityWith(out BuildCreateEvent buildEvent);
+            buildEvent.Type = "Kiosk";
+            buildEvent.buildingCanvasAsset = gameDefinitions.GuiDefinitions.DefaultInBuildingMenu;
         }
 
         private void OnBarrakCreateClick()
         {
             world.NewEntityWith(out BuildCreateEvent buildEvent);
             buildEvent.Type = "barraks";
-            buildEvent.buildingCanvasAsset = gameDefinitions.GuiDefinitions.inBuildingMenu;
+            buildEvent.buildingCanvasAsset = gameDefinitions.GuiDefinitions.InBuildingMenu;
         }
 
         private void CreateWarrior(ButtonComponent button)

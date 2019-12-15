@@ -83,7 +83,6 @@ namespace Systems
                 {
                     if (!buildEvent.IsNull() && buildEvent.IsAlive())
                     {
-                        Canvas.Destroy(buildEvent.Get<BuildCreateEvent>().buildingCanvasAsset);
                         buildEvent.Destroy();
                     }
                 }
@@ -133,7 +132,6 @@ namespace Systems
             newBuild.InBuildCanvas = GuiHelper.InstantiateAllButtons(canvas, world);
             newBuild.InBuildCanvas.enabled = false;
             newBuild.AllButtons = newBuild.InBuildCanvas.GetComponentsInChildren<Button>();
-
         }
     }
 }

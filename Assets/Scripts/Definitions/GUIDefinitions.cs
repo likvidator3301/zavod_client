@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "zavod_client/GUIDefinitions", fileName = "GUIDefinitions")]
-public class GUIDefinitions : ScriptableObject
+public class GuiDefinitions : ScriptableObject
 {
-    public Canvas buildMenu;
-    public Canvas inBuildingMenu;
+    public Canvas BuildMenu;
+    public Canvas InBuildingMenu;
     public Canvas PlayerInfo;
+    public Canvas DefaultInBuildingMenu;
 }
