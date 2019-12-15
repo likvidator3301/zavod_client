@@ -14,8 +14,9 @@ namespace Systems
         private readonly EcsFilter<BuildCreateEvent> buildEvents = null;
         private readonly EcsFilter<ClickEvent> clickEvents = null;
         private readonly EcsFilter<BuildingComponent> buildings = null;
-        private readonly EcsFilter<BuildingAssietComponent> buildingsAssets = null;
+        private readonly EcsFilter<BuildingAssetComponent> buildingsAssets = null;
         private readonly EcsFilter<CameraComponent> cameras = null;
+        private readonly EcsFilter<PlayerResourcesComponent> resources = null;
 
         private RaycastHit hitInfo;
         private Ray ray;
@@ -131,6 +132,7 @@ namespace Systems
             newBuild.Type = build.tag;
             newBuild.InBuildCanvas = canvas;
             newBuild.AllButtons = canvas.GetComponentsInChildren<Button>();
+
         }
     }
 }

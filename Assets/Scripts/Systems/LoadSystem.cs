@@ -32,7 +32,7 @@ namespace Systems
 
         private void LoadBuildingAssets()
         {
-            world.NewEntityWith(out BuildingAssietComponent barrak);
+            world.NewEntityWith(out BuildingAssetComponent barrak);
             barrak.buildingAsset = definitions.BuildingDefinitions.BarracsAsset;
         }
 

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Components
 {
-    class BuildingAssietComponent
+    class BuildingAssetComponent
     {
         [EcsIgnoreNullCheck]
         public GameObject buildingAsset;
