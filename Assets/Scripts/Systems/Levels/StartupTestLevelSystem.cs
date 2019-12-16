@@ -1,15 +1,15 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
-using Components;
-using Leopotam.Ecs;
-using Models;
-using ServerIntegration;
-using UnityEditor;
-using Vector3 = UnityEngine.Vector3;
-
-namespace Systems
+﻿namespace Systems
 {
+    using System.Threading.Tasks;
+
+    using Components;
+
+    using Leopotam.Ecs;
+
+    using Models;
+
+    using Vector3 = UnityEngine.Vector3;
+
     public class StartupTestLevelSystem : IEcsInitSystem
     {
         private ServerIntegration.ServerIntegration serverIntegration;
@@ -26,12 +26,31 @@ namespace Systems
 
         private async Task InitializeLevel()
         {
-            var allyUnit = serverIntegration.client.Unit.CreateUnit(UnitType.Warrior).;
-            var enemyUnit = serverIntegration.client.Unit.CreateUnit(UnitType.Chelovechik).Result;
+            var allyUnitDto = new CreateUnitDto();
+            var enemyUnitDto = new CreateUnitDto();
+            allyUnitDto.Position = new Models.Vector3(){X=allyUnitPosition.x, Y=allyUnitPosition.y, Z=allyUnitPosition.z};
+            enemyUnitDto.Position = new Models.Vector3(){X=enemyUnitPosition.x, Y=enemyUnitPosition.y, Z=enemyUnitPosition.z};
+            
+            int timeout = 1000;
+            var task = serverIntegration.client.Unit.CreateUnit(allyUnitDto);
+
+            ServerUnitDto allyUnit;
+            if (await Task.WhenAny(task, Task.Delay(timeout)) == task)
+            {
+                allyUnit = task.Result;
+            }
+
+            var enemyTask = serverIntegration.client.Unit.CreateUnit(enemyUnitDto);
+            ServerUnitDto enemyUnit;
+            if (await Task.WhenAny(enemyTask, Task.Delay(timeout)) == enemyTask)
+            {
+                enemyUnit = enemyTask.Result;
+            }
+
             UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityOnPositionFromUnitDbo(
-                ecsWorld, allyUnitPosition, allyUnit);
+                ecsWorld, allyUnitPosition, allyUnitDto);
             UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityOnPositionFromUnitDbo(
-                ecsWorld, enemyUnitPosition, enemyUnit);
+                ecsWorld, enemyUnitPosition, enemyUnitDto);
         }
     }
 }

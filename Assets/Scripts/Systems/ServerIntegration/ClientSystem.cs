@@ -41,7 +41,7 @@ namespace Systems
             {
                 foreach (var unit in updatedUnits.Result)
                 {
-                    var updateUnit = units.Entities.FirstOrDefault(u => u.Get<UnitComponent>().Guid == unit);
+                    var updateUnit = units.Entities.FirstOrDefault(u => u.Get<UnitComponent>().Guid == unit.Id);
                     updateUnit.Get<HealthComponent>().CurrentHp -= 20;
                 }
             }

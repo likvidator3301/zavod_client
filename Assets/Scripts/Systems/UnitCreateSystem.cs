@@ -6,6 +6,8 @@ using Vector3 = UnityEngine.Vector3;
 
 namespace Systems
 {
+    using Vector3 = Models.Vector3;
+
     public class UnitCreateSystem : IEcsRunSystem
     {
         private ServerIntegration.ServerIntegration serverIntegration;
@@ -20,10 +22,16 @@ namespace Systems
                 var newPosition = new Vector3(unitEvents.Get1[i].Position.x + 5, 
                                               unitEvents.Get1[i].Position.y, 
                                               unitEvents.Get1[i].Position.z);
-                var newUnit = serverIntegration.client.Unit.CreateUnit(
-                    unitEvents.Get1[i].UnitTag == UnitTag.Warrior ? UnitType.Warrior : UnitType.Chelovechik).Result;
+                var newUnitDto = new CreateUnitDto();
+                newUnitDto.Position = newPosition;
+                newUnitDto.UnitType = unitEvents.Get1[i].UnitTag == UnitTag.Warrior
+                    ? UnitType.Warrior
+                    : UnitType.Chelovechik;
+                
+                var newUnit = serverIntegration.client.Unit.CreateUnit(newUnitDto).Result;
+                var unityPosition = new UnityEngine.Vector3(newPosition.X, newPosition.Y, newPosition.Z);
                 UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityOnPositionFromUnitDbo(
-                    world, newPosition, newUnit);
+                    world, unityPosition, newUnitDto);
                 unitEvents.Entities[i].Destroy();
             }
         }
