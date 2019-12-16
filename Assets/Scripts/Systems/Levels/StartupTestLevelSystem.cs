@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
 using Components;
 using Leopotam.Ecs;
 using Models;
@@ -22,9 +24,9 @@ namespace Systems
             InitializeLevel();
         }
 
-        private void InitializeLevel()
+        private async Task InitializeLevel()
         {
-            var allyUnit = serverIntegration.client.Unit.CreateUnit(UnitType.Warrior).Result;
+            var allyUnit = serverIntegration.client.Unit.CreateUnit(UnitType.Warrior).;
             var enemyUnit = serverIntegration.client.Unit.CreateUnit(UnitType.Chelovechik).Result;
             UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityOnPositionFromUnitDbo(
                 ecsWorld, allyUnitPosition, allyUnit);

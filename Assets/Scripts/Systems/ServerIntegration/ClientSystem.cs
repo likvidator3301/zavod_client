@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Linq;
 using Components;
 using Leopotam.Ecs;
-using ZavodClient;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Systems
 {
@@ -41,8 +41,24 @@ namespace Systems
             {
                 foreach (var unit in updatedUnits.Result)
                 {
-                    //units.Get1.FirstOrDefault(u => u.Guid == unit);
-                    
+                    var updateUnit = units.Entities.FirstOrDefault(u => u.Get<UnitComponent>().Guid == unit);
+                    updateUnit.Get<HealthComponent>().CurrentHp -= 20;
+                }
+            }
+            lastSendAttackUnitsTime.Restart();
+        }
+
+        private void SendMoves()
+        {
+            var updatedUnits = serverIntegration.client.Unit.SendMoveUnits();
+            if (updatedUnits.IsCompleted)
+            {
+                foreach (var unit in updatedUnits.Result)
+                {
+                    var updateUnit = units.Get1.FirstOrDefault(u => u.Guid == unit.Id);
+                    var updatedPosition = unit.NewPosition;
+                    var unityPosition = new Vector3(updatedPosition.X, updatedPosition.Y, updatedPosition.Z);
+                    updateUnit.Object.transform.position = unityPosition;
                 }
             }
             lastSendAttackUnitsTime.Restart();

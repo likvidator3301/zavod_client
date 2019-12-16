@@ -2,7 +2,7 @@ namespace ServerIntegration
 {
     public class ServerIntegration
     {
-        private string url = "http://127.0.0.1:1234";
+        private string url = "http://localhost:5000";
         public readonly ZavodClient.ZavodClient client;
 
         public ServerIntegration()
