@@ -2,12 +2,12 @@
 using Leopotam.Ecs;
 using UnityEngine;
 using Components;
+using TMPro;
 
 namespace Systems
 {
     class CameraSystem : IEcsRunSystem
     {
-        private readonly GameDefinitions gameDefs = null;
         private readonly EcsFilter<PressKeyEvent> pressedKeyEventsFilter = null;
         private readonly EcsFilter<CameraComponent> cameraComponentsFilter = null;
 

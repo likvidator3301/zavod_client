@@ -9,11 +9,11 @@ namespace Systems
     public class UnitActionSystem : IEcsRunSystem
     {
         private const float inertiaEliminatorFactor = 3;
-        private EcsWorld ecsWorld;
-        private EcsFilter<UnitComponent> units;
-        private EcsFilter<AttackEvent> attackEvents;
-        private EcsFilter<MoveEvent> moveEvents;
-        private EcsFilter<FollowEvent> followEvents;
+        private readonly EcsWorld ecsWorld = null;
+        private readonly EcsFilter<UnitComponent> units = null;
+        private readonly EcsFilter<AttackEvent> attackEvents = null;
+        private readonly EcsFilter<MoveEvent> moveEvents = null;
+        private readonly EcsFilter<FollowEvent> followEvents = null;
 
         public void Run()
         {
