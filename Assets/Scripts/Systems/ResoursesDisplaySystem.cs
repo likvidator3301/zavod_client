@@ -3,6 +3,7 @@ using Components;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using System;
 
 namespace Systems
 {
@@ -21,7 +22,7 @@ namespace Systems
             foreach(var res in existResourses)
             {
                 var resComponent = res.Get<PlayerResourcesComponent>();
-                var formattedCash = cashText + resComponent.Cash;
+                var formattedCash = cashText + String.Format("{0:F1}", resComponent.Cash);
                 var formattedBeer = beerText + resComponent.Beer;
                 
                 foreach (var child in resComponent.ResoursesUiDisplay.GetComponentsInChildren<TextMeshProUGUI>())

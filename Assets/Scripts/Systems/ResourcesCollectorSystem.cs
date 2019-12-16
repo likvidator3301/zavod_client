@@ -23,6 +23,8 @@ namespace Systems
                     kioskEntity.Get<KioskComponent>().LastBeerGeneration = DateTime.Now;
                 }
             }
+
+            resources.Get1[0].Cash += 0.05f;
         }
     }
 }
