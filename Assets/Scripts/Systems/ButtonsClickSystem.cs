@@ -13,6 +13,7 @@ namespace Systems
         private readonly EcsWorld world = null;
         private readonly GameDefinitions gameDefinitions = null;
         private readonly EcsFilter<BuildingComponent> builds = null;
+        private readonly EcsFilter<PlayerResourcesComponent> resources = null;
 
         public void Run()
         {
@@ -62,6 +63,11 @@ namespace Systems
 
         private void CreateWarrior(ButtonComponent button)
         {
+            if (resources.Get1[0].Beer < 10)
+                return;
+
+            resources.Get1[0].Beer -= 10;
+                
             var GameObjectOfButton = GetParentGameObjectFromButton(button.button);
             world.NewEntityWith(out UnitCreateEvent unitCreate);
             unitCreate.UnitTag = UnitTag.Warrior;
@@ -75,9 +81,8 @@ namespace Systems
         {
             for (var i = 0; i < builds.GetEntitiesCount(); i++)
             {
-                foreach (var inBuildButton in builds.Get1[i].AllButtons)
+                foreach (var inBuildButton in builds.Entities[i].Get<BuildingComponent>().AllButtons)
                 {
-                    Debug.Log(inBuildButton.GetInstanceID());
                     if (inBuildButton.GetInstanceID() == button.GetInstanceID())
                         return builds.Get1[i].obj;
                 }

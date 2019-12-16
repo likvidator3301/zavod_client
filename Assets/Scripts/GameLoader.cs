@@ -40,6 +40,7 @@ public class GameLoader : MonoBehaviour
         systems = new EcsSystems(world)
             .Add(new ResoursesDisplaySystem())
             .Add(new ButtonsClickSystem())
+            .Add(new ResourcesCollectorSystem())
             .Add(controlsSystems)
             .Add(unitSystems)
             .Add(levelSystems)

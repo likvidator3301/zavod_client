@@ -37,13 +37,13 @@ namespace Systems
 
                 for (var i = 0; i < buildings.GetEntitiesCount(); i++)
                 {
-                    if (buildings.Get1[i].obj.GetComponent<Collider>().Raycast(ray, out hitInfo, 400))
+                    if (buildings.Entities[i].Get<BuildingComponent>().obj.GetComponent<Collider>().Raycast(ray, out hitInfo, 400))
                     {
-                        buildings.Get1[i].InBuildCanvas.enabled = true;
+                        buildings.Entities[i].Get<BuildingComponent>().InBuildCanvas.enabled = true;
                     }
                     else 
                     {
-                        buildings.Get1[i].InBuildCanvas.enabled = false;
+                        buildings.Entities[i].Get<BuildingComponent>().InBuildCanvas.enabled = false;
                     }
                 }
             }
