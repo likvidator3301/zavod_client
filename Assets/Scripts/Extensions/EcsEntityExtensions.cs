@@ -9,7 +9,13 @@ namespace Systems
 {
     public static class EcsEntityExtensions
     {
+
+#if UNITY_EDITOR
         private const string pathToInfo = @"./Assets/Data/Units";
+#else
+        private const string pathToInfo = @"./Units";
+#endif
+
         private const string fileType = "json";
         private const int destroyingDelay = 1000;
 
