@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9497eaae9b2d34a44a49983b3a95b24a, type: 3}
-  m_Name: GUIDefinitions
+  m_Name: GuiDefinitions
   m_EditorClassIdentifier: 
   BuildMenu: {fileID: 176140477752159486, guid: dbe7153e835705a4c966347d54178155,
     type: 3}

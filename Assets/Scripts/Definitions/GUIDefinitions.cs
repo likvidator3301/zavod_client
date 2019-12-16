@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "zavod_client/GUIDefinitions", fileName = "GUIDefinitions")]
+[CreateAssetMenu(menuName = "zavod_client/GuiDefinitions", fileName = "GuiDefinitions")]
 public class GuiDefinitions : ScriptableObject
 {
     public Canvas BuildMenu;

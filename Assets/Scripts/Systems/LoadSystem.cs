@@ -1,5 +1,4 @@
-﻿using System;
-using Components;
+﻿using Components;
 using Leopotam.Ecs;
 using UnityEngine;
 
@@ -42,7 +41,8 @@ namespace Systems
         private void LoadUiAssets()
         {
             world.NewEntityWith(out PlayerResourcesComponent playerAsset);
-            playerAsset.ResoursesUiDisplay = Canvas.Instantiate(definitions.GuiDefinitions.PlayerInfo);
+            Debug.Log(definitions.GuiDefinitions == null);
+            playerAsset.ResoursesUiDisplay = Object.Instantiate(definitions.GuiDefinitions.PlayerInfo);
         }
 
         private void LoadUi()
