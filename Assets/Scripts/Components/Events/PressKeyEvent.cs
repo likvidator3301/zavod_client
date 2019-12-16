@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Components
 {
-    class PressKeyEvent
+    internal class PressKeyEvent
     {
         public KeyCode Code;
     }

@@ -13,13 +13,13 @@ namespace Systems
             {
                 var pointOfRowCenter = endPoint + (startPoint - endPoint).normalized * unitWidth * 1.2f * i;
                 placedUnits.AddRange(
-                    CreateAndRotateRow(pointOfRowCenter, getPerpendicularVector(startPoint - endPoint), maxUnitsInRow, unitWidth));
+                    CreateAndRotateRow(pointOfRowCenter, GetPerpendicularVector(startPoint - endPoint), maxUnitsInRow, unitWidth));
             }
 
             return placedUnits;
         }
 
-        private static Vector3 getPerpendicularVector(Vector3 vec) => new Vector3(vec.z, vec.y, -vec.x);
+        private static Vector3 GetPerpendicularVector(Vector3 vec) => new Vector3(vec.z, vec.y, -vec.x);
 
         private static List<Vector3> CreateAndRotateRow(Vector3 centerPoint, Vector3 parralelRowVector, int maxUnitsInRow, float unitWitdh)
         {

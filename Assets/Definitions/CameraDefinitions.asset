@@ -15,7 +15,7 @@ MonoBehaviour:
   speed: 30
   verticalMoveStepFactor: 150
   rotateSpeed: 2
-  maxHeigth: 24
+  maxHeigth: 35
   minHeigth: 2
   verticalMoveSpeed: 0.18
   mainCameraPrefab: {fileID: 7734954885208448484, guid: 81cbff34fb4936f488b4a76399df3024,

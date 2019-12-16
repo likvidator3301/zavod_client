@@ -1,5 +1,4 @@
-﻿using System;
-using Components;
+﻿using Components;
 using Leopotam.Ecs;
 using UnityEngine;
 
@@ -14,6 +13,8 @@ namespace Systems
         {
             LoadMainCamera();
             LoadBuildingAssets();
+            LoadUiAssets();
+            LoadUi();
         }
 
         private void LoadMainCamera()
@@ -30,8 +31,23 @@ namespace Systems
 
         private void LoadBuildingAssets()
         {
-            world.NewEntityWith(out BuildingAssietComponent barrak);
+            world.NewEntityWith(out BuildingAssetComponent barrak);
             barrak.buildingAsset = definitions.BuildingDefinitions.BarracsAsset;
+
+            world.NewEntityWith(out BuildingAssetComponent kiosk);
+            kiosk.buildingAsset = definitions.BuildingDefinitions.KioskAsset;
+        }
+
+        private void LoadUiAssets()
+        {
+            world.NewEntityWith(out PlayerResourcesComponent playerAsset);
+            Debug.Log(definitions.GuiDefinitions == null);
+            playerAsset.ResoursesUiDisplay = Object.Instantiate(definitions.GuiDefinitions.PlayerInfo);
+        }
+
+        private void LoadUi()
+        {
+            GuiHelper.InstantiateAllButtons(definitions.GuiDefinitions.BuildMenu, world);
         }
     }
 }

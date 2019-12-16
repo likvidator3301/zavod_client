@@ -4,6 +4,7 @@ using Components;
 using Leopotam.Ecs;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 namespace Systems
@@ -24,6 +25,13 @@ namespace Systems
         
         private async void HandleSelection()
         {
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoStart))
+                    startPosition = hitInfoStart.point;
+                return;
+            }
+
             if (Input.GetMouseButtonDown((int)MouseButton.LeftMouse))
             {
                 if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoStart))

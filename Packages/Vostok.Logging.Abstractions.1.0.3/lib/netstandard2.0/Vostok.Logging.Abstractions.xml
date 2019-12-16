@@ -1,0 +1,720 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Vostok.Logging.Abstractions</name>
+    </assembly>
+    <members>
+        <member name="T:Vostok.Logging.Abstractions.CompositeLog">
+            <summary>
+            A log that passes messages on to all of the base logs.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.FilterByEventLogExtensions.SelectEvents(Vostok.Logging.Abstractions.ILog,System.Predicate{Vostok.Logging.Abstractions.LogEvent})">
+            <summary>
+            <para>Returns a wrapper log that only logs events matched by <paramref name="allow"/> predicate.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.FilterByEventLogExtensions.DropEvents(Vostok.Logging.Abstractions.ILog,System.Predicate{Vostok.Logging.Abstractions.LogEvent})">
+            <summary>
+            <para>Returns a wrapper log that drops events matched by <paramref name="reject"/> predicate.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.FilterByLevelLogExtensions.WithMinimumLevel(Vostok.Logging.Abstractions.ILog,Vostok.Logging.Abstractions.LogLevel)">
+            <summary>
+            Returns a wrapper log that ignores <see cref="T:Vostok.Logging.Abstractions.LogEvent"/>s with log level less than <paramref name="minLevel"/>.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.FilterByLevelLogExtensions.WithDisabledLevels(Vostok.Logging.Abstractions.ILog,Vostok.Logging.Abstractions.LogLevel[])">
+            <summary>
+            Returns a wrapper log that ignores <see cref="T:Vostok.Logging.Abstractions.LogEvent"/>s with log levels among provided <paramref name="disabledLevels"/>.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.FilterByPropertyLogExtensions.WithEventsSelectedByProperty``1(Vostok.Logging.Abstractions.ILog,System.String,System.Predicate{``0})">
+            <summary>
+            <para>Returns a wrapper log that only logs events which have a property with given <paramref name="key"/> and a value of type <typeparamref name="T"/> that is matched by <paramref name="allow"/> predicate.</para>
+            <para>Log events that do not have a property with such <paramref name="key"/> are dropped.</para>
+            <para>Log events that do have a property whose value is not of type <typeparamref name="T"/> are also dropped.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.FilterByPropertyLogExtensions.WithEventsSelectedByProperties(Vostok.Logging.Abstractions.ILog,System.Predicate{System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object}})">
+            <summary>
+            <para>Returns a wrapper log that only logs events whose properties are matched by <paramref name="allow"/> predicate.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.FilterByPropertyLogExtensions.WithEventsDroppedByProperty``1(Vostok.Logging.Abstractions.ILog,System.String,System.Predicate{``0})">
+            <summary>
+            <para>Returns a wrapper log that drops events which have a property with given <paramref name="key"/> and a value of type <typeparamref name="T"/> that is matched by <paramref name="reject"/> predicate.</para>
+            <para>Log events that do not have a property with such <paramref name="key"/> are logged.</para>
+            <para>Log events that do have a property whose value is not of type <typeparamref name="T"/> are also logged.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.FilterByPropertyLogExtensions.WithEventsDroppedByProperties(Vostok.Logging.Abstractions.ILog,System.Predicate{System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object}})">
+            <summary>
+            <para>Returns a wrapper log that drops events whose properties are matched by <paramref name="reject"/> predicate.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Debug(Vostok.Logging.Abstractions.ILog,System.String)">
+            <summary>
+            Logs the given <paramref name="message"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Debug"/> level without any additional properties.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Debug(Vostok.Logging.Abstractions.ILog,System.Exception)">
+            <summary>
+            Logs the given <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Debug"/> level without a message or any additional properties.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Debug(Vostok.Logging.Abstractions.ILog,System.Exception,System.String)">
+            <summary>
+            Logs the given <paramref name="message"/> and <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Debug"/> level without any additional properties.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Debug``1(Vostok.Logging.Abstractions.ILog,System.String,``0)">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Debug"/> level with given <paramref name="properties" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="properties"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Debug(Vostok.Logging.Abstractions.ILog,System.String,System.Object[])">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Debug"/> level with given <paramref name="parameters" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="parameters"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Debug``1(Vostok.Logging.Abstractions.ILog,System.Exception,System.String,``0)">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> and <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Debug"/> level with given <paramref name="properties" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="properties"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Debug(Vostok.Logging.Abstractions.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> and <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Debug"/> level with given <paramref name="parameters" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="parameters"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.IsEnabledForDebug(Vostok.Logging.Abstractions.ILog)">
+            <summary>
+            Returns true if given <paramref name="log"/> is enabled to log events of <see cref="F:Vostok.Logging.Abstractions.LogLevel.Debug"/> level, or false otherwise.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Info(Vostok.Logging.Abstractions.ILog,System.String)">
+            <summary>
+            Logs the given <paramref name="message"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Info"/> level without any additional properties.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Info(Vostok.Logging.Abstractions.ILog,System.Exception)">
+            <summary>
+            Logs the given <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Info"/> level without a message or any additional properties.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Info(Vostok.Logging.Abstractions.ILog,System.Exception,System.String)">
+            <summary>
+            Logs the given <paramref name="message"/> and <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Info"/> level without any additional properties.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Info``1(Vostok.Logging.Abstractions.ILog,System.String,``0)">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Info"/> level with given <paramref name="properties" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="properties"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Info(Vostok.Logging.Abstractions.ILog,System.String,System.Object[])">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Info"/> level with given <paramref name="parameters" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="parameters"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Info``1(Vostok.Logging.Abstractions.ILog,System.Exception,System.String,``0)">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> and <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Info"/> level with given <paramref name="properties" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="properties"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Info(Vostok.Logging.Abstractions.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> and <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Info"/> level with given <paramref name="parameters" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="parameters"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.IsEnabledForInfo(Vostok.Logging.Abstractions.ILog)">
+            <summary>
+            Returns true if given <paramref name="log"/> is enabled to log events of <see cref="F:Vostok.Logging.Abstractions.LogLevel.Info"/> level, or false otherwise.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Warn(Vostok.Logging.Abstractions.ILog,System.String)">
+            <summary>
+            Logs the given <paramref name="message"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Warn"/> level without any additional properties.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Warn(Vostok.Logging.Abstractions.ILog,System.Exception)">
+            <summary>
+            Logs the given <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Warn"/> level without a message or any additional properties.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Warn(Vostok.Logging.Abstractions.ILog,System.Exception,System.String)">
+            <summary>
+            Logs the given <paramref name="message"/> and <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Warn"/> level without any additional properties.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Warn``1(Vostok.Logging.Abstractions.ILog,System.String,``0)">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Warn"/> level with given <paramref name="properties" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="properties"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Warn(Vostok.Logging.Abstractions.ILog,System.String,System.Object[])">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Warn"/> level with given <paramref name="parameters" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="parameters"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Warn``1(Vostok.Logging.Abstractions.ILog,System.Exception,System.String,``0)">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> and <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Warn"/> level with given <paramref name="properties" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="properties"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Warn(Vostok.Logging.Abstractions.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> and <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Warn"/> level with given <paramref name="parameters" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="parameters"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.IsEnabledForWarn(Vostok.Logging.Abstractions.ILog)">
+            <summary>
+            Returns true if given <paramref name="log"/> is enabled to log events of <see cref="F:Vostok.Logging.Abstractions.LogLevel.Warn"/> level, or false otherwise.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Error(Vostok.Logging.Abstractions.ILog,System.String)">
+            <summary>
+            Logs the given <paramref name="message"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Error"/> level without any additional properties.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Error(Vostok.Logging.Abstractions.ILog,System.Exception)">
+            <summary>
+            Logs the given <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Error"/> level without a message or any additional properties.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Error(Vostok.Logging.Abstractions.ILog,System.Exception,System.String)">
+            <summary>
+            Logs the given <paramref name="message"/> and <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Error"/> level without any additional properties.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Error``1(Vostok.Logging.Abstractions.ILog,System.String,``0)">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Error"/> level with given <paramref name="properties" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="properties"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Error(Vostok.Logging.Abstractions.ILog,System.String,System.Object[])">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Error"/> level with given <paramref name="parameters" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="parameters"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Error``1(Vostok.Logging.Abstractions.ILog,System.Exception,System.String,``0)">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> and <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Error"/> level with given <paramref name="properties" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="properties"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Error(Vostok.Logging.Abstractions.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> and <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Error"/> level with given <paramref name="parameters" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="parameters"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.IsEnabledForError(Vostok.Logging.Abstractions.ILog)">
+            <summary>
+            Returns true if given <paramref name="log"/> is enabled to log events of <see cref="F:Vostok.Logging.Abstractions.LogLevel.Error"/> level, or false otherwise.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Fatal(Vostok.Logging.Abstractions.ILog,System.String)">
+            <summary>
+            Logs the given <paramref name="message"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Fatal"/> level without any additional properties.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Fatal(Vostok.Logging.Abstractions.ILog,System.Exception)">
+            <summary>
+            Logs the given <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Fatal"/> level without a message or any additional properties.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Fatal(Vostok.Logging.Abstractions.ILog,System.Exception,System.String)">
+            <summary>
+            Logs the given <paramref name="message"/> and <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Fatal"/> level without any additional properties.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Fatal``1(Vostok.Logging.Abstractions.ILog,System.String,``0)">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Fatal"/> level with given <paramref name="properties" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="properties"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Fatal(Vostok.Logging.Abstractions.ILog,System.String,System.Object[])">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Fatal"/> level with given <paramref name="parameters" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="parameters"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Fatal``1(Vostok.Logging.Abstractions.ILog,System.Exception,System.String,``0)">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> and <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Fatal"/> level with given <paramref name="properties" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="properties"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.Fatal(Vostok.Logging.Abstractions.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+            Logs the given <paramref name="messageTemplate"/> and <paramref name="exception"/> on the <see cref="F:Vostok.Logging.Abstractions.LogLevel.Fatal"/> level with given <paramref name="parameters" />. The <paramref name="messageTemplate"/> can contain placeholders for <paramref name="parameters"/>, see <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogExtensions.IsEnabledForFatal(Vostok.Logging.Abstractions.ILog)">
+            <summary>
+            Returns true if given <paramref name="log"/> is enabled to log events of <see cref="F:Vostok.Logging.Abstractions.LogLevel.Fatal"/> level, or false otherwise.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.TransformLevelsLogExtensions.WithLevelsTransformation(Vostok.Logging.Abstractions.ILog,System.Collections.Generic.IReadOnlyDictionary{Vostok.Logging.Abstractions.LogLevel,Vostok.Logging.Abstractions.LogLevel})">
+            <summary>
+            Returns a wrapper log that transforms log levels of incoming log events according to provided mapping.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.WithPropertyLogExtensions.WithProperty``1(Vostok.Logging.Abstractions.ILog,System.String,``0,System.Boolean)">
+            <summary>
+            <para>Returns a wrapper log that adds a static property with given <paramref name="key"/> and <paramref name="value"/> to each <see cref="T:Vostok.Logging.Abstractions.LogEvent"/> before logging.</para>
+            <para>By default, existing properties are not overwritten. This can be changed via <paramref name="allowOverwrite"/> parameter.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.WithPropertyLogExtensions.WithProperty``1(Vostok.Logging.Abstractions.ILog,System.String,System.Func{``0},System.Boolean,System.Boolean)">
+            <summary>
+            <para>Returns a wrapper log that adds a dynamic property with given <paramref name="key"/> and <paramref name="value"/> provider to each <see cref="T:Vostok.Logging.Abstractions.LogEvent"/> before logging.</para>
+            <para>By default, existing properties are not overwritten. This can be changed via <paramref name="allowOverwrite"/> parameter.</para>
+            <para>By default, <c>null</c> values are not added to events. This can be changed via <paramref name="allowNullValues"/> parameter.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.WithPropertyLogExtensions.WithProperties(Vostok.Logging.Abstractions.ILog,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object},System.Boolean,System.Boolean)">
+            <summary>
+            <para>Returns a wrapper log that adds all of the given properties to each <see cref="T:Vostok.Logging.Abstractions.LogEvent"/> before logging.</para>
+            <para>By default, existing properties are not overwritten. This can be changed via <paramref name="allowOverwrite"/> parameter.</para>
+            <para>By default, <c>null</c> values are not added to events. This can be changed via <paramref name="allowNullValues"/> parameter.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.WithPropertyLogExtensions.WithProperties(Vostok.Logging.Abstractions.ILog,System.Func{System.Collections.Generic.IEnumerable{System.ValueTuple{System.String,System.Object}}},System.Boolean,System.Boolean)">
+            <summary>
+            <para>Returns a wrapper log that adds all of the properties returned by given delegate to each <see cref="T:Vostok.Logging.Abstractions.LogEvent"/> before logging.</para>
+            <para>By default, existing properties are not overwritten. This can be changed via <paramref name="allowOverwrite"/> parameter.</para>
+            <para>By default, <c>null</c> values are not added to events. This can be changed via <paramref name="allowNullValues"/> parameter.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.WithPropertyLogExtensions.WithObjectProperties``1(Vostok.Logging.Abstractions.ILog,``0,System.Boolean,System.Boolean)">
+            <summary>
+            <para>Returns a wrapper log that adds all properties of given <paramref name="@object"/> to each <see cref="T:Vostok.Logging.Abstractions.LogEvent"/> before logging.</para>
+            <para>By default, existing properties are not overwritten. This can be changed via <paramref name="allowOverwrite"/> parameter.</para>
+            <para>By default, <c>null</c> values are not added to events. This can be changed via <paramref name="allowNullValues"/> parameter.</para>
+            <para>Usage example: <c>log.WithObjectProperties(new {A = 1, B = 2})</c></para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.WithPropertyLogExtensions.WithObjectProperties``1(Vostok.Logging.Abstractions.ILog,System.Func{``0},System.Boolean,System.Boolean)">
+            <summary>
+            <para>Returns a wrapper log that adds all properties of the object returned by given <paramref name="@object"/> delegate to each <see cref="T:Vostok.Logging.Abstractions.LogEvent"/> before logging.</para>
+            <para>By default, existing properties are not overwritten. This can be changed via <paramref name="allowOverwrite"/> parameter.</para>
+            <para>By default, <c>null</c> values are not added to events. This can be changed via <paramref name="allowNullValues"/> parameter.</para>
+            <para>Usage example: <c>log.WithObjectProperties(() => new {A = 1, B = 2})</c></para>
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.Abstractions.ILog">
+            <summary>
+            <para>Represents a log.</para>
+            <para>Implementations are expected to be thread-safe and never throw exceptions in any method.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.ILog.Log(Vostok.Logging.Abstractions.LogEvent)">
+            <summary>
+            Logs the given <see cref="T:Vostok.Logging.Abstractions.LogEvent"/>. This method should not be called directly in most cases. 
+            Use one of the <see cref="M:Vostok.Logging.Abstractions.LogExtensions.Debug(Vostok.Logging.Abstractions.ILog,System.String)"/>, <see cref="M:Vostok.Logging.Abstractions.LogExtensions.Info(Vostok.Logging.Abstractions.ILog,System.String)"/>, <see cref="M:Vostok.Logging.Abstractions.LogExtensions.Warn(Vostok.Logging.Abstractions.ILog,System.String)"/>, <see cref="M:Vostok.Logging.Abstractions.LogExtensions.Error(Vostok.Logging.Abstractions.ILog,System.String)"/> or <see cref="M:Vostok.Logging.Abstractions.LogExtensions.Fatal(Vostok.Logging.Abstractions.ILog,System.String)"/> extension methods instead.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.ILog.IsEnabledFor(Vostok.Logging.Abstractions.LogLevel)">
+            <summary>
+            <para>Returns whether the current log is configured to log events of the given <see cref="T:Vostok.Logging.Abstractions.LogLevel"/>.</para>
+            <para>In case you use the <see cref="M:Vostok.Logging.Abstractions.ILog.Log(Vostok.Logging.Abstractions.LogEvent)"/> method directly, call this method to avoid unnecessary construction of <see cref="T:Vostok.Logging.Abstractions.LogEvent"/>s.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.ILog.ForContext(System.String)">
+            <summary>
+            <para>Returns a copy of the log operating in the given source <paramref name="context" />.</para>
+            <para>The nature of this context is described by following statements:</para>
+            <list type="bullet">
+                <item><description>It is meant to denote the source of logging events, such as a class.</description></item>
+                <item><description>It is tied to the returned instance of <see cref="T:Vostok.Logging.Abstractions.ILog"/>.</description></item>
+                <item><description>It is hierarchical: chained <see cref="M:Vostok.Logging.Abstractions.ILog.ForContext(System.String)"/> calls produce an ordered sequence of contexts.</description></item>
+            </list>
+            <para>
+                It is generally expected that implementations would enrich incoming <see cref="T:Vostok.Logging.Abstractions.LogEvent"/>s with <see cref="F:Vostok.Logging.Abstractions.WellKnownProperties.SourceContext"/> property containing this context.
+                <see cref="T:Vostok.Logging.Abstractions.Wrappers.SourceContextWrapper"/> helps with this.
+                However, handling of source contexts is implementation-specific and may differ from the approach described above.
+            </para>
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.Abstractions.LogEvent">
+            <summary>
+            A single event to be logged. Consists of a timestamp, a log message, a saved exception and user-defined properties.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogEvent.#ctor(Vostok.Logging.Abstractions.LogLevel,System.DateTimeOffset,System.String,System.Exception)">
+            <summary>
+            Creates a new log event with specified <paramref name="level"/>, <paramref name="timestamp"/>, <paramref name="messageTemplate"/>, <paramref name="exception"/> and empty properties.
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.Abstractions.LogEvent.Level">
+            <summary>
+            The <see cref="T:Vostok.Logging.Abstractions.LogLevel"/> of the event. See <see cref="T:Vostok.Logging.Abstractions.LogLevel"/> enumeration for tips on when to use which log level.
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.Abstractions.LogEvent.Timestamp">
+            <summary>
+            The timestamp of the event. Represents the time when the event was created, rather then the time when it was written to a file or processed in any other way. The local time zone is kept here for future use. 
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate">
+            <summary>
+            <para>The template of the log message containing placeholders to be filled with values from <see cref="P:Vostok.Logging.Abstractions.LogEvent.Properties"/>.</para>
+            <para>For example, the template "foo{0} {key}" and properties { '0': 'bar', 'key': 'baz' } produce the following output: "foobar baz".</para>
+            <para>Use double curly braces to escape curly braces in text: "{{key}}", { 'key': 'value' } --> "{{key}}".</para>
+            <para>Any mismatched braces are kept as-is: "key1}", { 'key1': 'value' } --> "key1}".</para>
+            <para>Any nonexistent keys are rendered as empty strings: "{key1}", { } --> "".</para>
+            <para>Can be null for events containing only <see cref="P:Vostok.Logging.Abstractions.LogEvent.Exception"/>.</para>
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.Abstractions.LogEvent.Properties">
+            <summary>
+            <para>Contains various user-defined properties of the event.</para>
+            <list type="bullet">
+                <listheader>There are two kinds of properties:</listheader>
+                <item>Named properties. These should be set using logging extensions with the 'properties' argument like <see cref="M:Vostok.Logging.Abstractions.LogExtensions.Info``1(Vostok.Logging.Abstractions.ILog,System.String,``0)"/>.</item> 
+                <item>Positional parameters. These should be set using logging extensions with the 'parameters' argument like <see cref="M:Vostok.Logging.Abstractions.LogExtensions.Info(Vostok.Logging.Abstractions.ILog,System.String,System.Object[])"/> and are then referenced by their position in the array instead of name.</item>
+            </list>
+            <para>Both kinds of properties can be substituted into the <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/>. See <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> for details.</para>
+            <para>Can be null if there is no properties.</para>
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.Abstractions.LogEvent.Exception">
+            <summary>
+            The error associated with this log event. Can be null if there is no error.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogEvent.WithProperty``1(System.String,``0)">
+            <summary>
+            <para>Returns a copy of the log event with property <paramref name="key"/> set to <paramref name="value"/>. </para>
+            <para>Existing properties can be overwritten this way.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogEvent.WithPropertyIfAbsent``1(System.String,``0)">
+            <summary>
+            <para>Returns a copy of the log event with property <paramref name="key"/> set to <paramref name="value"/>. </para>
+            <para>Existing properties can not be overwritten this way: the same <see cref="T:Vostok.Logging.Abstractions.LogEvent"/> is returned upon conflict.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogEvent.WithoutProperty(System.String)">
+            <summary>
+            Returns a copy of the log event with property <paramref name="key"/> removed.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogEvent.WithMessageTemplate(System.String)">
+            <summary>
+            Returns a copy of the log event with given <paramref name="messageTemplate"/>.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogEvent.WithException(System.Exception)">
+            <summary>
+            Returns a copy of the log event with given <paramref name="exception"/>.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogEvent.WithLevel(Vostok.Logging.Abstractions.LogLevel)">
+            <summary>
+            Returns a copy of the log event with given <paramref name="level"/>.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogEvent.WithTimestamp(System.DateTimeOffset)">
+            <summary>
+            Returns a copy of the log event with given <paramref name="timestamp"/>.
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.Abstractions.LogLevel">
+            <summary>
+            <list type="bullet">
+                <listheader>Recommended usage:</listheader>
+                <item><description><see cref="F:Vostok.Logging.Abstractions.LogLevel.Debug"/> — for verbose output; this log level should usually be ignored on production installations.</description></item>
+                <item><description><see cref="F:Vostok.Logging.Abstractions.LogLevel.Info"/> — for neutral messages.</description></item>
+                <item><description><see cref="F:Vostok.Logging.Abstractions.LogLevel.Warn"/> — for non-critical errors that don't interrupt the normal operation of the application.</description></item>
+                <item><description><see cref="F:Vostok.Logging.Abstractions.LogLevel.Error"/> — for unexpected errors that may require human attention.</description></item>
+                <item><description><see cref="F:Vostok.Logging.Abstractions.LogLevel.Fatal"/> — for critical errors that result in application shutdown.</description></item>
+            </list>
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.Abstractions.LogLevel.Debug">
+            <summary>
+            Used for verbose output. This log level should usually be ignored on production installations.
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.Abstractions.LogLevel.Info">
+            <summary>
+            Used for neutral messages.
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.Abstractions.LogLevel.Warn">
+            <summary>
+            Used for non-critical errors that don't interrupt the normal operation of the application.
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.Abstractions.LogLevel.Error">
+            <summary>
+            Used for unexpected errors that may require human attention.
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.Abstractions.LogLevel.Fatal">
+            <summary>
+            Used for critical errors that result in application shutdown.
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.Abstractions.LogProvider">
+            <summary>
+            <para><see cref="T:Vostok.Logging.Abstractions.LogProvider"/> is a static shared configuration point that allows to decouple configuration of logging in libraries from calling code.</para>
+            <para>It is intended to be used primarily by library developers who must not force their users to explicitly provide <see cref="T:Vostok.Logging.Abstractions.ILog"/> instances.</para>
+            <para>It is expected to be configured by a hosting system or just directly in the application entry point.</para>
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.Abstractions.LogProvider.IsConfigured">
+            <summary>
+            Returns <c>true</c> if a global <see cref="T:Vostok.Logging.Abstractions.ILog"/> instance has already been configured with <see cref="M:Vostok.Logging.Abstractions.LogProvider.Configure(Vostok.Logging.Abstractions.ILog,System.Boolean)"/> method. Returns <c>false</c> otherwise.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogProvider.Get">
+            <summary>
+            <para>Returns the global default instance of <see cref="T:Vostok.Logging.Abstractions.ILog"/> if it's been configured.</para>
+            <para>If nothing has been configured yet, falls back to an instance of <see cref="T:Vostok.Logging.Abstractions.SilentLog"/>.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Abstractions.LogProvider.Configure(Vostok.Logging.Abstractions.ILog,System.Boolean)">
+            <summary>
+            <para>Configures the global default <see cref="T:Vostok.Logging.Abstractions.ILog"/> with given instance, which will be returned by all subsequent <see cref="M:Vostok.Logging.Abstractions.LogProvider.Get"/> calls.</para>
+            <para>By default, this method fails when trying to overwrite a previously configured instance. This behaviour can be changed with <paramref name="canOverwrite"/> parameter.</para>
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Provided instance was <c>null</c>.</exception>
+            <exception cref="T:System.InvalidOperationException">Attempted to overwrite previously configured instance.</exception>
+        </member>
+        <member name="T:Vostok.Logging.Abstractions.SilentLog">
+            <summary>
+            Represents a log that just discards all incoming <see cref="T:Vostok.Logging.Abstractions.LogEvent"/>s.
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.Abstractions.Values.OperationContextValue">
+            <summary>
+            Represents the value of <see cref="F:Vostok.Logging.Abstractions.WellKnownProperties.OperationContext"/> property.
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.Abstractions.Values.SourceContextValue">
+            <summary>
+            Represents the value of <see cref="F:Vostok.Logging.Abstractions.WellKnownProperties.SourceContext"/> property.
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.Abstractions.WellKnownProperties">
+            <summary>
+            Defines names of special well-known properties in <see cref="T:Vostok.Logging.Abstractions.LogEvent"/>s.
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.Abstractions.WellKnownProperties.SourceContext">
+            <summary>
+            <para>Property that denotes logging events source, such as a class in code base.</para>
+            <para>Represented by <see cref="T:Vostok.Logging.Abstractions.Values.SourceContextValue"/>.</para>
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.Abstractions.WellKnownProperties.OperationContext">
+            <summary>
+            <para>Property that denotes current logical operation context related to code execution flow, such as currently handled query.</para>
+            <para>Represented by <see cref="T:Vostok.Logging.Abstractions.Values.OperationContextValue"/>.</para>
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.Abstractions.WellKnownProperties.TraceContext">
+            <summary>
+            <para>Property that denotes current distributed tracing context.</para>
+            <para>Represented by anything of user's choice.</para>
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.Abstractions.Wrappers.SourceContextWrapper">
+            <summary>
+            <para>An <see cref="T:Vostok.Logging.Abstractions.ILog"/> wrapper that helps to implement <see cref="M:Vostok.Logging.Abstractions.ILog.ForContext(System.String)"/> method in custom logs efficiently.</para>
+            <para><see cref="T:Vostok.Logging.Abstractions.Wrappers.SourceContextWrapper"/> enriches all passing events with a <see cref="F:Vostok.Logging.Abstractions.WellKnownProperties.SourceContext"/> property with given value.</para>
+            <para>It's <see cref="M:Vostok.Logging.Abstractions.ILog.ForContext(System.String)"/> implementation prevents formation of wrapper chains by unwrapping to a base log that is not a <see cref="T:Vostok.Logging.Abstractions.Wrappers.SourceContextWrapper"/>.</para>
+            </summary>
+        </member>
+        <member name="T:Vostok.Commons.Collections.ImmutableArrayDictionary`2">
+            <summary>
+            <para>An immutable dictionary implemented using an array.</para>
+            <para>Search takes linear time, so this collection should only be used with small number of items.</para>
+            </summary>
+        </member>
+        <member name="F:Vostok.Commons.Collections.ImmutableArrayDictionary`2.Empty">
+            <summary>
+            An empty <see cref="T:Vostok.Commons.Collections.ImmutableArrayDictionary`2"/>.
+            </summary>
+        </member>
+        <member name="M:Vostok.Commons.Collections.ImmutableArrayDictionary`2.#ctor(System.Collections.Generic.IEqualityComparer{`0})">
+            <summary>
+            Create a new <see cref="T:Vostok.Commons.Collections.ImmutableArrayDictionary`2"/> with default capacity.
+            </summary>
+        </member>
+        <member name="M:Vostok.Commons.Collections.ImmutableArrayDictionary`2.#ctor(System.Int32,System.Collections.Generic.IEqualityComparer{`0})">
+            <summary>
+            Create a new <see cref="T:Vostok.Commons.Collections.ImmutableArrayDictionary`2"/> with the given capacity.
+            </summary>
+        </member>
+        <member name="P:Vostok.Commons.Collections.ImmutableArrayDictionary`2.Count">
+            <inheritdoc />
+        </member>
+        <member name="P:Vostok.Commons.Collections.ImmutableArrayDictionary`2.Keys">
+            <inheritdoc />
+        </member>
+        <member name="P:Vostok.Commons.Collections.ImmutableArrayDictionary`2.Values">
+            <inheritdoc />
+        </member>
+        <member name="M:Vostok.Commons.Collections.ImmutableArrayDictionary`2.ContainsKey(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Vostok.Commons.Collections.ImmutableArrayDictionary`2.TryGetValue(`0,`1@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Vostok.Commons.Collections.ImmutableArrayDictionary`2.Set(`0,`1,System.Boolean)">
+            <summary>
+            Returns a new <see cref="T:Vostok.Commons.Collections.ImmutableArrayDictionary`2"/> with the same data plus <paramref name="key"/> set to <paramref name="value"/>.
+            </summary>
+            <param name="key">The key to set value for.</param>
+            <param name="value">The value to write.</param>
+            <param name="overwrite">Specifies the behavior in case a value with the same key exists. If <c>true</c>, the value will be overwritten in the returned dictionary. Otherwise, the new value is ignored and the original dictionary is returned.</param>
+        </member>
+        <member name="M:Vostok.Commons.Collections.ImmutableArrayDictionary`2.Remove(`0)">
+            <summary>
+            Returns a new <see cref="T:Vostok.Commons.Collections.ImmutableArrayDictionary`2"/> with the same data except the value by <paramref name="key"/>. If there is no such key, the original dictionary is returned.
+            </summary>
+        </member>
+        <member name="M:Vostok.Commons.Collections.ImmutableArrayDictionary`2.GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="P:Vostok.Commons.Collections.ImmutableArrayDictionary`2.Item(`0)">
+            <inheritdoc />
+        </member>
+        <member name="T:Vostok.Commons.Time.PreciseDateTime">
+            <summary>
+            <para><see cref="T:Vostok.Commons.Time.PreciseDateTime"/> is an alternative to built-in <see cref="T:System.DateTimeOffset"/> with better precision in most environments.</para>
+            <para>Despite generally providing better precision, it's <b>not any more accurate</b> and <b>not monotonic</b>!</para>
+            <para>It's based on following techniques:</para>
+            <list type="number">
+                <item><description><c>GetSystemTimePreciseAsFileTime</c> system call on Windows 8 or 2012 and later.</description></item>
+                <item><description>Combination of <see cref="P:System.DateTimeOffset.UtcNow"/> and <see cref="M:System.Diagnostics.Stopwatch.GetTimestamp"/> if <see cref="T:System.Diagnostics.Stopwatch"/> uses a high-precision timer.</description></item>
+                <item><description>Plain old <see cref="P:System.DateTimeOffset.UtcNow"/> if nothing of above works.</description></item>
+            </list>
+            </summary>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseKindFlags.Access">
+            <summary>Only entity marked with attribute considered used.</summary>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseKindFlags.Assign">
+            <summary>Indicates implicit assignment to a member.</summary>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature">
+            <summary>
+            Indicates implicit instantiation of a type with fixed constructor signature.
+            That means any unused constructor parameters won't be reported as such.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature">
+            <summary>Indicates implicit instantiation of a type.</summary>
+        </member>
+        <member name="T:JetBrains.Annotations.ImplicitUseTargetFlags">
+            <summary>
+            Specify what is considered used implicitly when marked
+            with <see cref="T:JetBrains.Annotations.MeansImplicitUseAttribute"/> or <see cref="T:JetBrains.Annotations.UsedImplicitlyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseTargetFlags.Members">
+            <summary>Members of entity marked with attribute are considered used.</summary>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseTargetFlags.WithMembers">
+            <summary>Entity marked with attribute and all its members considered used.</summary>
+        </member>
+        <member name="T:JetBrains.Annotations.CanBeNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could be <c>null</c> sometimes,
+            so the check for <c>null</c> is necessary before its usage.
+            </summary>
+            <example><code>
+            [CanBeNull] object Test() => null;
+            
+            void UseTest() {
+              var p = Test();
+              var s = p.ToString(); // Warning: Possible 'System.NullReferenceException'
+            }
+            </code></example>
+        </member>
+        <member name="T:JetBrains.Annotations.NotNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could never be <c>null</c>.
+            </summary>
+            <example><code>
+            [NotNull] object Foo() {
+              return null; // Warning: Possible 'null' assignment
+            }
+            </code></example>
+        </member>
+        <member name="T:JetBrains.Annotations.StringFormatMethodAttribute">
+            <summary>
+            Indicates that the marked method builds string by format pattern and (optional) arguments.
+            Parameter, which contains format string, should be given in constructor. The format string
+            should be in <see cref="M:System.String.Format(System.IFormatProvider,System.String,System.Object[])"/>-like form.
+            </summary>
+            <example><code>
+            [StringFormatMethod("message")]
+            void ShowError(string message, params object[] args) { /* do something */ }
+            
+            void Foo() {
+              ShowError("Failed: {0}"); // Warning: Non-existing argument in format string
+            }
+            </code></example>
+        </member>
+        <member name="M:JetBrains.Annotations.StringFormatMethodAttribute.#ctor(System.String)">
+            <param name="formatParameterName">
+            Specifies which parameter of an annotated method should be treated as format-string
+            </param>
+        </member>
+        <member name="T:JetBrains.Annotations.UsedImplicitlyAttribute">
+            <summary>
+            Indicates that the marked symbol is used implicitly (e.g. via reflection, in external library),
+            so this symbol will not be marked as unused (as well as by other usage inspections).
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.PureAttribute">
+            <summary>
+            Indicates that a method does not make any observable state changes.
+            The same as <c>System.Diagnostics.Contracts.PureAttribute</c>.
+            </summary>
+            <example><code>
+            [Pure] int Multiply(int x, int y) => x * y;
+            
+            void M() {
+              Multiply(123, 42); // Waring: Return value of pure method is not used
+            }
+            </code></example>
+        </member>
+        <member name="T:JetBrains.Annotations.MeansImplicitUseAttribute">
+            <summary>
+            Should be used on attributes and causes ReSharper to not mark symbols marked with such attributes
+            as unused (as well as by other usage inspections)
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.PublicAPIAttribute">
+            <summary>
+            This attribute is intended to mark publicly available API
+            which should not be removed and so is treated as used.
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.ItemNotNullAttribute">
+            <summary>
+            Can be appplied to symbols of types derived from IEnumerable as well as to symbols of Task
+            and Lazy classes to indicate that the value of a collection item, of the Task.Result property
+            or of the Lazy.Value property can never be null.
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.ItemCanBeNullAttribute">
+            <summary>
+            Can be appplied to symbols of types derived from IEnumerable as well as to symbols of Task
+            and Lazy classes to indicate that the value of a collection item, of the Task.Result property
+            or of the Lazy.Value property can be null.
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.ValueProviderAttribute">
+            <summary>
+            For a parameter that is expected to be one of the limited set of values.
+            Specify fields of which type should be used as values for this parameter.
+            </summary>
+        </member>
+    </members>
+</doc>

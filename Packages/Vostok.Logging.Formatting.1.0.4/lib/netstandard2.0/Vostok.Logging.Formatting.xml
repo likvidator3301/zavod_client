@@ -1,0 +1,342 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Vostok.Logging.Formatting</name>
+    </assembly>
+    <members>
+        <member name="T:Vostok.Logging.Formatting.LogEventFormatter">
+            <summary>
+            <para>Represents a helper used to render log events into text.</para>
+            <para>See <see cref="M:Vostok.Logging.Formatting.LogEventFormatter.Format(Vostok.Logging.Abstractions.LogEvent,System.IO.TextWriter,Vostok.Logging.Formatting.OutputTemplate,System.IFormatProvider)"/> method for details.</para>
+            <para>See <see cref="T:Vostok.Logging.Formatting.OutputTemplate"/> method for template syntax.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.LogEventFormatter.Format(Vostok.Logging.Abstractions.LogEvent,Vostok.Logging.Formatting.OutputTemplate,System.IFormatProvider)">
+            <inheritdoc cref="M:Vostok.Logging.Formatting.LogEventFormatter.Format(Vostok.Logging.Abstractions.LogEvent,System.IO.TextWriter,Vostok.Logging.Formatting.OutputTemplate,System.IFormatProvider)"/>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.LogEventFormatter.Format(Vostok.Logging.Abstractions.LogEvent,System.IO.TextWriter,Vostok.Logging.Formatting.OutputTemplate,System.IFormatProvider)">
+            <summary>
+            <para>Renders given <paramref name="event"/> using all of its content.</para>
+            <para>Performs substitution of property placeholders present in <paramref name="template"/>.</para>
+            <para>Uses template syntax defined for <see cref="T:Vostok.Logging.Formatting.OutputTemplate"/>.</para>
+            <para>Example output template: <c>{Timestamp} {Level} {Prefix} {Message}{NewLine}{Exception}</c></para>
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.Formatting.LogMessageFormatter">
+            <summary>
+            <para>Represents a helper used to render log event messages into text.</para>
+            <para>See <see cref="M:Vostok.Logging.Formatting.LogMessageFormatter.Format(Vostok.Logging.Abstractions.LogEvent,System.IO.TextWriter,System.IFormatProvider)"/> method for details.</para>
+            <para>See <see cref="T:Vostok.Logging.Formatting.OutputTemplate"/> method for template syntax.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.LogMessageFormatter.Format(Vostok.Logging.Abstractions.LogEvent,System.IFormatProvider)">
+            <inheritdoc cref="M:Vostok.Logging.Formatting.LogMessageFormatter.Format(Vostok.Logging.Abstractions.LogEvent,System.IO.TextWriter,System.IFormatProvider)"/>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.LogMessageFormatter.Format(Vostok.Logging.Abstractions.LogEvent,System.IO.TextWriter,System.IFormatProvider)">
+            <summary>
+            <para>Renders given <paramref name="event"/>'s message using its <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> and <see cref="P:Vostok.Logging.Abstractions.LogEvent.Properties"/>.</para>
+            <para>Performs substitution of property placeholders present in message template.</para>
+            <para>Uses template syntax defined for <see cref="T:Vostok.Logging.Formatting.OutputTemplate"/> (with one key difference outlined below).</para>
+            <para>Unlike to <see cref="T:Vostok.Logging.Formatting.LogEventFormatter"/>, there are no special predefined properties during message formatting. Only event properties are used.</para>
+            <para>Example message template: <c>'Hello, {User}! You have {UnreadCount:D5} messages to read.'</c></para>
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.Formatting.OutputTemplate">
+            <summary>
+            <para>Represents a pattern used to render <see cref="T:Vostok.Logging.Abstractions.LogEvent" />s into text representation.</para>
+            <para>The syntax allows properties in the following format resembling native .NET string interpolation: '{prop:format}'. Format part is optional.</para>
+            <para>Properties are supplied from event <see cref="P:Vostok.Logging.Abstractions.LogEvent.Properties" />, but there are a number of special predefined ones:</para>
+            <list type="bullet">
+                <item><description><c>{Timestamp:format}</c> — inserts <see cref="P:Vostok.Logging.Abstractions.LogEvent.Timestamp" /> formatted with given optional <c>format</c>. Default format is <c>yyyy-MM-dd HH:mm:ss,fff</c>.<para /></description></item>
+                <item><description><c>{Uptime:format}</c> — inserts a current process uptime measured in milliseconds and formatted with given optional <c>format</c>.<para /></description></item>
+                <item><description><c>{Level}</c> — inserts <see cref="P:Vostok.Logging.Abstractions.LogEvent.Level" /> in upper case (such as <c>INFO</c>). For more compact level names, use a format such as <c>{Level:u3}</c> or <c>{Level:w3}</c> for three-character upper- or lowercase level names, respectively.<para /></description></item>
+                <item><description><c>{Message}</c> — inserts log message rendered from <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate" /> and <see cref="P:Vostok.Logging.Abstractions.LogEvent.Properties" /> using <see cref="T:Vostok.Logging.Formatting.LogMessageFormatter" />.<para /></description></item>
+                <item><description><c>{NewLine}</c> — inserts a platform-dependent newline.<para /></description></item>
+                <item><description><c>{Exception}</c> — inserts <see cref="P:Vostok.Logging.Abstractions.LogEvent.Exception" /> with message, stack trace, inner exception and a trailing newline.<para /></description></item>
+                <item><description><c>{Properties}</c> — inserts all of event's <see cref="P:Vostok.Logging.Abstractions.LogEvent.Properties" />.<para /></description></item>
+            </list>
+            <para>Ordinary named properties are just referenced by their names, such as <c>{MyProp}</c>.</para>
+            <para>With ordinary properties, it's possible to use a special <c>:W</c> format to add a leading space, <c>:w</c> to add a trailing space or <c>:wW</c> to add both.</para>
+            <para>In the event of name collision, special predefined properties take precedence.</para>
+            <para>Any text between property tokens in curly braces is rendered as-is.</para>
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.Formatting.OutputTemplate.Empty">
+            <summary>
+            A template that always produces empty text regardless of <see cref="T:Vostok.Logging.Abstractions.LogEvent"/> contents.
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.Formatting.OutputTemplate.Default">
+            <summary>
+            A default template with following representation: <c>{Timestamp} {Level} {TraceContext:w}{OperationContext:w}{SourceContext:w} {Prefix}{Message}{NewLine}{Exception}</c>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplate.Create">
+            <summary>
+            Creates a builder which can be used to construct <see cref="T:Vostok.Logging.Formatting.OutputTemplate"/> without going through string parsing.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplate.Parse(System.String)">
+            <summary>
+            Parses given template string and returns an <see cref="T:Vostok.Logging.Formatting.OutputTemplate"/> corresponding to it.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplate.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplate.Equals(Vostok.Logging.Formatting.OutputTemplate)">
+            <inheritdoc />
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplate.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplate.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="T:Vostok.Logging.Formatting.OutputTemplateBuilder">
+            <summary>
+            A builder for <see cref="T:Vostok.Logging.Formatting.OutputTemplate"/>.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplateBuilder.Build">
+            <summary>
+            Creates and returns an <see cref="T:Vostok.Logging.Formatting.OutputTemplate"/> assembled from all the parts added earlier.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplateBuilder.AddText(System.String)">
+            <summary>
+            Adds a literal text token which will be rendered as-is.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplateBuilder.AddNewline">
+            <summary>
+            Adds a token which emits platform-dependent newline.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplateBuilder.AddTimestamp(System.String)">
+            <summary>
+            Adds a token which emits event <see cref="P:Vostok.Logging.Abstractions.LogEvent.Timestamp"/> in given <paramref name="format"/>.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplateBuilder.AddUptime(System.String)">
+            <summary>
+            Adds a token which emits current process uptime measured in milliseconds and formatted in given <paramref name="format"/>.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplateBuilder.AddProperty(System.String,System.String)">
+            <summary>
+            <para>Adds a token which emits a property with given <paramref name="name"/> from event's <see cref="P:Vostok.Logging.Abstractions.LogEvent.Properties"/> in given <paramref name="format"/>.</para>
+            <para>You can use a special <c>:W</c> format to add a leading space, <c>:w</c> to add a trailing space or <c>:wW</c> to add both.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplateBuilder.AddAllProperties">
+            <summary>
+            Adds a token which emits all of event's <see cref="P:Vostok.Logging.Abstractions.LogEvent.Properties"/>.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplateBuilder.AddMessage">
+            <summary>
+            Adds a token which emits log message rendered from <see cref="P:Vostok.Logging.Abstractions.LogEvent.MessageTemplate"/> and <see cref="P:Vostok.Logging.Abstractions.LogEvent.Properties"/> using <see cref="T:Vostok.Logging.Formatting.LogMessageFormatter"/>.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplateBuilder.AddLevel">
+            <summary>
+            Adds a token which emits <see cref="P:Vostok.Logging.Abstractions.LogEvent.Level"/> in upper case (such as <c>INFO</c>).
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplateBuilder.AddLevel(System.String)">
+            <summary>
+            <para>Adds a token which emits <see cref="P:Vostok.Logging.Abstractions.LogEvent.Level"/> with given <paramref name="format"/>.</para>
+            <para>Use a format such as <c>{Level:u3}</c> or <c>{Level:w3}</c> for three-character upper- or lowercase level names, respectively.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplateBuilder.AddException">
+            <summary>
+            Adds a token which emits <see cref="P:Vostok.Logging.Abstractions.LogEvent.Exception"/> with message, stack trace, inner exception and a trailing newline.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.OutputTemplateBuilder.AddToken(Vostok.Logging.Formatting.Tokens.ITemplateToken)">
+            <summary>
+            Adds given arbitrary <paramref name="token"/> to the output template.
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.Formatting.PropertyValueFormatter">
+            <summary>
+            <para>Represents a helper used to format log event property values during rendering.</para>
+            <para>See <see cref="M:Vostok.Logging.Formatting.PropertyValueFormatter.Format(System.IO.TextWriter,System.Object,System.String,System.IFormatProvider)"/> method for details.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.PropertyValueFormatter.Format(System.Object,System.String,System.IFormatProvider)">
+            <inheritdoc cref="M:Vostok.Logging.Formatting.PropertyValueFormatter.Format(System.IO.TextWriter,System.Object,System.String,System.IFormatProvider)"/>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.PropertyValueFormatter.Format(System.IO.TextWriter,System.Object,System.String,System.IFormatProvider)">
+            <summary>
+            <inheritdoc cref="M:Vostok.Commons.Formatting.ObjectValueFormatter.Format(System.IO.TextWriter,System.Object,System.String,System.IFormatProvider)"/>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.Formatting.Tokenizer.SpecialTokensTypesProvider.Get">
+            <summary>
+            <para>Provides a <see cref="T:System.Type"/> objects for types that represent parts of log string.</para>
+            <para>All of these types is non-abstract types inherited from <see cref="T:Vostok.Logging.Formatting.Tokens.NamedToken"/> except <see cref="T:Vostok.Logging.Formatting.Tokens.PropertyToken"/>.</para>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Vostok.Logging.Formatting.Tokens.ITemplateToken">
+            <summary>
+            <see cref="T:Vostok.Logging.Formatting.Tokens.ITemplateToken"/> is a building block of <see cref="T:Vostok.Logging.Formatting.OutputTemplate"/>s. Each token is responsible for rendering a specific portion of <see cref="T:Vostok.Logging.Abstractions.LogEvent"/>.
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.Formatting.WellKnownTokens">
+            <summary>
+            Defines names of special well-known tokens that can be used in <see cref="T:Vostok.Logging.Formatting.OutputTemplate"/>s.
+            </summary>
+        </member>
+        <member name="T:Vostok.Commons.Formatting.ObjectValueFormatter">
+            <summary>
+            <para>A helper used to format arbitrary object values.</para>
+            <para>See <see cref="M:Vostok.Commons.Formatting.ObjectValueFormatter.Format(System.IO.TextWriter,System.Object,System.String,System.IFormatProvider)"/> method for details.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Commons.Formatting.ObjectValueFormatter.Format(System.Object,System.String,System.IFormatProvider)">
+            <inheritdoc cref="M:Vostok.Commons.Formatting.ObjectValueFormatter.Format(System.IO.TextWriter,System.Object,System.String,System.IFormatProvider)"/>
+        </member>
+        <member name="M:Vostok.Commons.Formatting.ObjectValueFormatter.Format(System.IO.TextWriter,System.Object,System.String,System.IFormatProvider)">
+            <summary>
+            <para>Formats given property <paramref name="value"/>.</para>
+            <para>Here's how it works:</para>
+            <list type="number">
+                <item><description>If <paramref name="value"/> is <c>null</c>, nothing happens. <para/></description></item>
+                <item><description>If <paramref name="value"/> is a <see cref="T:System.String"/>, it's written as is. <para/></description></item>
+                <item><description>If <paramref name="value"/> implements <see cref="T:System.IFormattable"/>, it's formatted using given <paramref name="format"/> and <paramref name="formatProvider"/>. <para/></description></item>
+                <item><description>If <paramref name="value"/>'s type explicitly overrides <see cref="M:System.Object.ToString"/>, we just use that. <para/></description></item>
+                <item><description>If <paramref name="value"/> implements <see cref="T:System.Collections.Generic.IReadOnlyDictionary`2"/>, it's formatted as a JSON object. <para/></description></item>
+                <item><description>If <paramref name="value"/> implements <see cref="T:System.Collections.IEnumerable"/>, it's formatted as a JSON array. <para/></description></item>
+                <item><description>If <paramref name="value"/>'s type has any properties with public getters, it's formatted as JSON object. <para/></description></item>
+                <item><description>If nothing of above applies, default <see cref="M:System.Object.ToString"/> result is used. <para/></description></item>
+            </list>
+            </summary>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseKindFlags.Access">
+            <summary>Only entity marked with attribute considered used.</summary>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseKindFlags.Assign">
+            <summary>Indicates implicit assignment to a member.</summary>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature">
+            <summary>
+            Indicates implicit instantiation of a type with fixed constructor signature.
+            That means any unused constructor parameters won't be reported as such.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature">
+            <summary>Indicates implicit instantiation of a type.</summary>
+        </member>
+        <member name="T:JetBrains.Annotations.ImplicitUseTargetFlags">
+            <summary>
+            Specify what is considered used implicitly when marked
+            with <see cref="T:JetBrains.Annotations.MeansImplicitUseAttribute"/> or <see cref="T:JetBrains.Annotations.UsedImplicitlyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseTargetFlags.Members">
+            <summary>Members of entity marked with attribute are considered used.</summary>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseTargetFlags.WithMembers">
+            <summary>Entity marked with attribute and all its members considered used.</summary>
+        </member>
+        <member name="T:JetBrains.Annotations.CanBeNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could be <c>null</c> sometimes,
+            so the check for <c>null</c> is necessary before its usage.
+            </summary>
+            <example><code>
+            [CanBeNull] object Test() => null;
+            
+            void UseTest() {
+              var p = Test();
+              var s = p.ToString(); // Warning: Possible 'System.NullReferenceException'
+            }
+            </code></example>
+        </member>
+        <member name="T:JetBrains.Annotations.NotNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could never be <c>null</c>.
+            </summary>
+            <example><code>
+            [NotNull] object Foo() {
+              return null; // Warning: Possible 'null' assignment
+            }
+            </code></example>
+        </member>
+        <member name="T:JetBrains.Annotations.StringFormatMethodAttribute">
+            <summary>
+            Indicates that the marked method builds string by format pattern and (optional) arguments.
+            Parameter, which contains format string, should be given in constructor. The format string
+            should be in <see cref="M:System.String.Format(System.IFormatProvider,System.String,System.Object[])"/>-like form.
+            </summary>
+            <example><code>
+            [StringFormatMethod("message")]
+            void ShowError(string message, params object[] args) { /* do something */ }
+            
+            void Foo() {
+              ShowError("Failed: {0}"); // Warning: Non-existing argument in format string
+            }
+            </code></example>
+        </member>
+        <member name="M:JetBrains.Annotations.StringFormatMethodAttribute.#ctor(System.String)">
+            <param name="formatParameterName">
+            Specifies which parameter of an annotated method should be treated as format-string
+            </param>
+        </member>
+        <member name="T:JetBrains.Annotations.UsedImplicitlyAttribute">
+            <summary>
+            Indicates that the marked symbol is used implicitly (e.g. via reflection, in external library),
+            so this symbol will not be marked as unused (as well as by other usage inspections).
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.PureAttribute">
+            <summary>
+            Indicates that a method does not make any observable state changes.
+            The same as <c>System.Diagnostics.Contracts.PureAttribute</c>.
+            </summary>
+            <example><code>
+            [Pure] int Multiply(int x, int y) => x * y;
+            
+            void M() {
+              Multiply(123, 42); // Waring: Return value of pure method is not used
+            }
+            </code></example>
+        </member>
+        <member name="T:JetBrains.Annotations.MeansImplicitUseAttribute">
+            <summary>
+            Should be used on attributes and causes ReSharper to not mark symbols marked with such attributes
+            as unused (as well as by other usage inspections)
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.PublicAPIAttribute">
+            <summary>
+            This attribute is intended to mark publicly available API
+            which should not be removed and so is treated as used.
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.ItemNotNullAttribute">
+            <summary>
+            Can be appplied to symbols of types derived from IEnumerable as well as to symbols of Task
+            and Lazy classes to indicate that the value of a collection item, of the Task.Result property
+            or of the Lazy.Value property can never be null.
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.ItemCanBeNullAttribute">
+            <summary>
+            Can be appplied to symbols of types derived from IEnumerable as well as to symbols of Task
+            and Lazy classes to indicate that the value of a collection item, of the Task.Result property
+            or of the Lazy.Value property can be null.
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.ValueProviderAttribute">
+            <summary>
+            For a parameter that is expected to be one of the limited set of values.
+            Specify fields of which type should be used as values for this parameter.
+            </summary>
+        </member>
+    </members>
+</doc>

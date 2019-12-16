@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Components
 {
-    public class UnitsQueueComponent
+    internal class UnitsQueueComponent
     {
         public Queue<UnitCreateEvent> units = new Queue<UnitCreateEvent>();
     }

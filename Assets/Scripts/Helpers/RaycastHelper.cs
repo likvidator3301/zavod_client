@@ -3,6 +3,7 @@ using System.Linq;
 using Components;
 using Leopotam.Ecs;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Systems
 {
@@ -18,6 +19,7 @@ namespace Systems
             if (Camera.main == null)
                 return false;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            
             return Physics.Raycast(ray, out hitInfo, range) && hitInfo.collider.gameObject.CompareTag(collisionTagName);
         }
         

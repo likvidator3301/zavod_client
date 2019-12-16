@@ -1,0 +1,535 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Vostok.Logging.File</name>
+    </assembly>
+    <members>
+        <member name="T:Vostok.Logging.File.Configuration.FileLogSettings">
+            <summary>
+            <para>Settings of a <see cref="T:Vostok.Logging.File.FileLog"/> instance.</para>
+            <para><see cref="T:Vostok.Logging.File.Configuration.FileLogSettings"/> instances should be treated as immutable after construction:
+            to reconfigure a <see cref="T:Vostok.Logging.File.FileLog"/> on the fly, always create a new one instead of modifying the properties directly.</para>
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.File.Configuration.FileLogSettings.FilePath">
+            <summary>
+            <para>Path to the log file. If a <see cref="P:Vostok.Logging.File.Configuration.FileLogSettings.RollingStrategy"/> is specified, this path serves as base path and gets combined with suffixes.</para>
+            <para>Here are some examples of how rolling may transform file paths:</para>
+            <list type="bullet">
+                <item><description><see cref="F:Vostok.Logging.File.Configuration.RollingStrategyType.None"/>: <c>log</c> --> <c>log</c></description></item>
+                <item><description><see cref="F:Vostok.Logging.File.Configuration.RollingStrategyType.BySize"/>: <c>log</c> --> <c>log-2</c></description></item>
+                <item><description><see cref="F:Vostok.Logging.File.Configuration.RollingStrategyType.ByTime"/>: <c>log</c> --> <c>log-2018-09-05</c></description></item>
+                <item><description><see cref="F:Vostok.Logging.File.Configuration.RollingStrategyType.Hybrid"/>: <c>log</c> --> <c>log-2018-09-05-2</c></description></item>
+            </list>
+            <para>The path is relative to current working directory (<see cref="P:System.Environment.CurrentDirectory"/>).</para>
+            <para>Dynamic reconfiguration is supported for this parameter: <see cref="T:Vostok.Logging.File.FileLog"/> will switch to a new file on change.</para>
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.File.Configuration.FileLogSettings.OutputTemplate">
+            <summary>
+            <para>The template used to render log messages. See <see cref="T:Vostok.Logging.Formatting.OutputTemplate"/> for details.</para>
+            <para>Dynamic reconfiguration is supported for this parameter: it's accessed for each <see cref="T:Vostok.Logging.Abstractions.LogEvent"/>.</para>
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.File.Configuration.FileLogSettings.FormatProvider">
+            <summary>
+            <para>If specified, this <see cref="T:System.IFormatProvider"/> will be used when formatting log property values.</para>
+            <para>Dynamic reconfiguration is supported for this parameter: it's accessed for each <see cref="T:Vostok.Logging.Abstractions.LogEvent"/>.</para>
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.File.Configuration.FileLogSettings.FileOpenMode">
+            <summary>
+            <para>Specifies the way to treat an existing log file: append (default) or rewrite.</para>
+            <para>Dynamic reconfiguration is supported for this parameter: <see cref="T:Vostok.Logging.File.FileLog"/> will reopen the file on change.</para>
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.File.Configuration.FileLogSettings.RollingStrategy">
+            <summary>
+            <para>An optional rolling strategy (disabled by default).</para>
+            <para>Dynamic reconfiguration is supported for this parameter: <see cref="T:Vostok.Logging.File.FileLog"/> will react to its changes.</para>
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.File.Configuration.FileLogSettings.Encoding">
+            <summary>
+            <para>Output text encoding (UTF-8 by default).</para>
+            <para>Dynamic reconfiguration is supported for this parameter: <see cref="T:Vostok.Logging.File.FileLog"/> will reopen the file on change.</para>
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.File.Configuration.FileLogSettings.OutputBufferSize">
+            <summary>
+            <para>Output buffer size, in bytes (64K by default).</para>
+            <para>Dynamic reconfiguration is supported for this parameter: <see cref="T:Vostok.Logging.File.FileLog"/> will reopen the file on change.</para>
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.File.Configuration.FileLogSettings.EnabledLogLevels">
+            <summary>
+            <para>A whitelist of enabled <see cref="T:Vostok.Logging.Abstractions.LogLevel"/>s (contains all levels by default). Only log events with levels contained in this array will be logged.</para>
+            <para>Dynamic reconfiguration is supported for this parameter: it's accessed for each <see cref="T:Vostok.Logging.Abstractions.LogEvent"/>.</para>
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.File.Configuration.FileLogSettings.EventsQueueCapacity">
+            <summary>
+            <para>Capacity of the internal log events queue.</para>
+            <para>This parameter has a per-file scope.</para>
+            <para>Dynamic reconfiguration is not supported for this parameter: a snapshot will be taken on first usage attempt.</para>
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.File.Configuration.FileLogSettings.EventsBufferCapacity">
+            <summary>
+            <para>Specifies how many log events are processed in one iteration for each file.</para>
+            <para>This parameter has a per-file scope.</para>
+            <para>Dynamic reconfiguration is not supported for this parameter: a snapshot will be taken on first usage attempt.</para>
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.File.Configuration.FileLogSettings.FileSettingsUpdateCooldown">
+            <summary>
+            <para>Cooldown for enforcing file-related settings (name, rolling strategy, buffer size, etc.). This means that when conditions are met to switch to the next part of log file or reopen the file with another name/options due to change in settings, the switching may be delayed for up to <see cref="P:Vostok.Logging.File.Configuration.FileLogSettings.FileSettingsUpdateCooldown"/>.</para>
+            <para>Dynamic reconfiguration is supported for this parameter: <see cref="T:Vostok.Logging.File.FileLog"/> will react to its changes.</para>
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.File.Configuration.FileOpenMode">
+            <summary>
+            Specifies how to open an existing log file.
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.File.Configuration.FileOpenMode.Append">
+            <summary>
+            Append new text to existing file content.
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.File.Configuration.FileOpenMode.Rewrite">
+            <summary>
+            Re-create existing file from scratch.
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.File.Configuration.RollingPeriod">
+            <summary>
+            Specifies how often a time-based rolling strategy should switch to a new file.
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.File.Configuration.RollingPeriod.Day">
+            <summary>
+            Change to a new file every day.
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.File.Configuration.RollingPeriod.Hour">
+            <summary>
+            Change to a new file every hour.
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.File.Configuration.RollingPeriod.Minute">
+            <summary>
+            Change to a new file every minute.
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.File.Configuration.RollingPeriod.Second">
+            <summary>
+            Change to a new file every second.
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.File.Configuration.RollingStrategyOptions">
+            <summary>
+            Configuration of rolling strategy.
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.File.Configuration.RollingStrategyOptions.MaxFiles">
+            <summary>
+            How many log files to keep. Older files are automatically deleted when switching to a new file. Specify a value &lt;= 0 to avoid deleting old files.
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.File.Configuration.RollingStrategyOptions.Type">
+            <summary>
+            Type of rolling strategy.
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.File.Configuration.RollingStrategyOptions.Period">
+            <summary>
+            Period of switching to the next part of log file. Affects only <see cref="F:Vostok.Logging.File.Configuration.RollingStrategyType.ByTime"/> and <see cref="F:Vostok.Logging.File.Configuration.RollingStrategyType.Hybrid"/> strategies.
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.File.Configuration.RollingStrategyOptions.MaxSize">
+            <summary>
+            Maximal size of one part of log file, in bytes. Affects only <see cref="F:Vostok.Logging.File.Configuration.RollingStrategyType.BySize"/> and <see cref="F:Vostok.Logging.File.Configuration.RollingStrategyType.Hybrid"/> strategies.
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.File.Configuration.RollingStrategyType">
+            <summary>
+            Specifies the rolling behavior: when to switch to the next part of log file.
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.File.Configuration.RollingStrategyType.None">
+            <summary>
+            No rolling, just always write to one file.
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.File.Configuration.RollingStrategyType.ByTime">
+            <summary>
+            Switch to next file once in a specified time period.
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.File.Configuration.RollingStrategyType.BySize">
+            <summary>
+            Switch to next file when current file reaches specified size.
+            </summary>
+        </member>
+        <member name="F:Vostok.Logging.File.Configuration.RollingStrategyType.Hybrid">
+            <summary>
+            A combination of <see cref="F:Vostok.Logging.File.Configuration.RollingStrategyType.ByTime"/> and <see cref="F:Vostok.Logging.File.Configuration.RollingStrategyType.BySize"/> approaches. Will switch to next file as soon as any of the conditions is met.
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.File.EventsWriting.EventsWriterProvider">
+            <summary>
+            Not thread-safe. Expected usage pattern: <see cref="M:Vostok.Logging.File.EventsWriting.EventsWriterProvider.ObtainWriterAsync(System.Threading.CancellationToken)"/> --> <see cref="M:Vostok.Logging.File.EventsWriting.EventsWriterProvider.ObtainWriterAsync(System.Threading.CancellationToken)"/> --> ... --> <see cref="M:Vostok.Logging.File.EventsWriting.EventsWriterProvider.Dispose"/>.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.File.EventsWriting.IEventsWriterProvider.ObtainWriterAsync(System.Threading.CancellationToken)">
+            <summary>
+            <para>Attempts to obtain an <see cref="T:Vostok.Logging.File.EventsWriting.IEventsWriter"/> instance to write <see cref="T:Vostok.Logging.File.LogEventInfo"/>s with.</para>
+            <para>Returns <c>null</c> on any failure, such as file opening error.</para>
+            <para>May wait for a cooldown provided by <see cref="T:Vostok.Logging.File.EventsWriting.ICooldownController"/> before trying to open a writer.</para>
+            </summary>
+        </member>
+        <member name="T:Vostok.Logging.File.FileLog">
+            <summary>
+            <para>A log which outputs events to a file.</para>
+            <para>
+                The implementation is asynchronous and thread-safe: logged messages are not immediately rendered and written to file. 
+                Instead, they are added to a lock-free queue which is processed by a background worker. The capacity of the queue 
+                can be changed in settings if a settings provider is used. In case of a queue overflow some events may be dropped.
+            </para>
+            <para>Use <see cref="M:Vostok.Logging.File.FileLog.Flush"/> or <see cref="M:Vostok.Logging.File.FileLog.FlushAsync"/> to ensure that logged events are written to file.</para>
+            <para>Use <see cref="P:Vostok.Logging.File.FileLog.EventsLost"/> counter to see how many events were lost due to queue overflow.</para>
+            <para>Remember to <see cref="M:Vostok.Logging.File.FileLog.Dispose"/> a <see cref="T:Vostok.Logging.File.FileLog"/> instance when you no longer need it to close the file handle.</para>
+            <para><see cref="M:Vostok.Logging.File.FileLog.Log(Vostok.Logging.Abstractions.LogEvent)"/> method never throws exceptions. On the other hand, <see cref="M:Vostok.Logging.File.FileLog.Flush"/> and <see cref="M:Vostok.Logging.File.FileLog.FlushAsync"/> may do so.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.File.FileLog.#ctor(Vostok.Logging.File.Configuration.FileLogSettings)">
+            <summary>
+            Create a new <see cref="T:Vostok.Logging.File.FileLog"/> with given static settings.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.File.FileLog.#ctor(System.Func{Vostok.Logging.File.Configuration.FileLogSettings})">
+            <summary>
+            <para>Create a new file log with the dynamic settings provided by given delegate.</para>
+            <para>There are some subtleties about updating <see cref="T:Vostok.Logging.File.FileLog"/> settings. There are three types of settings:</para>
+            <list type="bullet">
+            <item><description>
+            <para>Settings that cannot be changed after the first event was logged through this <see cref="T:Vostok.Logging.File.FileLog"/> instance:</para>
+            <para><see cref="P:Vostok.Logging.File.Configuration.FileLogSettings.EventsQueueCapacity"/>, <see cref="P:Vostok.Logging.File.Configuration.FileLogSettings.EventsBufferCapacity"/></para>
+            <para>These two options, however, have a per-file scope (rather than global).</para>
+            </description></item>
+            <item><description>
+            <para>Settings that will cause re-opening of log file when changed:</para>
+            <para>
+            <see cref="P:Vostok.Logging.File.Configuration.FileLogSettings.FilePath"/>,
+            <see cref="P:Vostok.Logging.File.Configuration.FileLogSettings.FileOpenMode"/>,
+            <see cref="P:Vostok.Logging.File.Configuration.FileLogSettings.Encoding"/>,
+            <see cref="P:Vostok.Logging.File.Configuration.FileLogSettings.OutputBufferSize"/>,
+            <see cref="P:Vostok.Logging.File.Configuration.FileLogSettings.RollingStrategy"/></para>
+            <para>These settings are set on per-file level (rather than per-instance). Only the first <see cref="T:Vostok.Logging.File.FileLog"/> to log something to a file will be allowed to modify settings for that file.</para>
+            </description></item>
+            <item><description>
+            <para>All other settings can be changed any time and come into effect immediately.</para>
+            </description></item>
+            </list>
+            </summary>
+        </member>
+        <member name="P:Vostok.Logging.File.FileLog.TotalEventsLost">
+            <summary>
+            The total number of events dropped by all <see cref="T:Vostok.Logging.File.FileLog"/> instances in process due to event queue overflows.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.File.FileLog.FlushAllAsync">
+            <summary>
+            Waits asynchronously until all currently buffered log events are actually written to their log files.
+            </summary>
+            <exception cref="T:Vostok.Logging.File.FileLogException">Unable to flush events to at least one of the files.</exception>
+        </member>
+        <member name="M:Vostok.Logging.File.FileLog.FlushAll">
+            <summary>
+            Waits until all currently buffered log events are actually written to their log files.
+            </summary>
+            <exception cref="T:Vostok.Logging.File.FileLogException">Unable to flush events to at least one of the files.</exception>
+        </member>
+        <member name="P:Vostok.Logging.File.FileLog.EventsLost">
+            <summary>
+            The number of events dropped by this <see cref="T:Vostok.Logging.File.FileLog"/> instance due to events queue overflow.
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.File.FileLog.Log(Vostok.Logging.Abstractions.LogEvent)">
+            <inheritdoc />
+        </member>
+        <member name="M:Vostok.Logging.File.FileLog.IsEnabledFor(Vostok.Logging.Abstractions.LogLevel)">
+            <inheritdoc />
+        </member>
+        <member name="M:Vostok.Logging.File.FileLog.ForContext(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Vostok.Logging.File.FileLog.FlushAsync">
+            <summary>
+            Waits asynchronously until all log events buffered for current log file are actually written.
+            </summary>
+            <exception cref="T:Vostok.Logging.File.FileLogException">Unable to flush events to the file.</exception>
+        </member>
+        <member name="M:Vostok.Logging.File.FileLog.Flush">
+            <summary>
+            Waits until all log events buffered for current log file are actually written.
+            </summary>
+            <exception cref="T:Vostok.Logging.File.FileLogException">Unable to flush events to the file.</exception>
+        </member>
+        <member name="M:Vostok.Logging.File.FileLog.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:Vostok.Logging.File.Muxers.SingleFileMuxer">
+            <summary>
+            <para>An instance of <see cref="T:Vostok.Logging.File.Muxers.SingleFileMuxer"/> is responsible for writing log events from multiple <see cref="T:Vostok.Logging.File.FileLog"/> instances routed to the same base file path.</para>
+            <para>Its static settings are:</para>
+            <list type="bullet">
+                <item><description><see cref="P:Vostok.Logging.File.Configuration.FileLogSettings.FilePath"/></description></item>
+                <item><description><see cref="P:Vostok.Logging.File.Configuration.FileLogSettings.EventsQueueCapacity"/></description></item>
+                <item><description><see cref="P:Vostok.Logging.File.Configuration.FileLogSettings.EventsBufferCapacity"/></description></item>
+            </list>
+            <para>Its dynamic settings are:</para>
+            <list type="bullet">
+                <item><description><see cref="P:Vostok.Logging.File.Configuration.FileLogSettings.Encoding"/></description></item>
+                <item><description><see cref="P:Vostok.Logging.File.Configuration.FileLogSettings.FileOpenMode"/></description></item>
+                <item><description><see cref="P:Vostok.Logging.File.Configuration.FileLogSettings.OutputBufferSize"/></description></item>
+                <item><description><see cref="P:Vostok.Logging.File.Configuration.FileLogSettings.RollingStrategy"/></description></item>
+                <item><description><see cref="P:Vostok.Logging.File.Configuration.FileLogSettings.FileSettingsUpdateCooldown"/></description></item>
+            </list>
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.File.Muxers.SingleFileMuxer.Dispose">
+            <summary>
+            Not expected to be called concurrently with TryAdd().
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.File.Rolling.Strategies.IRollingStrategy.DiscoverExistingFiles(Vostok.Logging.File.Helpers.FilePath)">
+            <summary>
+            Returned files must be sorted oldest to newest (by parsed suffix).
+            </summary>
+        </member>
+        <member name="M:Vostok.Logging.File.Rolling.Strategies.RollingStrategyHelper.DiscoverExistingFiles``1(Vostok.Logging.File.Helpers.FilePath,Vostok.Logging.File.Helpers.IFileSystem,Vostok.Logging.File.Rolling.Suffixes.IFileSuffixFormatter{``0})">
+            <summary>
+            Returns files in order oldest to newest (ordered by parsed suffix).
+            </summary>
+        </member>
+        <member name="T:Vostok.Commons.Collections.CachingTransform`2">
+            <summary>
+            <para><see cref="T:Vostok.Commons.Collections.CachingTransform`2"/> helps to obtain a value derived from external source by applying a transformation.</para>
+            <para>It assumes that transformation is expensive to perform and caches transformed result for last observed source value for efficiency.</para>
+            </summary>
+            <typeparam name="TRaw">Type of raw source value.</typeparam>
+            <typeparam name="TProcessed">Type of processed result.</typeparam>
+        </member>
+        <member name="M:Vostok.Commons.Collections.CachingTransform`2.#ctor(System.Func{`0,`1},System.Func{`0},System.Collections.Generic.IEqualityComparer{`0},System.Boolean)">
+            <param name="processor">Transformation function applied to raw values.</param>
+            <param name="provider">Provider function used for <see cref="M:Vostok.Commons.Collections.CachingTransform`2.Get"/> without parameters.</param>
+            <param name="comparer">Comparer used to check cache validity.</param>
+            <param name="preventParallelProcessing">If set to <c>true</c>, prevents parallel execution of <paramref name="processor"/> function.</param>
+        </member>
+        <member name="M:Vostok.Commons.Collections.CachingTransform`2.Get">
+            <summary>
+            <para>Returns processed value that corresponds to current raw value from provided delegate defined in constructor.</para>
+            <para>Does not handle any exceptions produced by user delegates.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Commons.Collections.CachingTransform`2.Get(`0)">
+            <summary>
+            <para>Returns processed value that corresponds to given <paramref name="raw"/> value.</para>
+            <para>Does not handle any exceptions produced by user delegates.</para>
+            </summary>
+        </member>
+        <member name="T:Vostok.Commons.Collections.ConcurrentBoundedQueue`1">
+            <summary>
+            <para>Represents a thread-safe "many producers + single consumer" queue suited for scenarios where production is random and frequent, but consumer prefers to work with batches.</para>
+            <para>It's expected that <see cref="M:Vostok.Commons.Collections.ConcurrentBoundedQueue`1.TryAdd(`0)"/> is called concurrently from different threads, but <see cref="M:Vostok.Commons.Collections.ConcurrentBoundedQueue`1.Drain(`0[],System.Int32,System.Int32)"/> is not used concurrently from different threads.</para>
+            <para>The queue has a static predefined capacity. In the event of overflow, new items cannot be added.</para>
+            </summary>
+        </member>
+        <member name="M:Vostok.Commons.Collections.ConcurrentBoundedQueue`1.#ctor(System.Int32)">
+            <summary>
+            Create a new <see cref="T:Vostok.Commons.Collections.ConcurrentBoundedQueue`1"/> with the given <paramref name="capacity"/>.
+            </summary>
+        </member>
+        <member name="P:Vostok.Commons.Collections.ConcurrentBoundedQueue`1.Count">
+            <summary>
+            Returns current count if items in queue.
+            </summary>
+        </member>
+        <member name="P:Vostok.Commons.Collections.ConcurrentBoundedQueue`1.Capacity">
+            <summary>
+            Returns queue capacity (a maximum count of items that can be added).
+            </summary>
+        </member>
+        <member name="M:Vostok.Commons.Collections.ConcurrentBoundedQueue`1.TryAdd(`0)">
+            <summary>
+            <para>Attempts to add given <paramref name="item"/> to queue.</para>
+            <para>This method can be called concurrently from different threads.</para>
+            <para>This method can be called concurrently with <see cref="M:Vostok.Commons.Collections.ConcurrentBoundedQueue`1.Drain(`0[],System.Int32,System.Int32)"/>.</para>
+            <para>This method is lock-free.</para>
+            </summary>
+            <returns><c>true</c> if item was added, <c>false</c> otherwise (when queue is full).</returns>
+        </member>
+        <member name="M:Vostok.Commons.Collections.ConcurrentBoundedQueue`1.Drain(`0[],System.Int32,System.Int32)">
+            <summary>
+            <para>Attempts to drain up to <paramref name="count"/> of items from queue to <paramref name="buffer"/>, starting at given <paramref name="index"/>.</para>
+            <para>The queue is not guaranteed to become empty after a successful drain due to potential races with adder threads.</para>
+            <para>This method should not be called concurrently with itself from different threads.</para>
+            <para>This method can be called concurrently with <see cref="M:Vostok.Commons.Collections.ConcurrentBoundedQueue`1.TryAdd(`0)"/>.</para>
+            </summary>
+            <returns>Resulting count of items drained into <paramref name="buffer"/>, starting at <paramref name="index"/>.</returns>
+        </member>
+        <member name="M:Vostok.Commons.Collections.ConcurrentBoundedQueue`1.WaitForNewItemsAsync">
+            <summary>
+            Asynchronously waits until something is available to <see cref="M:Vostok.Commons.Collections.ConcurrentBoundedQueue`1.Drain(`0[],System.Int32,System.Int32)"/>.
+            </summary>
+        </member>
+        <member name="M:Vostok.Commons.Collections.ConcurrentBoundedQueue`1.TryWaitForNewItemsAsync(System.TimeSpan)">
+            <summary>
+            Asynchronously waits until something is available to <see cref="M:Vostok.Commons.Collections.ConcurrentBoundedQueue`1.Drain(`0[],System.Int32,System.Int32)"/> or the provided <paramref name="timeout"/> expires.
+            </summary>
+            <returns><c>true</c> if there is something to drain, <c>false</c> otherwise.</returns>
+        </member>
+        <member name="M:Vostok.Commons.Threading.AtomicLong.Add(System.Int64)">
+            <summary>
+            
+            </summary>
+            <param name="toAdd"></param>
+            <returns>new value</returns>
+        </member>
+        <member name="M:Vostok.Commons.Threading.AtomicLong.CompareExchange(System.Int64,System.Int64)">
+            <summary></summary>
+            <returns>The original value</returns>
+            <param name="newValue">The value that replaces the destination value if the comparison results in equality. </param>
+            <param name="comparand">The value that is compared to the value</param>
+        </member>
+        <member name="M:Vostok.Commons.Threading.AtomicLong.Exchange(System.Int64)">
+            <summary>Sets a newValue and returns the original value, as an atomic operation.</summary>
+            <returns>The original value</returns>
+            <param name="newValue">new value</param>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseKindFlags.Access">
+            <summary>Only entity marked with attribute considered used.</summary>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseKindFlags.Assign">
+            <summary>Indicates implicit assignment to a member.</summary>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature">
+            <summary>
+            Indicates implicit instantiation of a type with fixed constructor signature.
+            That means any unused constructor parameters won't be reported as such.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature">
+            <summary>Indicates implicit instantiation of a type.</summary>
+        </member>
+        <member name="T:JetBrains.Annotations.ImplicitUseTargetFlags">
+            <summary>
+            Specify what is considered used implicitly when marked
+            with <see cref="T:JetBrains.Annotations.MeansImplicitUseAttribute"/> or <see cref="T:JetBrains.Annotations.UsedImplicitlyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseTargetFlags.Members">
+            <summary>Members of entity marked with attribute are considered used.</summary>
+        </member>
+        <member name="F:JetBrains.Annotations.ImplicitUseTargetFlags.WithMembers">
+            <summary>Entity marked with attribute and all its members considered used.</summary>
+        </member>
+        <member name="T:JetBrains.Annotations.CanBeNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could be <c>null</c> sometimes,
+            so the check for <c>null</c> is necessary before its usage.
+            </summary>
+            <example><code>
+            [CanBeNull] object Test() => null;
+            
+            void UseTest() {
+              var p = Test();
+              var s = p.ToString(); // Warning: Possible 'System.NullReferenceException'
+            }
+            </code></example>
+        </member>
+        <member name="T:JetBrains.Annotations.NotNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could never be <c>null</c>.
+            </summary>
+            <example><code>
+            [NotNull] object Foo() {
+              return null; // Warning: Possible 'null' assignment
+            }
+            </code></example>
+        </member>
+        <member name="T:JetBrains.Annotations.StringFormatMethodAttribute">
+            <summary>
+            Indicates that the marked method builds string by format pattern and (optional) arguments.
+            Parameter, which contains format string, should be given in constructor. The format string
+            should be in <see cref="M:System.String.Format(System.IFormatProvider,System.String,System.Object[])"/>-like form.
+            </summary>
+            <example><code>
+            [StringFormatMethod("message")]
+            void ShowError(string message, params object[] args) { /* do something */ }
+            
+            void Foo() {
+              ShowError("Failed: {0}"); // Warning: Non-existing argument in format string
+            }
+            </code></example>
+        </member>
+        <member name="M:JetBrains.Annotations.StringFormatMethodAttribute.#ctor(System.String)">
+            <param name="formatParameterName">
+            Specifies which parameter of an annotated method should be treated as format-string
+            </param>
+        </member>
+        <member name="T:JetBrains.Annotations.UsedImplicitlyAttribute">
+            <summary>
+            Indicates that the marked symbol is used implicitly (e.g. via reflection, in external library),
+            so this symbol will not be marked as unused (as well as by other usage inspections).
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.PureAttribute">
+            <summary>
+            Indicates that a method does not make any observable state changes.
+            The same as <c>System.Diagnostics.Contracts.PureAttribute</c>.
+            </summary>
+            <example><code>
+            [Pure] int Multiply(int x, int y) => x * y;
+            
+            void M() {
+              Multiply(123, 42); // Waring: Return value of pure method is not used
+            }
+            </code></example>
+        </member>
+        <member name="T:JetBrains.Annotations.MeansImplicitUseAttribute">
+            <summary>
+            Should be used on attributes and causes ReSharper to not mark symbols marked with such attributes
+            as unused (as well as by other usage inspections)
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.PublicAPIAttribute">
+            <summary>
+            This attribute is intended to mark publicly available API
+            which should not be removed and so is treated as used.
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.ItemNotNullAttribute">
+            <summary>
+            Can be appplied to symbols of types derived from IEnumerable as well as to symbols of Task
+            and Lazy classes to indicate that the value of a collection item, of the Task.Result property
+            or of the Lazy.Value property can never be null.
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.ItemCanBeNullAttribute">
+            <summary>
+            Can be appplied to symbols of types derived from IEnumerable as well as to symbols of Task
+            and Lazy classes to indicate that the value of a collection item, of the Task.Result property
+            or of the Lazy.Value property can be null.
+            </summary>
+        </member>
+        <member name="T:JetBrains.Annotations.ValueProviderAttribute">
+            <summary>
+            For a parameter that is expected to be one of the limited set of values.
+            Specify fields of which type should be used as values for this parameter.
+            </summary>
+        </member>
+    </members>
+</doc>

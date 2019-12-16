@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GameDefinitions
   m_EditorClassIdentifier: 
   CameraDefinitions: {fileID: 11400000, guid: 82f17b566b3019d4ca035123dddb6482, type: 2}
-  GuiDefinitions: {fileID: 11400000, guid: 0a1ecf93e69b873489709bcf3a36de49, type: 2}
+  GuiDefinitions: {fileID: 11400000, guid: 1916514050d4ab6469d8c8c4c4bf6daf, type: 2}
   BuildingDefinitions: {fileID: 11400000, guid: 0d1a10ff9a5f8d3428a2cc9cd9c93e03,
     type: 2}
   UnitsDefinitions: {fileID: 11400000, guid: c0f018f0c756b274593296041020698e, type: 2}

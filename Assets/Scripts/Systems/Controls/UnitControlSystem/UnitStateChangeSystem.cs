@@ -8,9 +8,8 @@ namespace Systems
 {
     public class UnitStateChangeSystem : IEcsRunSystem
     {
-        private EcsWorld ecsWorld;
-        private PlayerComponent player;
-        private EcsFilter<DieEvent> deadEvents;
+        private readonly EcsWorld ecsWorld = null;
+        private readonly EcsFilter<DieEvent> deadEvents = null;
 
         public void Run() => DestroyDeadUnits();
 

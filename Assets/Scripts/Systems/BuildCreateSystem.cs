@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using Components;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
+using System;
 
 namespace Systems
 {
@@ -13,13 +15,13 @@ namespace Systems
         private readonly EcsFilter<BuildCreateEvent> buildEvents = null;
         private readonly EcsFilter<ClickEvent> clickEvents = null;
         private readonly EcsFilter<BuildingComponent> buildings = null;
-        private readonly EcsFilter<BuildingAssietComponent> buildingsAssets = null;
+        private readonly EcsFilter<BuildingAssetComponent> buildingsAssets = null;
         private readonly EcsFilter<CameraComponent> cameras = null;
-        private readonly GameDefinitions gameDefinitions = null;
+        private readonly EcsFilter<PlayerResourcesComponent> resources = null;
 
         private RaycastHit hitInfo;
         private Ray ray;
-        private GameObject currentBuild;
+        private GameObject currentBuilding;
         private Canvas newCanvas;
 
         public void Run()
@@ -29,21 +31,21 @@ namespace Systems
 
             HandleInputEvents();
 
-            if (currentBuild == null)   
+            if (currentBuilding == null || TryCancelCurrentBuilding())   
                 return;
 
             var isRaycastHit = TryMovingTheBuildingToMousePosition();
             var isCollide = false;
 
             for (var i = 0; i < buildings.GetEntitiesCount(); i++)
-                isCollide = isCollide || buildings.Get1[i].obj.GetComponent<Collider>().isCollide(currentBuild.GetComponent<Collider>());
+                isCollide = isCollide || buildings.Entities[i].Get<BuildingComponent>().obj.GetComponent<Collider>().isCollide(currentBuilding.GetComponent<Collider>());
 
             if (isCollide)
             {
-                currentBuild.GetComponentInChildren<TextMeshPro>().enabled = true;
+                currentBuilding.GetComponentInChildren<TextMeshPro>().enabled = true;
                 return;
             }
-            currentBuild.GetComponentInChildren<TextMeshPro>().enabled = false;
+            currentBuilding.GetComponentInChildren<TextMeshPro>().enabled = false;
 
             TryToBuildABuilding(isRaycastHit);
         }
@@ -55,12 +57,26 @@ namespace Systems
 
             for (var i = 0; i < clickEvents.GetEntitiesCount(); i++)
             {
-                if (clickEvents.Get1[i].ButtonNumber == 0 && !clickEvents.Get1[i].IsBlocked)
+                if (clickEvents.Get1[i].ButtonNumber == 0 
+                    && !EventSystem.current.IsPointerOverGameObject()
+                    && PricesKeeper.PricesFromTag[currentBuilding.tag] <= resources.Get1[0].Cash)
                 {
-                    BuildSet(currentBuild, newCanvas);
-                    currentBuild = null;
+                    BuildSet(currentBuilding, newCanvas);
+                    resources.Get1[0].Cash -= PricesKeeper.PricesFromTag[currentBuilding.tag];
+                    currentBuilding = null;
                 }
             }
+        }
+
+        private bool TryCancelCurrentBuilding()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                GameObject.Destroy(currentBuilding);
+                currentBuilding = null;
+                return true;
+            }
+            return false;
         }
 
         private void HandleInputEvents()
@@ -70,15 +86,20 @@ namespace Systems
                 foreach (var buildId in buildingsAssets)
                 {
                     if (buildingsAssets.Get1[buildId].buildingAsset.tag.Equals(buildEvents.Get1[0].Type))
+                    {
                         CreateOrSwitchBuild(buildingsAssets.Get1[buildId].buildingAsset);
+                        buildEvents.Entities[0].Destroy();
+                    }
                 }
 
-                newCanvas = buildEvents.Get1[0].buildingCanvas;
+                newCanvas = buildEvents.Get1[0].buildingCanvasAsset;
 
                 foreach (var buildEvent in buildEvents.Entities)
                 {
                     if (!buildEvent.IsNull() && buildEvent.IsAlive())
+                    {
                         buildEvent.Destroy();
+                    }
                 }
             }
         }
@@ -88,16 +109,16 @@ namespace Systems
             var isBuildMove = false;
             ray = cameras.Get1[0].Camera.ScreenPointToRay(Input.mousePosition);
 
-            foreach (var terrain in Object.FindObjectsOfType<Terrain>())
+            foreach (var terrain in UnityEngine.Object.FindObjectsOfType<Terrain>())
             {
                 isBuildMove = isBuildMove || terrain.GetComponent<Collider>().Raycast(ray, out hitInfo, 400);
                 if (isBuildMove)
                 {
                     var buildingPosition = hitInfo.point;
-                    buildingPosition.y += currentBuild.transform.lossyScale.y / 2;
+                    buildingPosition.y += currentBuilding.transform.lossyScale.y / 2;
                     buildingPosition.x = Mathf.Round(buildingPosition.x);
                     buildingPosition.z = Mathf.Round(buildingPosition.z);
-                    currentBuild.transform.position = buildingPosition;
+                    currentBuilding.transform.position = buildingPosition;
                     break;
                 }
             }
@@ -107,24 +128,31 @@ namespace Systems
 
         private void CreateOrSwitchBuild(GameObject build) 
         {
-            if (currentBuild == null)
+            if (currentBuilding == null)
             {
-                currentBuild = Object.Instantiate(build);
+                currentBuilding = UnityEngine.Object.Instantiate(build);
             }
-            else if (!currentBuild.tag.Equals(build.tag))
+            else if (!currentBuilding.tag.Equals(build.tag))
             {
-                Object.Destroy(currentBuild);
-                currentBuild = Object.Instantiate(build);
+                UnityEngine.Object.Destroy(currentBuilding);
+                currentBuilding = UnityEngine.Object.Instantiate(build);
             }
         }
 
         private void BuildSet(GameObject build, Canvas canvas)
         {
-            world.NewEntityWith(out BuildingComponent newBuild);
+            var buildEntity = world.NewEntityWith(out BuildingComponent newBuild);
             newBuild.obj = build;
             newBuild.Type = build.tag;
-            newBuild.InBuildCanvas = canvas;
-            newBuild.AllButtons = canvas.GetComponentsInChildren<Button>();
+            newBuild.InBuildCanvas = GuiHelper.InstantiateAllButtons(canvas, world);
+            newBuild.InBuildCanvas.enabled = false;
+            newBuild.AllButtons = newBuild.InBuildCanvas.GetComponentsInChildren<Button>();
+
+            if (build.tag.Equals("Kiosk"))
+            {
+                var kioskKomponent = buildEntity.Set<KioskComponent>();
+                kioskKomponent.LastBeerGeneration = DateTime.Now;
+            }
         }
     }
 }
