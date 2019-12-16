@@ -3,7 +3,7 @@ using System;
 
 namespace Components
 {
-    public class UnitCreateEvent
+    internal class UnitCreateEvent
     {
         public UnitTag UnitTag;
         public Vector3 Position;

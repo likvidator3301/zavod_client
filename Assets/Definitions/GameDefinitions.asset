@@ -16,3 +16,4 @@ MonoBehaviour:
   GuiDefinitions: {fileID: 11400000, guid: 0a1ecf93e69b873489709bcf3a36de49, type: 2}
   BuildingDefinitions: {fileID: 11400000, guid: 0d1a10ff9a5f8d3428a2cc9cd9c93e03,
     type: 2}
+  UnitsDefinitions: {fileID: 11400000, guid: c0f018f0c756b274593296041020698e, type: 2}

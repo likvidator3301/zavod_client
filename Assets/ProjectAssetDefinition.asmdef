@@ -1,0 +1,20 @@
+{
+    "name": "ProjectAssetDefinitio",
+    "references": [
+        "GUID:656c2c43d3cfe4855bd40e058874b0be",
+        "GUID:0104ae351448541ee9a4ab55eb9d8b69",
+        "GUID:3687cc952c3624919ac685c6b0a7a7b1",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:6546d7765b4165b40850b3667f981c26",
+        "GUID:656e461844099ae43a609ff6109b0877",
+        "GUID:bb05cab7d802aa5468f8f2f86840d984"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

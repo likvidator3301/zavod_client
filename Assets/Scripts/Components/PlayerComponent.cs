@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
-using UnityEditor;
+using Leopotam.Ecs;
+using System;
 
 namespace Components
 {
     public class PlayerComponent
     {
-        public List<UnitComponent> SelectedUnits = new List<UnitComponent>();
-        public GUID Guid { get; }
+        public List<EcsEntity> SelectedUnits = new List<EcsEntity>();
+        public Guid Guid { get; }
         public long Score { get; set; } = 500;
         
-        public PlayerComponent(GUID guid)
+        public PlayerComponent(Guid guid)
         {
             Guid = guid;
         }

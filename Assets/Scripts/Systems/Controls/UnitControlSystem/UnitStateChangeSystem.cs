@@ -1,6 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Components;
+using Components.UnitsEvents;
 using Leopotam.Ecs;
 using Object = UnityEngine.Object;
 
@@ -10,23 +10,22 @@ namespace Systems
     {
         private EcsWorld ecsWorld;
         private PlayerComponent player;
-        private EcsFilter<UnitComponent> units;
+        private EcsFilter<DieEvent> deadEvents;
 
-        public void Run()
-        {
-            DestroyDeadUnits();
-        }
+        public void Run() => DestroyDeadUnits();
 
         private void DestroyDeadUnits()
         {
-            foreach (var unitEntity in units
-                .Entities
-                .Where(u => !u.IsNull() && u.IsAlive() && u.Get<UnitComponent>()
-                                .Object.GetComponent<HealthComponent>()
-                                .CurrentHp <= 0))
+            var deadEventEntities = deadEvents.Entities
+                .Where(e => e.IsNotNullAndAlive());
+            foreach (var deadEventEntity in deadEventEntities)
             {
-                Object.Destroy(unitEntity.Get<UnitComponent>().Object);
-                unitEntity.Destroy();
+                var dieEvent = deadEventEntity.Get<DieEvent>();
+                UnitAnimationHelper.CreateDieEvent(ecsWorld, dieEvent.DeadUnit);
+                Object.Destroy(dieEvent.DeadUnit.Get<UnitComponent>().Object);
+                //await deadEvent.DeadUnit.DestroyEntityWithDelay();
+                dieEvent.DeadUnit.Destroy();
+                deadEventEntity.Destroy();
             }
         }
     }

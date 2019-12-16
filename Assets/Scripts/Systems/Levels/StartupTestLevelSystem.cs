@@ -1,5 +1,6 @@
 ﻿using Components;
 using Leopotam.Ecs;
+using UnityEditor;
 using UnityEngine;
 
 namespace Systems
@@ -9,9 +10,8 @@ namespace Systems
         private const float minHeight = 2.6f;
         private EcsWorld ecsWorld;
         private EcsGrowList<UnitComponent> units;
-        private PrefabsHolderComponent prefabsHolder;
-        private readonly Vector3 allyUnitPosition = new Vector3(375, minHeight, 515);
-        private readonly Vector3 enemyUnitPosition = new Vector3(375, minHeight, 527);
+        private readonly Vector3 allyUnitPosition = new Vector3(44, minHeight, 40);
+        private readonly Vector3 enemyUnitPosition = new Vector3(44, minHeight, 45);
 
         public void Init()
         {
@@ -19,15 +19,15 @@ namespace Systems
         }
 
         private void InitializeLevel()
-        {            
-            ecsWorld.NewEntityWith<UnitComponent>(out var allyUnit);
-            ecsWorld.NewEntityWith<UnitComponent>(out var enemyUnit);
-            var allyObjectUnit = Object.Instantiate(prefabsHolder.WarriorPrefab, allyUnitPosition, Quaternion.identity);
-            var enemyObjectUnit = Object.Instantiate(prefabsHolder.EnemyWarriorPrefab, enemyUnitPosition, Quaternion.identity);
-            allyUnit.SetFields(allyObjectUnit, UnitTag.Warrior);
-            allyUnit.AddWarriorComponents();
-            enemyUnit.SetFields(enemyObjectUnit, UnitTag.EnemyWarrior);
-            enemyUnit.AddWarriorComponents();
+        {
+            var allyUnitEntity = ecsWorld.NewEntityWith<UnitComponent>(out var allyUnitComponent);
+            var enemyUnitEntity = ecsWorld.NewEntityWith<UnitComponent>(out var enemyUnitComponent);
+            var allyObjectUnit = Object.Instantiate(UnitsPrefabsHolder.WarriorPrefab, allyUnitPosition, Quaternion.identity);
+            var enemyObjectUnit = Object.Instantiate(UnitsPrefabsHolder.EnemyWarriorPrefab, enemyUnitPosition, Quaternion.identity);
+            allyUnitComponent.SetFields(allyObjectUnit, UnitTag.Warrior);
+            allyUnitEntity.AddWarriorComponents();
+            enemyUnitComponent.SetFields(enemyObjectUnit, UnitTag.EnemyWarrior);
+            enemyUnitEntity.AddWarriorComponents();
         }
     }
 }

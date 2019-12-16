@@ -15,3 +15,6 @@ MonoBehaviour:
   BarracsAsset: {fileID: 5032764035151549222, guid: caa6bf7cce95d36408242ecaed8fbcde,
     type: 3}
   SecondsForWarriorCreate: 3
+  KioskAsset: {fileID: 225715556806484386, guid: 4e1fb13ac4fb97040904785fa51a4698,
+    type: 3}
+  KioskCahsPerSec: 10

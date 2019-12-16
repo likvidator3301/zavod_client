@@ -2,7 +2,7 @@
 
 namespace Components
 {
-    public class DefenseComponent : MonoBehaviour
+    public class DefenseComponent
     {
         public float Defense { get; set; }
 

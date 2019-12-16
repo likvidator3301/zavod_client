@@ -9,10 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9defe999cb89a9d438fef6a618fa0025, type: 3}
+  m_Script: {fileID: 11500000, guid: 9497eaae9b2d34a44a49983b3a95b24a, type: 3}
   m_Name: GUIDefinitions
   m_EditorClassIdentifier: 
-  buildMenu: {fileID: 176140477752159486, guid: dbe7153e835705a4c966347d54178155,
+  BuildMenu: {fileID: 176140477752159486, guid: dbe7153e835705a4c966347d54178155,
     type: 3}
-  inBuildingMenu: {fileID: 2559180388796972013, guid: e08035956c081df4697ca338ce6260ab,
+  InBuildingMenu: {fileID: 2559180388796972013, guid: e08035956c081df4697ca338ce6260ab,
+    type: 3}
+  PlayerInfo: {fileID: 1783083583824724785, guid: daf364a806f12c04d9023cdda588cc88,
+    type: 3}
+  DefaultInBuildingMenu: {fileID: 3902563827767497443, guid: 6e4bc8d9b30bf854cadbe8951717d7bd,
     type: 3}

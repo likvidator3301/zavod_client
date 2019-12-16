@@ -4,11 +4,11 @@ using Leopotam.Ecs;
 
 namespace Components
 {
-    public class BuildCreateEvent
+    internal class BuildCreateEvent
     {
         public string Type;
 
         [EcsIgnoreNullCheck]
-        public Canvas buildingCanvas;
+        public Canvas buildingCanvasAsset;
     }
 }

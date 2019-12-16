@@ -1,74 +1,62 @@
-﻿using System;
-using System.Linq;
-using Components;
+﻿using Components;
 using Leopotam.Ecs;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Systems
 {
     public class UnitActionHandler : IEcsRunSystem
     {
-        private PlayerComponent player;
-        private PrefabsHolderComponent prefabsHolder;
-        private EcsFilter<UnitComponent> units;
-        private EcsWorld ecsWorld;
+        private readonly PlayerComponent player = null;
+        private readonly GameDefinitions gameDefinitions = null;
+        private readonly EcsFilter<UnitComponent> units = null;
+        private readonly EcsWorld ecsWorld = null;
 
-        public void Run()
-        {
-            HandleInput();
-        }
-
-        private void HandleInput()
-        {
-            //HandleCreatingUnits();
-            HandleMovingUnits();
-        }
-
-        private void HandleCreatingUnits()
-        {
-            if (!Input.GetKeyDown(KeyCode.U))
-                return;
-            if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfo))
-                prefabsHolder.WarriorPrefab.AddNewEntityOnPositionWithTag(ecsWorld, hitInfo.point, UnitTag.Warrior);
-        }
+        public void Run() => HandleMovingUnits();
 
         private void HandleMovingUnits()
         {
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown((int)MouseButton.RightMouse))
                 MoveSelectedUnits();
         }
 
         private void MoveSelectedUnits()
         {
-            if (!RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfo, UnitTag.EnemyWarrior.ToString()))
-                UnitActionSystem.UpdateTargets(hitInfo.point, player.SelectedUnits);
+            if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfo, LevelObjectTag.Ground.ToString()))
+            {
+                if (player.SelectedUnits.Count < 1)
+                    return;
+                
+                var unitsPlace = UnitsPlacementHelpert.PlaceUnits(CalculateApproximateCenterOfSelectedUnits(), 
+                                                                  hitInfo.point, 
+                                                                  player.SelectedUnits.Count, 
+                                                                  gameDefinitions.UnitsDefinitions.MaxUnitsInRow, 
+                                                                  player.SelectedUnits[0].Get<UnitComponent>().Object.transform.lossyScale.x);
+                for (var i = 0; i < player.SelectedUnits.Count; i++)
+                    MoveHelper.CreateMoveEvent(ecsWorld, player.SelectedUnits[i], unitsPlace[i]);
+            }
             else
             {
-                var enemyUnit = GetUnitByRaycastHit(hitInfo);
-                if (enemyUnit == null)
-                    return;
-                MoveToAttackUnits(enemyUnit);
+                foreach (var unit in player.SelectedUnits)
+                {
+                    var unitTarget = RaycastHelper.GetUnitEntityByRaycastHit(hitInfo, units.Entities);
+                    if (unitTarget.IsNull())
+                        break;
+
+                    MoveHelper.CreateFollowEvent(ecsWorld, unit, unitTarget);
+                }
             }
         }
 
-        private UnitComponent GetUnitByRaycastHit(RaycastHit hitInfo)
+        private Vector3 CalculateApproximateCenterOfSelectedUnits()
         {
-            var enemyUnit = units.Get1.FirstOrDefault(u => u.Object.Equals(hitInfo.collider.gameObject));
-            return enemyUnit;
-        }
+            var sumAllUnitsPositions = Vector3.zero;
 
-        private void MoveToAttackUnits(UnitComponent enemyUnit)
-        {
-            var enemyPosition = enemyUnit.Object.transform.position;
             foreach (var unit in player.SelectedUnits)
-            {
-                var attackComponent = unit.Object.GetComponent<AttackComponent>();
-                if (Vector3.Distance(unit.Object.transform.position, enemyPosition) >
-                    attackComponent.AttackRange)
-                    UnitActionSystem.UpdateTarget(enemyPosition, unit);
-                else
-                    UnitActionSystem.Attack(unit, enemyUnit);
-            }
+                sumAllUnitsPositions += unit.Get<UnitComponent>().Object.transform.position;
+
+            return sumAllUnitsPositions / player.SelectedUnits.Count;
         }
+
     }
 }
