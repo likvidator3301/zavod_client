@@ -37,7 +37,7 @@ public class UnitLayoutUISystem : IEcsRunSystem, IEcsInitSystem
             var newButton = InstantiateButtonObject();
 
             world.NewEntityWith<ButtonComponent>(out var newButtonComponent);
-            newButtonComponent.buttonName = unitSpawnedEventFilter.Get1[spawnedUnit].Unit.Tag.ToString();
+            newButtonComponent.buttonName = unitSpawnedEventFilter.Get1[spawnedUnit].Unit.Get<UnitComponent>().Tag.ToString();
             newButtonComponent.button = newButton.GetComponent<Button>();
             newButtonComponent.bounds = newButton.GetComponent<Button>().GetLayoutButtonBounds();
 
@@ -51,7 +51,7 @@ public class UnitLayoutUISystem : IEcsRunSystem, IEcsInitSystem
             unitSpawnedEventFilter.Entities[spawnedUnit].Destroy();
         }
 
-        if (Input.GetKey("left shift"))
+        if (Input.GetKeyUp(KeyCode.LeftShift))
             SelectAllLayoutUnits();
     }
 
@@ -69,15 +69,23 @@ public class UnitLayoutUISystem : IEcsRunSystem, IEcsInitSystem
         return button;
     }
 
-    private void SelectAttachedUnit(UnitComponent unit)
+    private void SelectAttachedUnit(EcsEntity unit)
     {
-        player.SelectedUnits.Clear();
+        if (!Input.GetKey(KeyCode.LeftAlt))
+        {
+            player.SelectedUnits.DehighlightObjects();
+            player.SelectedUnits.Clear();
+        }
         player.SelectedUnits.Add(unit);
+        player.SelectedUnits.HighlightObjects();
     }
 
     private void SelectAllLayoutUnits()
     {
-            foreach (var unit in unitButtonsFilter)
+        player.SelectedUnits.DehighlightObjects();
+        player.SelectedUnits.Clear();
+        foreach (var unit in unitButtonsFilter)
                 player.SelectedUnits.Add(unitButtonsFilter.Get1[unit].Unit);
+        player.SelectedUnits.HighlightObjects();
     }
 }

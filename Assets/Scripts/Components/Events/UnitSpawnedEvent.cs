@@ -7,5 +7,5 @@ using Components;
 public class UnitSpawnedEvent
 {
     [EcsIgnoreNullCheck]
-    public UnitComponent Unit;
+    public EcsEntity Unit;
 }

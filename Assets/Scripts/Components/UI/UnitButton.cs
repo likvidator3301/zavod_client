@@ -10,6 +10,6 @@ namespace Components
         [EcsIgnoreNullCheck]
         public ButtonComponent Button;
         [EcsIgnoreNullCheck]
-        public UnitComponent Unit;
+        public EcsEntity Unit;
     }
 }
