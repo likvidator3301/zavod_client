@@ -42,6 +42,9 @@ namespace Systems
                 case "CreateKiosk":
                     CreateKiosk();
                     break;
+                case "Exit":
+                    Application.Quit();
+                    break;
                 default:
                     break;
             }
