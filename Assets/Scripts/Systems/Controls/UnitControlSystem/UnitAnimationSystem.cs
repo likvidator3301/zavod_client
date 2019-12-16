@@ -8,6 +8,7 @@ namespace Systems
 {
     public class UnitAnimationSystem : IEcsRunSystem
     {
+        private ServerIntegration.ServerIntegration serverIntegration;
         private readonly EcsFilter<UnitAnimationEvent> animationEvents = null;
         private readonly EcsFilter<UnitComponent> units = null;
         private const float stopMovingAnimationDistance = 1.5f;
@@ -15,8 +16,10 @@ namespace Systems
         public void Run()
         {
             RunAnimations();
-            StopUnitIfIsOnTargetPosition();
-            StopAttackingIfNotAttacking();
+            StopUnitIfOnTargetPosition();
+            StopAttackIfNotAttacking();
+            
+            AddMoveUnitsToClient();
         }
 
         private void RunAnimations()
@@ -36,7 +39,7 @@ namespace Systems
             }
         }
 
-        private void StopUnitIfIsOnTargetPosition()
+        private void StopUnitIfOnTargetPosition()
         {
             var unitEntities = units.Entities
                 .Where(u => u.IsNotNullAndAlive());
@@ -49,7 +52,7 @@ namespace Systems
             }
         }
         
-        private void StopAttackingIfNotAttacking()
+        private void StopAttackIfNotAttacking()
         {
             var unitEntities = units.Entities
                 .Where(u => u.IsNotNullAndAlive());
@@ -59,6 +62,20 @@ namespace Systems
                 
                 if (!isAttacking)
                     UnitAnimationHelper.CreateStopAttackingEvent(unitEntity);
+            }
+        }
+
+        private void AddMoveUnitsToClient()
+        {
+            var movingUnitsEntities = units.Entities
+                .Where(u => u.IsNotNullAndAlive()
+                            && u.Get<UnitAnimationComponent>().IsMoving);
+            foreach (var movingUnit in movingUnitsEntities)
+            {
+                var unitComponent = movingUnit.Get<UnitComponent>();
+                var unityPosition = unitComponent.Object.transform.position;
+                var position = new Models.Vector3 {X = unityPosition.x, Y = unityPosition.y, Z = unityPosition.z};
+                serverIntegration.client.Unit.AddUnitsToMove(unitComponent.Guid, position);
             }
         }
     }

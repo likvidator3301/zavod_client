@@ -1,12 +1,16 @@
-﻿using Components;
+﻿using System.Net;
+using Components;
 using Leopotam.Ecs;
+using Models;
+using ServerIntegration;
 using UnityEditor;
-using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Systems
 {
     public class StartupTestLevelSystem : IEcsInitSystem
     {
+        private ServerIntegration.ServerIntegration serverIntegration;
         private const float minHeight = 2.6f;
         private EcsWorld ecsWorld;
         private EcsGrowList<UnitComponent> units;
@@ -20,14 +24,12 @@ namespace Systems
 
         private void InitializeLevel()
         {
-            var allyUnitEntity = ecsWorld.NewEntityWith<UnitComponent>(out var allyUnitComponent);
-            var enemyUnitEntity = ecsWorld.NewEntityWith<UnitComponent>(out var enemyUnitComponent);
-            var allyObjectUnit = Object.Instantiate(UnitsPrefabsHolder.WarriorPrefab, allyUnitPosition, Quaternion.identity);
-            var enemyObjectUnit = Object.Instantiate(UnitsPrefabsHolder.EnemyWarriorPrefab, enemyUnitPosition, Quaternion.identity);
-            allyUnitComponent.SetFields(allyObjectUnit, UnitTag.Warrior);
-            allyUnitEntity.AddWarriorComponents();
-            enemyUnitComponent.SetFields(enemyObjectUnit, UnitTag.EnemyWarrior);
-            enemyUnitEntity.AddWarriorComponents();
+            var allyUnit = serverIntegration.client.Unit.CreateUnit(UnitType.Warrior).Result;
+            var enemyUnit = serverIntegration.client.Unit.CreateUnit(UnitType.Chelovechik).Result;
+            UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityOnPositionFromUnitDbo(
+                ecsWorld, allyUnitPosition, allyUnit);
+            UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityOnPositionFromUnitDbo(
+                ecsWorld, enemyUnitPosition, enemyUnit);
         }
     }
 }

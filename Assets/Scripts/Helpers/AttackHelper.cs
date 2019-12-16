@@ -39,6 +39,7 @@ namespace Systems
             var attackEvent = attackingUnitEntity.Set<AttackEvent>();
             attackEvent.TargetHealthComponent = targetUnitEntity.Get<HealthComponent>();
             attackEvent.TargetPosition = targetUnitEntity.Get<UnitComponent>().Object.transform.position;
+            attackEvent.TargetGuid = targetUnitEntity.Get<UnitComponent>().Guid;
         }
 
         public static void CreateAttackEvent(

@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Leopotam.Ecs;
-using UnityEditor;
 
 namespace Components
 {
     public class PlayerComponent
     {
         public List<EcsEntity> SelectedUnits = new List<EcsEntity>();
-        public GUID Guid { get; }
+        public Guid Guid { get; }
         public long Score { get; set; } = 500;
         
-        public PlayerComponent(GUID guid)
+        public PlayerComponent(Guid guid)
         {
             Guid = guid;
         }

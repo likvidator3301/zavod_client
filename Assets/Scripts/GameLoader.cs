@@ -1,9 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Leopotam.Ecs;
 using Systems;
 using Components;
-using UnityEditor;
-using UnityEngine.Serialization;
 
 public class GameLoader : MonoBehaviour
 {
@@ -16,7 +15,8 @@ public class GameLoader : MonoBehaviour
     public void Start()
     {
         world = new EcsWorld();
-        var playerComponent = new PlayerComponent(GUID.Generate());
+        var playerComponent = new PlayerComponent(Guid.NewGuid());
+        var serverIntegration = new ServerIntegration.ServerIntegration();
 
 #if UNITY_EDITOR
         Leopotam.Ecs.UnityIntegration.EcsWorldObserver.Create(world);
@@ -38,14 +38,18 @@ public class GameLoader : MonoBehaviour
             .Add(new UnitCreateSystem())
             .Add(new UnitAnimationSystem())
             .Add(new UnitHealthSystem());
+        var serverIntegrationSystems = new EcsSystems(world)
+            .Add(new ClientSystem());
 
         systems = new EcsSystems(world)
             .Add(new GuiSystem())
             .Add(controlsSystems)
             .Add(unitSystems)
             .Add(levelSystems)
+            .Add(serverIntegrationSystems)
             .Inject(playerComponent)
             .Inject(gameDefinitions)
+            .Inject(serverIntegration)
             .ProcessInjects();
 
         systems.Init();

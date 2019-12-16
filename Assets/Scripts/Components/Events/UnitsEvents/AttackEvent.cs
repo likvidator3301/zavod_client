@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Components.UnitsEvents
@@ -6,5 +7,6 @@ namespace Components.UnitsEvents
     {
         public Vector3 TargetPosition { get; set; }
         public HealthComponent TargetHealthComponent { get; set; }
+        public Guid TargetGuid { get; set; }
     }
 }

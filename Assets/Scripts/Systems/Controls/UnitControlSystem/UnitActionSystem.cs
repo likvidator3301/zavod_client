@@ -9,6 +9,7 @@ namespace Systems
 {
     public class UnitActionSystem : IEcsRunSystem
     {
+        private ServerIntegration.ServerIntegration serverIntegration;
         private const float inertiaEliminatorFactor = 3;
         private EcsWorld ecsWorld;
         private EcsFilter<UnitComponent> units;
@@ -41,6 +42,8 @@ namespace Systems
         private void Attack(EcsEntity attackingUnitEntity)
         {
             var attackEvent = attackingUnitEntity.Get<AttackEvent>();
+            var targetGuid = attackEvent.TargetGuid;
+            var attackingGuid = attackingUnitEntity.Get<UnitComponent>().Guid;
             var targetPosition = attackEvent.TargetPosition;
             var targetHealthComponent = attackEvent.TargetHealthComponent;
             var attackingUnitAttackComponent = attackingUnitEntity.Get<AttackComponent>();
@@ -52,6 +55,7 @@ namespace Systems
             }
             
             UnitAnimationHelper.CreateAttackEvent(attackingUnitEntity);
+            serverIntegration.client.Unit.AddUnitsToAttack(attackingGuid, targetGuid);
 
             targetHealthComponent.CurrentHp -= attackingUnitAttackComponent.AttackDamage;
             attackingUnitAttackComponent.LastAttackTime = Time.time;

@@ -35,8 +35,8 @@ namespace Systems
                     endPosition = hitInfoEnd.point;
                     var selectionInfo = new SelectionRectangle(startPosition, endPosition);
                     selectedUnits = selectionInfo.GetUnitsInFrame(units);
-                    var selectionFrame = selectionInfo.GetSelectionFrame();
                     selectedUnits.HighlightObjects();
+                    var selectionFrame = selectionInfo.GetSelectionFrame();
                     await selectionFrame.DestroyObjectWithDelay(selectionDeletingDelayWhileSelecting);
                 }
             }
