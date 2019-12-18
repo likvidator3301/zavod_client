@@ -36,6 +36,7 @@ public class GameLoader : MonoBehaviour
             .Add(new UnitAnimationSystem())
             .Add(new UnitActionHandler())
             .Add(new SelectionHandler())
+            .Add(new UnitLayoutUISystem())
             .Inject(playerComponent)
             .Inject(gameDefinitions)
             .ProcessInjects();
