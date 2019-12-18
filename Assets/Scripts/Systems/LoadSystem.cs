@@ -42,7 +42,6 @@ namespace Systems
         private void LoadUiAssets()
         {
             world.NewEntityWith(out PlayerResourcesComponent playerAsset);
-            Debug.Log(definitions.GuiDefinitions == null);
             playerAsset.ResoursesUiDisplay = GameObject.Instantiate(definitions.GuiDefinitions.PlayerInfo);
         }
 

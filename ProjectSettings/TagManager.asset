@@ -14,6 +14,7 @@ TagManager:
   - barraks
   - UnitButton
   - UnitButtonsContainer
+  - Kiosk
   layers:
   - Default
   - TransparentFX
