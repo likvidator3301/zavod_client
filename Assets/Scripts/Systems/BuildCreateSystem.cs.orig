@@ -15,9 +15,15 @@ namespace Systems
         private readonly EcsFilter<BuildCreateEvent> buildEvents = null;
         private readonly EcsFilter<ClickEvent> clickEvents = null;
         private readonly EcsFilter<BuildingComponent> buildings = null;
+<<<<<<< HEAD
+        private readonly EcsFilter<BuildingAssietComponent> buildingsAssets = null;
+        private readonly EcsFilter<CameraComponent> cameras = null;
+        private readonly GameDefinitions gameDefinitions = null;
+=======
         private readonly EcsFilter<BuildingAssetComponent> buildingsAssets = null;
         private readonly EcsFilter<CameraComponent> cameras = null;
         private readonly EcsFilter<PlayerResourcesComponent> resources = null;
+>>>>>>> origin/mV/resources
 
         private RaycastHit hitInfo;
         private Ray ray;
@@ -86,10 +92,14 @@ namespace Systems
                 foreach (var buildId in buildingsAssets)
                 {
                     if (buildingsAssets.Get1[buildId].buildingAsset.tag.Equals(buildEvents.Get1[0].Type))
+<<<<<<< HEAD
+                        CreateOrSwitchBuild(buildingsAssets.Get1[buildId].buildingAsset);
+=======
                     {
                         CreateOrSwitchBuild(buildingsAssets.Get1[buildId].buildingAsset);
                         buildEvents.Entities[0].Destroy();
                     }
+>>>>>>> origin/mV/resources
                 }
 
                 newCanvas = buildEvents.Get1[0].buildingCanvasAsset;
@@ -144,6 +154,10 @@ namespace Systems
             var buildEntity = world.NewEntityWith(out BuildingComponent newBuild);
             newBuild.obj = build;
             newBuild.Type = build.tag;
+<<<<<<< HEAD
+            newBuild.InBuildCanvas = canvas;
+            newBuild.AllButtons = canvas.GetComponentsInChildren<Button>();
+=======
             newBuild.InBuildCanvas = GuiHelper.InstantiateAllButtons(canvas, world);
             newBuild.InBuildCanvas.enabled = false;
             newBuild.AllButtons = newBuild.InBuildCanvas.GetComponentsInChildren<Button>();
@@ -153,6 +167,7 @@ namespace Systems
                 var kioskKomponent = buildEntity.Set<KioskComponent>();
                 kioskKomponent.LastBeerGeneration = DateTime.Now;
             }
+>>>>>>> origin/mV/resources
         }
     }
 }
