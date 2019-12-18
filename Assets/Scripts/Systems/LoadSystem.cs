@@ -43,7 +43,7 @@ namespace Systems
         {
             world.NewEntityWith(out PlayerResourcesComponent playerAsset);
             Debug.Log(definitions.GuiDefinitions == null);
-            playerAsset.ResoursesUiDisplay = Object.Instantiate(definitions.GuiDefinitions.PlayerInfo);
+            playerAsset.ResoursesUiDisplay = GameObject.Instantiate(definitions.GuiDefinitions.PlayerInfo);
         }
 
         private void LoadUi()
