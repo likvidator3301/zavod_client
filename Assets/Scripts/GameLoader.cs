@@ -42,7 +42,6 @@ public class GameLoader : MonoBehaviour
             .ProcessInjects();
 
         systems.Init();
-
 #if UNITY_EDITOR
         Leopotam.Ecs.UnityIntegration.EcsSystemsObserver.Create(systems);
 #endif
