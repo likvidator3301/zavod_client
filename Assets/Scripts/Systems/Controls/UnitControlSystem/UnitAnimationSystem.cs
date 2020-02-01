@@ -64,11 +64,12 @@ namespace Systems
                     UnitAnimationHelper.CreateStopAttackingEvent(unitEntity);
             }
         }
-
+        
+        //TODO: Try to explain why u.Get<UnitAnimationComponent> can be null!
         private void AddMoveUnitsToClient()
         {
             var movingUnitsEntities = units.Entities
-                .Where(u => u.IsNotNullAndAlive()
+                .Where(u => u.IsNotNullAndAlive() && u.Get<UnitAnimationComponent>() != null
                             && u.Get<UnitAnimationComponent>().IsMoving);
             foreach (var movingUnit in movingUnitsEntities)
             {

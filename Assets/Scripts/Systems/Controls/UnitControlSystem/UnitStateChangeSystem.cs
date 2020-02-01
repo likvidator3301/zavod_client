@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Components;
 using Components.UnitsEvents;
 using Leopotam.Ecs;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Systems
@@ -21,12 +22,15 @@ namespace Systems
         {
             var dieEventEntities = dieEvents.Entities
                 .Where(e => e.IsNotNullAndAlive());
+            
             foreach (var dieEventEntity in dieEventEntities)
             {
                 var statusCode = await serverIntegration.client.Unit.DeleteUnit(dieEventEntity.Get<UnitComponent>().Guid);
+                Debug.Log(statusCode);
                 
                 if (statusCode == HttpStatusCode.OK)
                 {
+                    Debug.Log("DieEvent was used");
                     UnitAnimationHelper.CreateDieEvent(dieEventEntity);
                     Object.Destroy(dieEventEntity.Get<UnitComponent>().Object);
                     //await deadEvent.DeadUnit.DestroyEntityWithDelay();

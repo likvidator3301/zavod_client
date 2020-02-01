@@ -57,7 +57,6 @@ namespace Systems
             UnitAnimationHelper.CreateAttackEvent(attackingUnitEntity);
             serverIntegration.client.Unit.AddUnitsToAttack(attackingGuid, targetGuid);
 
-            targetHealthComponent.CurrentHp -= attackingUnitAttackComponent.AttackDamage;
             attackingUnitAttackComponent.LastAttackTime = Time.time;
         }
 

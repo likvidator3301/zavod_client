@@ -26,12 +26,8 @@ namespace Systems
 
         public void Run()
         {
-            Debug.Log($"run client system {lastSendAttackUnitsTime.ElapsedMilliseconds} --- {sendDelay}");
-
             if (lastSendAttackUnitsTime.ElapsedMilliseconds > sendDelay)
             {
-                Debug.Log("run Send attack");
-
                 SendAttacks();
             }
 
@@ -44,19 +40,14 @@ namespace Systems
 
         private async Task SendAttacks()
         {
-            Debug.Log("Send attack");
             var attacksResultDto = await serverIntegration.client.Unit.SendAttackUnits();
-            Debug.Log("Sent attack");
 
             foreach (var attackResultDto in attacksResultDto)
             {
-                Debug.Log("HERE!!!");
                 if (attackResultDto.Flag)
                 {
                     var updateUnit = units.Entities.FirstOrDefault(u => u.Get<UnitComponent>().Guid == attackResultDto.Id);
-                    Debug.Log("Current hp: " + updateUnit.Get<HealthComponent>().CurrentHp);
-                    updateUnit.Get<HealthComponent>().CurrentHp -= attackResultDto.Hp;
-                    Debug.Log("Next hp: " + updateUnit.Get<HealthComponent>().CurrentHp);
+                    updateUnit.Get<HealthComponent>().CurrentHp = attackResultDto.Hp;
                 }
             }
             lastSendAttackUnitsTime.Restart();

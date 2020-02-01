@@ -46,7 +46,7 @@ namespace Systems
                 var newEntity = ecsWorld.NewEntityWith<UnitComponent>(out var unitComponent);
                 var newUnitObject = Object.Instantiate(prefab, minimumHeightPosition, Quaternion.identity);
                 unitComponent.SetFields(
-                    newUnitObject, unitDto.Type == UnitType.Warrior ? UnitTag.Warrior : UnitTag.EnemyWarrior);
+                    newUnitObject, unitDto.Type == UnitType.Warrior ? UnitTag.Warrior : UnitTag.EnemyWarrior, unitDto.Id);
                 newEntity.AddComponents(unitDto);
             }
         }
