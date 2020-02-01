@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Components;
 using Components.UnitsEvents;
 using Leopotam.Ecs;
@@ -16,14 +17,21 @@ namespace Systems
 
         public void Run() => DestroyDeadUnits();
 
-        private void DestroyDeadUnits()
+        private async void DestroyDeadUnits()
         {
             var dieEventEntities = dieEvents.Entities
                 .Where(e => e.IsNotNullAndAlive());
             foreach (var dieEventEntity in dieEventEntities)
             {
-                var result = serverIntegration.client.Unit.DeleteUnit(dieEventEntity.Get<UnitComponent>().Guid).Result;
-                if (result == HttpStatusCode.OK)
+                var timeout = 1000;
+                var statusCode = default(HttpStatusCode);
+                var task = serverIntegration.client.Unit.DeleteUnit(dieEventEntity.Get<UnitComponent>().Guid);
+                if (await Task.WhenAny(task, Task.Delay(timeout)) == task)
+                {
+                    statusCode = task.Result;
+                }
+                
+                if (statusCode == HttpStatusCode.OK)
                 {
                     UnitAnimationHelper.CreateDieEvent(dieEventEntity);
                     Object.Destroy(dieEventEntity.Get<UnitComponent>().Object);

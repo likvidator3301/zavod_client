@@ -1,7 +1,10 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Components;
 using Leopotam.Ecs;
+using Models;
 using Vector3 = UnityEngine.Vector3;
 
 namespace Systems
@@ -29,37 +32,48 @@ namespace Systems
 
             if (lastSendMoveUnitsTime.ElapsedMilliseconds > sendDelay)
             {
-                serverIntegration.client.Unit.SendMoveUnits();
+                SendMoves();
                 lastSendMoveUnitsTime.Restart();
             }
         }
 
-        private void SendAttacks()
+        private async void SendAttacks()
         {
-            var updatedUnits = serverIntegration.client.Unit.SendAttackUnits();
-            if (updatedUnits.IsCompleted)
+            var timeout = 1000;
+            var task = serverIntegration.client.Unit.SendAttackUnits();
+            var attacksResultDto = default(List<ResultOfAttackDto>);
+            if (await Task.WhenAny(task, Task.Delay(timeout)) == task)
             {
-                foreach (var unit in updatedUnits.Result)
+                attacksResultDto = task.Result;
+            }
+
+            foreach (var attackResultDto in attacksResultDto)
+            {
+                if (attackResultDto.Flag)
                 {
-                    var updateUnit = units.Entities.FirstOrDefault(u => u.Get<UnitComponent>().Guid == unit.Id);
-                    updateUnit.Get<HealthComponent>().CurrentHp -= 20;
+                    var updateUnit = units.Entities.FirstOrDefault(u => u.Get<UnitComponent>().Guid == attackResultDto.Id);
+                    updateUnit.Get<HealthComponent>().CurrentHp -= attackResultDto.Hp;
                 }
             }
             lastSendAttackUnitsTime.Restart();
         }
 
-        private void SendMoves()
+        private async void SendMoves()
         {
-            var updatedUnits = serverIntegration.client.Unit.SendMoveUnits();
-            if (updatedUnits.IsCompleted)
+            var timeout = 1000;
+            var task = serverIntegration.client.Unit.SendMoveUnits();
+            var moveUnitsDto = default(List<MoveUnitDto>);
+            if (await Task.WhenAny(task, Task.Delay(timeout)) == task)
             {
-                foreach (var unit in updatedUnits.Result)
-                {
-                    var updateUnit = units.Get1.FirstOrDefault(u => u.Guid == unit.Id);
-                    var updatedPosition = unit.NewPosition;
-                    var unityPosition = new Vector3(updatedPosition.X, updatedPosition.Y, updatedPosition.Z);
-                    updateUnit.Object.transform.position = unityPosition;
-                }
+                moveUnitsDto = task.Result;
+            }
+            
+            foreach (var moveUnitDto in moveUnitsDto)
+            {
+                var updateUnit = units.Get1.FirstOrDefault(u => u.Guid == moveUnitDto.Id);
+                var updatedPosition = moveUnitDto.NewPosition;
+                var unityPosition = new Vector3(updatedPosition.X, updatedPosition.Y, updatedPosition.Z);
+                updateUnit.Object.transform.position = unityPosition;
             }
             lastSendAttackUnitsTime.Restart();
         }

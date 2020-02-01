@@ -37,6 +37,19 @@ namespace Systems
                 newEntity.AddWarriorComponents();
             }
         }
+        
+        public static void AddNewUnitEntityOnPositionFromUnitDbo(
+            this GameObject prefab, EcsWorld ecsWorld, Vector3 position, ServerUnitDto unitDto)
+        {
+            {
+                var minimumHeightPosition = new Vector3(position.x, Math.Min(position.y, minimumHeight), position.z);
+                var newEntity = ecsWorld.NewEntityWith<UnitComponent>(out var unitComponent);
+                var newUnitObject = Object.Instantiate(prefab, minimumHeightPosition, Quaternion.identity);
+                unitComponent.SetFields(
+                    newUnitObject, unitDto.Type == UnitType.Warrior ? UnitTag.Warrior : UnitTag.EnemyWarrior);
+                newEntity.AddComponents(unitDto);
+            }
+        }
 
         public static async Task DestroyObjectWithDelay(this GameObject obj, int waitForMilliseconds = 500)
         {

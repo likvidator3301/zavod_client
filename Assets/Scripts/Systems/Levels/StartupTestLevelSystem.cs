@@ -31,26 +31,26 @@
             allyUnitDto.Position = new Models.Vector3(){X=allyUnitPosition.x, Y=allyUnitPosition.y, Z=allyUnitPosition.z};
             enemyUnitDto.Position = new Models.Vector3(){X=enemyUnitPosition.x, Y=enemyUnitPosition.y, Z=enemyUnitPosition.z};
             
-            int timeout = 1000;
+            var timeout = 1000;
             var task = serverIntegration.client.Unit.CreateUnit(allyUnitDto);
 
-            ServerUnitDto allyUnit;
+            ServerUnitDto allyUnit = default(ServerUnitDto);
             if (await Task.WhenAny(task, Task.Delay(timeout)) == task)
             {
                 allyUnit = task.Result;
             }
 
             var enemyTask = serverIntegration.client.Unit.CreateUnit(enemyUnitDto);
-            ServerUnitDto enemyUnit;
+            ServerUnitDto enemyUnit = default(ServerUnitDto);
             if (await Task.WhenAny(enemyTask, Task.Delay(timeout)) == enemyTask)
             {
                 enemyUnit = enemyTask.Result;
             }
 
             UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityOnPositionFromUnitDbo(
-                ecsWorld, allyUnitPosition, allyUnitDto);
+                ecsWorld, allyUnitPosition, allyUnit);
             UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityOnPositionFromUnitDbo(
-                ecsWorld, enemyUnitPosition, enemyUnitDto);
+                ecsWorld, enemyUnitPosition, enemyUnit);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Models;
+using UnityEngine;
 
 namespace Components
 {
@@ -11,6 +12,12 @@ namespace Components
         {
             MaxHp = healthComponent.MaxHp;
             CurrentHp = healthComponent.CurrentHp;
+        }
+        
+        public void InitializeComponent(ServerUnitDto unitDto)
+        {
+            MaxHp = unitDto.MaxHp;
+            CurrentHp = unitDto.CurrentHp;
         }
     }
 }
