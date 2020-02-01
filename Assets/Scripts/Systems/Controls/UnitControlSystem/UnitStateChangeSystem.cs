@@ -17,19 +17,13 @@ namespace Systems
 
         public void Run() => DestroyDeadUnits();
 
-        private async void DestroyDeadUnits()
+        private async Task DestroyDeadUnits()
         {
             var dieEventEntities = dieEvents.Entities
                 .Where(e => e.IsNotNullAndAlive());
             foreach (var dieEventEntity in dieEventEntities)
             {
-                var timeout = 1000;
-                var statusCode = default(HttpStatusCode);
-                var task = serverIntegration.client.Unit.DeleteUnit(dieEventEntity.Get<UnitComponent>().Guid);
-                if (await Task.WhenAny(task, Task.Delay(timeout)) == task)
-                {
-                    statusCode = task.Result;
-                }
+                var statusCode = await serverIntegration.client.Unit.DeleteUnit(dieEventEntity.Get<UnitComponent>().Guid);
                 
                 if (statusCode == HttpStatusCode.OK)
                 {

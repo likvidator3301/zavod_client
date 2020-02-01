@@ -1,4 +1,7 @@
-﻿namespace Systems
+﻿using System;
+using UnityEngine;
+
+namespace Systems
 {
     using System.Threading.Tasks;
 
@@ -28,28 +31,16 @@
         {
             var allyUnitDto = new CreateUnitDto();
             var enemyUnitDto = new CreateUnitDto();
+            enemyUnitDto.UnitType = UnitType.Chelovechik;
             allyUnitDto.Position = new Models.Vector3(){X=allyUnitPosition.x, Y=allyUnitPosition.y, Z=allyUnitPosition.z};
             enemyUnitDto.Position = new Models.Vector3(){X=enemyUnitPosition.x, Y=enemyUnitPosition.y, Z=enemyUnitPosition.z};
             
-            var timeout = 1000;
-            var task = serverIntegration.client.Unit.CreateUnit(allyUnitDto);
-
-            ServerUnitDto allyUnit = default(ServerUnitDto);
-            if (await Task.WhenAny(task, Task.Delay(timeout)) == task)
-            {
-                allyUnit = task.Result;
-            }
-
-            var enemyTask = serverIntegration.client.Unit.CreateUnit(enemyUnitDto);
-            ServerUnitDto enemyUnit = default(ServerUnitDto);
-            if (await Task.WhenAny(enemyTask, Task.Delay(timeout)) == enemyTask)
-            {
-                enemyUnit = enemyTask.Result;
-            }
-
+            var allyUnit = await serverIntegration.client.Unit.CreateUnit(allyUnitDto);
+            var enemyUnit = await serverIntegration.client.Unit.CreateUnit(enemyUnitDto);
+            
             UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityOnPositionFromUnitDbo(
                 ecsWorld, allyUnitPosition, allyUnit);
-            UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityOnPositionFromUnitDbo(
+            UnitsPrefabsHolder.EnemyWarriorPrefab.AddNewUnitEntityOnPositionFromUnitDbo(
                 ecsWorld, enemyUnitPosition, enemyUnit);
         }
     }

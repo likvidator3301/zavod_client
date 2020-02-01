@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Components;
 using Leopotam.Ecs;
 using Models;
+using Debug = UnityEngine.Debug;
 using Vector3 = UnityEngine.Vector3;
 
 namespace Systems
@@ -15,7 +16,7 @@ namespace Systems
         private EcsFilter<UnitComponent> units;
         private Stopwatch lastSendAttackUnitsTime = new Stopwatch();
         private Stopwatch lastSendMoveUnitsTime = new Stopwatch();
-        private const int sendDelay = 200;
+        private const int sendDelay = 500;
 
         public void Init()
         {
@@ -25,8 +26,12 @@ namespace Systems
 
         public void Run()
         {
+            Debug.Log($"run client system {lastSendAttackUnitsTime.ElapsedMilliseconds} --- {sendDelay}");
+
             if (lastSendAttackUnitsTime.ElapsedMilliseconds > sendDelay)
             {
+                Debug.Log("run Send attack");
+
                 SendAttacks();
             }
 
@@ -37,43 +42,36 @@ namespace Systems
             }
         }
 
-        private async void SendAttacks()
+        private async Task SendAttacks()
         {
-            var timeout = 1000;
-            var task = serverIntegration.client.Unit.SendAttackUnits();
-            var attacksResultDto = default(List<ResultOfAttackDto>);
-            if (await Task.WhenAny(task, Task.Delay(timeout)) == task)
-            {
-                attacksResultDto = task.Result;
-            }
+            Debug.Log("Send attack");
+            var attacksResultDto = await serverIntegration.client.Unit.SendAttackUnits();
+            Debug.Log("Sent attack");
 
             foreach (var attackResultDto in attacksResultDto)
             {
+                Debug.Log("HERE!!!");
                 if (attackResultDto.Flag)
                 {
                     var updateUnit = units.Entities.FirstOrDefault(u => u.Get<UnitComponent>().Guid == attackResultDto.Id);
+                    Debug.Log("Current hp: " + updateUnit.Get<HealthComponent>().CurrentHp);
                     updateUnit.Get<HealthComponent>().CurrentHp -= attackResultDto.Hp;
+                    Debug.Log("Next hp: " + updateUnit.Get<HealthComponent>().CurrentHp);
                 }
             }
             lastSendAttackUnitsTime.Restart();
         }
 
-        private async void SendMoves()
+        private async Task SendMoves()
         {
-            var timeout = 1000;
-            var task = serverIntegration.client.Unit.SendMoveUnits();
-            var moveUnitsDto = default(List<MoveUnitDto>);
-            if (await Task.WhenAny(task, Task.Delay(timeout)) == task)
-            {
-                moveUnitsDto = task.Result;
-            }
-            
+            var moveUnitsDto = await serverIntegration.client.Unit.SendMoveUnits();
+                
             foreach (var moveUnitDto in moveUnitsDto)
             {
                 var updateUnit = units.Get1.FirstOrDefault(u => u.Guid == moveUnitDto.Id);
-                var updatedPosition = moveUnitDto.NewPosition;
-                var unityPosition = new Vector3(updatedPosition.X, updatedPosition.Y, updatedPosition.Z);
-                updateUnit.Object.transform.position = unityPosition;
+                // var updatedPosition = moveUnitDto.NewPosition;
+                // var unityPosition = new Vector3(updatedPosition.X, updatedPosition.Y, updatedPosition.Z);
+                // updateUnit.Object.transform.position = unityPosition;
             }
             lastSendAttackUnitsTime.Restart();
         }
