@@ -1,30 +1,41 @@
 ﻿using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using Components;
 using Components.UnitsEvents;
 using Leopotam.Ecs;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Systems
 {
     public class UnitStateChangeSystem : IEcsRunSystem
     {
-        private readonly EcsWorld ecsWorld = null;
-        private readonly EcsFilter<DieEvent> deadEvents = null;
+        private ServerIntegration.ServerIntegration serverIntegration;
+        private EcsWorld ecsWorld;
+        private PlayerComponent player;
+        private EcsFilter<DieEvent> dieEvents;
 
         public void Run() => DestroyDeadUnits();
 
-        private void DestroyDeadUnits()
+        private async Task DestroyDeadUnits()
         {
-            var deadEventEntities = deadEvents.Entities
+            var dieEventEntities = dieEvents.Entities
                 .Where(e => e.IsNotNullAndAlive());
-            foreach (var deadEventEntity in deadEventEntities)
+            
+            foreach (var dieEventEntity in dieEventEntities)
             {
-                var dieEvent = deadEventEntity.Get<DieEvent>();
-                UnitAnimationHelper.CreateDieEvent(ecsWorld, dieEvent.DeadUnit);
-                Object.Destroy(dieEvent.DeadUnit.Get<UnitComponent>().Object);
-                //await deadEvent.DeadUnit.DestroyEntityWithDelay();
-                dieEvent.DeadUnit.Destroy();
-                deadEventEntity.Destroy();
+                var statusCode = await serverIntegration.client.Unit.DeleteUnit(dieEventEntity.Get<UnitComponent>().Guid);
+                Debug.Log(statusCode);
+                
+                if (statusCode == HttpStatusCode.OK)
+                {
+                    Debug.Log("DieEvent was used");
+                    UnitAnimationHelper.CreateDieEvent(dieEventEntity);
+                    Object.Destroy(dieEventEntity.Get<UnitComponent>().Object);
+                    //await deadEvent.DeadUnit.DestroyEntityWithDelay();
+                    dieEventEntity.Destroy();
+                }
             }
         }
     }

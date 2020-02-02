@@ -15,14 +15,14 @@ namespace Systems
         public Vector2 RightBottom { get; set; }
         private const float minSelectionHeight = 0.005f;
 
-        public SelectionRectangle(Vector3 startPosition, Vector3 endPosition, float minHeight = minSelectionHeight)
+        public SelectionRectangle(Vector3 leftBottom, Vector3 rightTop, float minHeight = minSelectionHeight)
         {
-            var squareStartScreen = startPosition;
-            var center = (squareStartScreen + endPosition) / 2f;
+            var squareStartScreen = leftBottom;
+            var center = (squareStartScreen + rightTop) / 2f;
             center.y = minSelectionHeight;
             Center = center;
-            SizeX = Mathf.Abs(squareStartScreen.x - endPosition.x);
-            SizeZ = Mathf.Abs(squareStartScreen.z - endPosition.z);
+            SizeX = Mathf.Abs(squareStartScreen.x - rightTop.x);
+            SizeZ = Mathf.Abs(squareStartScreen.z - rightTop.z);
             LeftTop = new Vector2(Center.x - SizeX / 2, Center.z - SizeZ / 2);
             RightBottom = new Vector2(Center.x +SizeX / 2, Center.z + SizeZ / 2);
         }
@@ -41,15 +41,15 @@ namespace Systems
 
         public List<EcsEntity> GetUnitsInFrame(EcsFilter<UnitComponent> units)
         {
-            return GetUnitsInFrame(units.Entities.Where(u => u.IsNotNullAndAlive()));
+            return GetUnitsInFrame(units.Entities
+                .Where(u => u.IsNotNullAndAlive()));
         }
 
         public List<EcsEntity> GetUnitsInFrame(IEnumerable<EcsEntity> units)
         {
-            var selection = this;
             return units
-                .Where(u => u.Get<UnitComponent>().Tag != UnitTag.EnemyWarrior 
-                            && selection.IsWithinFrame(u.Get<UnitComponent>().Object.transform.position))
+                .Where(u => u.Get<UnitComponent>().Tag == UnitTag.Warrior
+                            && IsWithinFrame(u.Get<UnitComponent>().Object.transform.position))
                 .ToList();
         }
         

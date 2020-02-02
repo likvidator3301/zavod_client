@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Models;
+using UnityEngine;
 
 namespace Components
 {
@@ -15,6 +16,14 @@ namespace Components
             AttackDelay = attackComponent.AttackDelay;
             AttackRange = attackComponent.AttackRange;
             LastAttackTime = attackComponent.LastAttackTime;
+        }
+
+        public void InitializeComponent(ServerUnitDto unitDto)
+        {
+            AttackDamage = unitDto.AttackDamage;
+            AttackDelay = unitDto.AttackDelay;
+            AttackRange = unitDto.AttackRange;
+            LastAttackTime = unitDto.LastAttackTime;
         }
     }
 }

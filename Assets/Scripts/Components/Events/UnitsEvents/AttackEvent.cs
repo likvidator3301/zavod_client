@@ -1,10 +1,12 @@
-using Leopotam.Ecs;
+using System;
+using UnityEngine;
 
 namespace Components.UnitsEvents
 {
     public class AttackEvent
     {
-        public EcsEntity AttackingUnit { get; set; }
-        public EcsEntity Target { get; set; }
+        public Vector3 TargetPosition { get; set; }
+        public HealthComponent TargetHealthComponent { get; set; }
+        public Guid TargetGuid { get; set; }
     }
 }

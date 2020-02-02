@@ -2,7 +2,6 @@
 using System.Linq;
 using Components;
 using Leopotam.Ecs;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
@@ -18,10 +17,7 @@ namespace Systems
         private PlayerComponent player;
         private const int selectionDeletingDelayWhileSelecting = 5;
 
-        public void Run()
-        {
-            HandleSelection();
-        }
+        public void Run() => HandleSelection();
         
         private async void HandleSelection()
         {
@@ -47,8 +43,8 @@ namespace Systems
                     endPosition = hitInfoEnd.point;
                     var selectionInfo = new SelectionRectangle(startPosition, endPosition);
                     selectedUnits = selectionInfo.GetUnitsInFrame(units);
-                    var selectionFrame = selectionInfo.GetSelectionFrame();
                     selectedUnits.HighlightObjects();
+                    var selectionFrame = selectionInfo.GetSelectionFrame();
                     await selectionFrame.DestroyObjectWithDelay(selectionDeletingDelayWhileSelecting);
                 }
             }

@@ -1,16 +1,21 @@
-﻿using Leopotam.Ecs;
+﻿using System;
+using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.UI;
 using Components;
+using Models;
 using TMPro;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using System;
+using ZavodClient;
+using Object = UnityEngine.Object;
 
 namespace Systems
 {
     public class BuildCreateSystem : IEcsRunSystem
     {
+        private ServerIntegration.ServerIntegration serverIntegration;
         private readonly EcsWorld world = null;
         private readonly EcsFilter<BuildCreateEvent> buildEvents = null;
         private readonly EcsFilter<ClickEvent> clickEvents = null;
@@ -141,8 +146,10 @@ namespace Systems
 
         private void BuildSet(GameObject build, Canvas canvas)
         {
+            var buildingId = serverIntegration.client.Building.CreateBuilding(BuildingType.Hut).Result;
             var buildEntity = world.NewEntityWith(out BuildingComponent newBuild);
             newBuild.obj = build;
+            newBuild.Guid = buildingId.Id;
             newBuild.Type = build.tag;
             newBuild.InBuildCanvas = GuiHelper.InstantiateAllButtons(canvas, world);
             newBuild.InBuildCanvas.enabled = false;

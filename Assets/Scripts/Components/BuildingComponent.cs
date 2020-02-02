@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using Leopotam.Ecs;
 using UnityEngine.UI;
@@ -18,5 +17,7 @@ namespace Components
 
         [EcsIgnoreNullCheck]
         public Button[] AllButtons;
+
+        public Guid Guid;
     }
 }

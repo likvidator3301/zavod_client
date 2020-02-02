@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Models;
+using UnityEngine;
 
 namespace Components
 {
@@ -9,6 +10,11 @@ namespace Components
         public void InitializeComponent(DefenseComponent defenseComponent)
         {
             Defense = defenseComponent.Defense;
+        }
+        
+        public void InitializeComponent(ServerUnitDto unitDto)
+        {
+            Defense = unitDto.Defense;
         }
     }
 }

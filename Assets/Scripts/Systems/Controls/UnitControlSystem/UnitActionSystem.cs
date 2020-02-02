@@ -3,11 +3,13 @@ using Components;
 using Components.UnitsEvents;
 using Leopotam.Ecs;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Systems
 {
     public class UnitActionSystem : IEcsRunSystem
     {
+        private ServerIntegration.ServerIntegration serverIntegration;
         private const float inertiaEliminatorFactor = 3;
         private readonly EcsWorld ecsWorld = null;
         private readonly EcsFilter<UnitComponent> units = null;
@@ -17,8 +19,8 @@ namespace Systems
 
         public void Run()
         {
-            DestroyFollowEventsIfIsMoveToTarget();
-            DestroyFollowEventsIfCanAttackTarget();
+            UnsetFollowEventsIfIsMovingToTarget();
+            UnsetFollowEventsIfCanAttackTarget();
             CreateAttackEventsIfCanAttackAndNotMoving();
             
             MoveUnitsToTarget();
@@ -30,144 +32,142 @@ namespace Systems
         {
             var attackEventEntities = attackEvents.Entities
                 .Where(e => e.IsNotNullAndAlive()
-                            && !e.Get<AttackEvent>().AttackingUnit.Get<UnitComponent>().Animator.GetBool(
-                                UnitAnimationState.IsMoving.ToString())
-                            && e.Get<AttackEvent>().AttackingUnit.Get<HealthComponent>().CurrentHp > 0);
+                            && e.Get<DieEvent>() == null
+                            && e.Get<MoveEvent>() == null
+                            && e.Get<AttackEvent>() != null);
             foreach (var attackEventEntity in attackEventEntities)
                 Attack(attackEventEntity);
         }
 
-        private void Attack(EcsEntity attackEventEntity)
+        private void Attack(EcsEntity attackingUnitEntity)
         {
-            var attackEvent = attackEventEntity.Get<AttackEvent>();
-            var attackingUnit = attackEvent.AttackingUnit;
-            var targetUnit = attackEvent.Target;
-            var attackComponent = attackingUnit.Get<AttackComponent>();
-            var targetHealthComponent = targetUnit.Get<HealthComponent>();
-            if (!attackingUnit.IsNotNullAndAlive()
-                || !targetUnit.IsNotNullAndAlive()
-                || !AttackHelper.CanAttack(attackingUnit, targetUnit))
+            var attackEvent = attackingUnitEntity.Get<AttackEvent>();
+            var targetGuid = attackEvent.TargetGuid;
+            var attackingGuid = attackingUnitEntity.Get<UnitComponent>().Guid;
+            var targetPosition = attackEvent.TargetPosition;
+            var targetHealthComponent = attackEvent.TargetHealthComponent;
+            var attackingUnitAttackComponent = attackingUnitEntity.Get<AttackComponent>();
+            var attackingPosition = attackingUnitEntity.Get<UnitComponent>().Object.transform.position;
+            if (!AttackHelper.CanAttack(attackingUnitAttackComponent, attackingPosition, targetPosition))
             {
-                attackEventEntity.Destroy();
+                attackingUnitEntity.Unset<AttackEvent>();
                 return;
             }
             
-            UnitAnimationHelper.CreateAttackEvent(ecsWorld, attackingUnit);
+            UnitAnimationHelper.CreateAttackEvent(attackingUnitEntity);
+            serverIntegration.client.Unit.AddUnitsToAttack(attackingGuid, targetGuid);
 
-            targetHealthComponent.CurrentHp -= attackComponent.AttackDamage;
-            attackComponent.LastAttackTime = Time.time;
-            if (targetHealthComponent.CurrentHp <= 0)
-            {
-                ChangeStateHelper.CreateDieEvent(ecsWorld, targetUnit);
-                attackEventEntity.Destroy();
-            }
+            attackingUnitAttackComponent.LastAttackTime = Time.time;
         }
 
         private void MoveUnitsToTarget()
         {
             var moveEventEntities = moveEvents.Entities
-                .Where(e => e.IsNotNullAndAlive());
+                .Where(e => e.IsNotNullAndAlive() && e.Get<MoveEvent>() != null);
             foreach (var moveEventEntity in moveEventEntities)
             {
                 var moveEvent = moveEventEntity.Get<MoveEvent>();
-                UnitAnimationHelper.CreateMovingEvent(ecsWorld, moveEvent.MovingObject);
+                UnitAnimationHelper.CreateMovingEvent(moveEventEntity);
                 
-                UpdateTargetForUnit(moveEvent.MovingObject, moveEvent.NextPosition);
-                moveEventEntity.Destroy();
+                UpdateTargetForUnit(
+                    moveEventEntity.Get<UnitComponent>().Agent, 
+                    moveEventEntity.Get<MovementComponent>(),
+                    moveEvent.TargetPosition);
+                moveEventEntity.Unset<MoveEvent>();
             }
         }
         
-        private void UpdateTargetForUnit(EcsEntity unitEntity, Vector3 targetPosition)
+        private void UpdateTargetForUnit(
+            NavMeshAgent unitAgent,
+            MovementComponent unitMovementComponent,
+            Vector3 targetPosition)
         {
-            var agent = unitEntity.Get<UnitComponent>().Agent;
-            var movementComponent = unitEntity.Get<MovementComponent>();
-            agent.SetDestination(targetPosition);
-            agent.speed = movementComponent.MoveSpeed;
-            agent.acceleration = movementComponent.MoveSpeed * inertiaEliminatorFactor;
+            unitAgent.SetDestination(targetPosition);
+            unitAgent.speed = unitMovementComponent.MoveSpeed;
+            unitAgent.acceleration = unitMovementComponent.MoveSpeed * inertiaEliminatorFactor;
         }
-
-        private void DestroyFollowEventsIfIsMoveToTarget()
-        {
-            var followEventEntities = followEvents.Entities
-                .Where(e => e.IsNotNullAndAlive());
-            var movingObjects = moveEvents.Entities
-                .Where(e => e.IsNotNullAndAlive())
-                .Select(e => e.Get<MoveEvent>().MovingObject);
-            var toDestroyEvents = followEventEntities
-                .Where(e => movingObjects.Contains(e.Get<FollowEvent>().MovingObject));
-            
-            foreach (var destroyingEvent in toDestroyEvents)
-                destroyingEvent.Destroy();
-        }
-
-        private void DestroyFollowEventsIfCanAttackTarget()
-        {
-            var followEventEntites = followEvents.Entities
-                .Where(e => e.IsNotNullAndAlive());
-            foreach (var followEventEntity in followEventEntites)
-            {
-                var movingObject = followEventEntity.Get<FollowEvent>().MovingObject;
-                var target = followEventEntity.Get<FollowEvent>().Target;
-                if (!target.IsNotNullAndAlive())
-                {
-                    followEventEntity.Destroy();
-                    continue;
-                }
-                
-                if (target.Get<UnitComponent>().Tag == UnitTag.EnemyWarrior
-                    && AttackHelper.CanAttack(movingObject, target))
-                {
-                    var movingObjectAgent = movingObject.Get<UnitComponent>().Agent;
-                    movingObjectAgent.SetDestination(movingObject.Get<UnitComponent>().Object.transform.position);
-                    followEventEntity.Destroy();
-                }
-            }
-        }
-
+        
         private void FollowUnitsToTarget()
         {
             var followEventEntities = followEvents.Entities
-                .Where(e => e.IsNotNullAndAlive());
+                .Where(e => e.IsNotNullAndAlive() && e.Get<FollowEvent>() != null);
             foreach (var followEventEntity in followEventEntities)
             {
                 var followEvent = followEventEntity.Get<FollowEvent>();
-                var targetComponent = followEvent.Target.Get<UnitComponent>();
-                if (targetComponent == null || targetComponent.Object == null)
+                var targetUnitComponent = followEvent.TargetUnitComponent;
+                if (targetUnitComponent == null || targetUnitComponent.Object == null)
                 {
-                    followEventEntity.Destroy();
+                    followEventEntity.Unset<FollowEvent>();
                     continue;
                 }
 
-                UnitAnimationHelper.CreateMovingEvent(ecsWorld, followEvent.MovingObject);
+                UnitAnimationHelper.CreateMovingEvent(followEventEntity);
                 
-                var targetObjectPosition = targetComponent.Object.transform.position;
-                UpdateTargetForUnit(followEvent.MovingObject, targetObjectPosition);
+                var targetPosition = targetUnitComponent.Object.transform.position;
+                var unitAgent = followEventEntity.Get<UnitComponent>().Agent;
+                var unitMovementComponent = followEventEntity.Get<MovementComponent>();
+                UpdateTargetForUnit(unitAgent, unitMovementComponent, targetPosition);
             }
         }
 
+        private void UnsetFollowEventsIfIsMovingToTarget()
+        {
+            var movingFollowEventEntities = followEvents.Entities
+                .Where(e => e.IsNotNullAndAlive()
+                            && e.Get<MoveEvent>() != null);
+            foreach (var followEventEntity in movingFollowEventEntities)
+                followEventEntity.Unset<FollowEvent>();
+        }
+
+        private void UnsetFollowEventsIfCanAttackTarget()
+        {
+            var followEventEntities = followEvents.Entities
+                .Where(e => e.IsNotNullAndAlive() && e.Get<AttackComponent>() != null);
+            foreach (var followEventEntity in followEventEntities)
+            {
+                var followEvent = followEventEntity.Get<FollowEvent>();
+                if (followEvent == null || followEvent.TargetUnitComponent == null)
+                {
+                    followEventEntity.Unset<FollowEvent>();
+                    continue;
+                }
+
+                var targetUnitComponent = followEvent.TargetUnitComponent;
+                var unitAttackComponent = followEventEntity.Get<AttackComponent>();
+                var unitPosition = followEventEntity.Get<UnitComponent>().Object.transform.position;
+                var targetPosition = targetUnitComponent.Object.transform.position;
+                if (targetUnitComponent.Tag == UnitTag.EnemyWarrior
+                    && AttackHelper.CanAttack(unitAttackComponent, unitPosition, targetPosition)
+                    || targetUnitComponent.Tag == UnitTag.Warrior)
+                {
+                    var movingObjectAgent = followEventEntity.Get<UnitComponent>().Agent;
+                    movingObjectAgent.SetDestination(unitPosition);
+                    followEventEntity.Unset<FollowEvent>();
+                }
+            }
+        }
+        
         private void CreateAttackEventsIfCanAttackAndNotMoving()
         {
             var allyUnits = units.Entities
-                .Where(u => u.IsNotNullAndAlive() && u.Get<UnitComponent>().Tag != UnitTag.EnemyWarrior);
+                .Where(u => u.IsNotNullAndAlive() && u.Get<UnitComponent>().Tag == UnitTag.Warrior);
             var enemyUnits = units.Entities
                 .Where(u => u.IsNotNullAndAlive() && u.Get<UnitComponent>().Tag == UnitTag.EnemyWarrior);
             
-            foreach (var attackingUnitEntity in allyUnits)
+            foreach (var attackingEntity in allyUnits)
             {
-                var targetUnitEntity = enemyUnits
-                    .FirstOrDefault(enemy => CanAttackAndNotInAttackEvents(attackingUnitEntity, enemy));
-                if (targetUnitEntity != default)
-                    AttackHelper.CreateAttackEvent(ecsWorld, attackingUnitEntity, targetUnitEntity);
+                var targetEntity = enemyUnits
+                    .FirstOrDefault(enemyEntity => CanAttackAndNotAttackingNow(attackingEntity, enemyEntity));
+                if (targetEntity != default)
+                    AttackHelper.CreateAttackEvent(attackingEntity, targetEntity);
             }
         }
 
-        private bool CanAttackAndNotInAttackEvents(EcsEntity allyUnit, EcsEntity enemyUnit)
+        private bool CanAttackAndNotAttackingNow(EcsEntity allyUnit, EcsEntity enemyUnit)
         {
-            var attackEvent = attackEvents.Entities
-                .FirstOrDefault(e => e.IsNotNullAndAlive()
-                                     && e.Get<AttackEvent>().AttackingUnit == allyUnit);
+            var haveAttackEvent = allyUnit.Get<AttackEvent>() != null;
             
-            return attackEvent == default && AttackHelper.CanAttack(allyUnit, enemyUnit);
+            return !haveAttackEvent && AttackHelper.CanAttack(allyUnit, enemyUnit);
         }
     }
 }

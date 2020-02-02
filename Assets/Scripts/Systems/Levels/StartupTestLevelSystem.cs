@@ -1,12 +1,21 @@
-﻿using Components;
-using Leopotam.Ecs;
-using UnityEditor;
+﻿using System;
 using UnityEngine;
 
 namespace Systems
 {
+    using System.Threading.Tasks;
+
+    using Components;
+
+    using Leopotam.Ecs;
+
+    using Models;
+
+    using Vector3 = UnityEngine.Vector3;
+
     public class StartupTestLevelSystem : IEcsInitSystem
     {
+        private ServerIntegration.ServerIntegration serverIntegration;
         private const float minHeight = 2.6f;
         private EcsWorld ecsWorld;
         private EcsGrowList<UnitComponent> units;
@@ -18,16 +27,21 @@ namespace Systems
             InitializeLevel();
         }
 
-        private void InitializeLevel()
+        private async Task InitializeLevel()
         {
-            var allyUnitEntity = ecsWorld.NewEntityWith<UnitComponent>(out var allyUnitComponent);
-            var enemyUnitEntity = ecsWorld.NewEntityWith<UnitComponent>(out var enemyUnitComponent);
-            var allyObjectUnit = Object.Instantiate(UnitsPrefabsHolder.WarriorPrefab, allyUnitPosition, Quaternion.identity);
-            var enemyObjectUnit = Object.Instantiate(UnitsPrefabsHolder.EnemyWarriorPrefab, enemyUnitPosition, Quaternion.identity);
-            allyUnitComponent.SetFields(allyObjectUnit, UnitTag.Warrior);
-            allyUnitEntity.AddWarriorComponents();
-            enemyUnitComponent.SetFields(enemyObjectUnit, UnitTag.EnemyWarrior);
-            enemyUnitEntity.AddWarriorComponents();
+            var allyUnitDto = new CreateUnitDto();
+            var enemyUnitDto = new CreateUnitDto();
+            enemyUnitDto.UnitType = UnitType.Chelovechik;
+            allyUnitDto.Position = new Models.Vector3(){X=allyUnitPosition.x, Y=allyUnitPosition.y, Z=allyUnitPosition.z};
+            enemyUnitDto.Position = new Models.Vector3(){X=enemyUnitPosition.x, Y=enemyUnitPosition.y, Z=enemyUnitPosition.z};
+            
+            var allyUnit = await serverIntegration.client.Unit.CreateUnit(allyUnitDto);
+            var enemyUnit = await serverIntegration.client.Unit.CreateUnit(enemyUnitDto);
+            
+            UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityOnPositionFromUnitDbo(
+                ecsWorld, allyUnitPosition, allyUnit);
+            UnitsPrefabsHolder.EnemyWarriorPrefab.AddNewUnitEntityOnPositionFromUnitDbo(
+                ecsWorld, enemyUnitPosition, enemyUnit);
         }
     }
 }

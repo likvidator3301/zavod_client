@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Components;
 using Leopotam.Ecs;
+using Models;
 
 namespace Systems
 {
@@ -34,6 +35,18 @@ namespace Systems
             movementComponent.InitializeComponent(GetComponentFor<MovementComponent>(
                 UnitTag.Warrior, UnitComponentTag.MovementComponent));
         }
+        
+        public static void AddComponents(this EcsEntity entity, ServerUnitDto unitDto)
+        {
+            var attackComponent = entity.Set<AttackComponent>();
+            var defenseComponent = entity.Set<DefenseComponent>();
+            var healthComponent = entity.Set<HealthComponent>();
+            var movementComponent = entity.Set<MovementComponent>();
+            attackComponent.InitializeComponent(unitDto);
+            defenseComponent.InitializeComponent(unitDto);
+            healthComponent.InitializeComponent(unitDto);
+            movementComponent.InitializeComponent(unitDto);
+        }
 
         private static T GetComponentFor<T>(UnitTag unit, UnitComponentTag unitComponent)
         {
@@ -44,7 +57,7 @@ namespace Systems
         public static void HighlightObjects(this IEnumerable<EcsEntity> unitsEntities)
         {
             unitsEntities
-                .Where(u => !u.IsNull() && u.IsAlive())
+                .Where(u => u.IsNotNullAndAlive())
                 .Select(u => u.Get<UnitComponent>().Object)
                 .HighlightObjects();
         }

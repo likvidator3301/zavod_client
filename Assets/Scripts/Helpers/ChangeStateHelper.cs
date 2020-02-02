@@ -5,10 +5,6 @@ namespace Systems
 {
     public class ChangeStateHelper
     {
-        public static void CreateDieEvent(EcsWorld ecsWorld, EcsEntity unitEntity)
-        {
-            ecsWorld.NewEntityWith<DieEvent>(out var deadEvent);
-            deadEvent.DeadUnit = unitEntity;
-        }
+        public static void CreateDieEvent(EcsEntity unitEntity) => unitEntity.Set<DieEvent>();
     }
 }
