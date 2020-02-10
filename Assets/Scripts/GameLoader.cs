@@ -4,6 +4,7 @@ using Leopotam.Ecs;
 using Systems;
 using System;
 using Components;
+using Models;
 
 public class GameLoader : MonoBehaviour
 {
@@ -23,25 +24,36 @@ public class GameLoader : MonoBehaviour
         Leopotam.Ecs.UnityIntegration.EcsWorldObserver.Create(world);
 #endif  
 
-        systems = new EcsSystems(world)
-            .Add(new LoadSystem())
-            .Add(new CameraSystem())
-            .Add(new InputSystem())
-            .Add(new CheckClickOnBuildsSystem())
+        var controlsSystems = new EcsSystems(world)
             .Add(new BuildCreateSystem())
-            .Add(new ButtonsClickSystem())
-            .Add(new ResoursesDisplaySystem())
-            .Add(new ResourcesCollectorSystem())
+            .Add(new InputSystem())
+            .Add(new CameraSystem())
+            .Add(new UnitActionHandler())
+            .Add(new SelectionHandler())
+            .Add(new CheckClickOnBuildsSystem())
+            .Add(new ButtonsClickSystem());
+        var levelSystems = new EcsSystems(world)
+            .Add(new StartupTestLevelSystem())
+            .Add(new LoadSystem());
+        var unitSystems = new EcsSystems(world)
             .Add(new UnitStateChangeSystem())
             .Add(new UnitActionSystem())
             .Add(new UnitCreateSystem())
             .Add(new UnitAnimationSystem())
-            .Add(new UnitActionHandler())
-            .Add(new SelectionHandler())
-            .Add(new UnitLayoutUISystem())
-            .Add(new UnitHealthSystem())
-            .Add(new ClientSystem())
-            .Add(new GuiSystem())
+            .Add(new UnitHealthSystem());
+        var serverIntegrationSystems = new EcsSystems(world)
+            .Add(new ClientSystem());
+        var uiSystems = new EcsSystems(world)
+            .Add(new ResoursesDisplaySystem())
+            .Add(new ResourcesCollectorSystem())
+            .Add(new UnitLayoutUISystem());
+
+        systems = new EcsSystems(world)
+            .Add(controlsSystems)
+            .Add(levelSystems)
+            .Add(unitSystems)
+            .Add(serverIntegrationSystems)
+            .Add(uiSystems)
             .Inject(playerComponent)
             .Inject(gameDefinitions)
             .Inject(serverIntegration)

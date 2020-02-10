@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace ServerIntegration
 {
@@ -23,7 +24,6 @@ namespace ServerIntegration
             {
                 info = task.Result;
             }
-
             return info;
         }
     }
