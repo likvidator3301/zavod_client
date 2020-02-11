@@ -11,9 +11,9 @@ namespace Systems
     {
         private readonly EcsFilter<PlayerResourcesComponent> resourses = null;
         private static readonly string cashText = "Нал: ";
-        private static readonly string beerText = "Пивас: ";
+        private static readonly string beerText = "Семки: ";
         private static readonly string cash = "Cash";
-        private static readonly string beer = "Beer";
+        private static readonly string seeds = "Seeds";
         
         public void Run()
         {
@@ -28,7 +28,7 @@ namespace Systems
                 foreach (var child in resComponent.ResoursesUiDisplay.GetComponentsInChildren<TextMeshProUGUI>())
                 {
                     UpdateUnityText(child, formattedCash, cash);
-                    UpdateUnityText(child, formattedBeer, beer);
+                    UpdateUnityText(child, formattedBeer, seeds);
                 }
             }
         }
