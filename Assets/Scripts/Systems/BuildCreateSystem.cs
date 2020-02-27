@@ -1,14 +1,13 @@
 ﻿using System;
 using Leopotam.Ecs;
 using UnityEngine;
-using UnityEngine.UI;
 using Components;
 using Models;
 using TMPro;
-using System.Collections.Generic;
 using UnityEngine.EventSystems;
-using System;
-using ZavodClient;
+using System.Threading.Tasks;
+using Components.Tags.Buildings;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace Systems
@@ -114,7 +113,7 @@ namespace Systems
             var isBuildMove = false;
             ray = cameras.Get1[0].Camera.ScreenPointToRay(Input.mousePosition);
 
-            foreach (var terrain in UnityEngine.Object.FindObjectsOfType<Terrain>())
+            foreach (var terrain in Object.FindObjectsOfType<Terrain>())
             {
                 isBuildMove = isBuildMove || terrain.GetComponent<Collider>().Raycast(ray, out hitInfo, 400);
                 if (isBuildMove)
@@ -135,31 +134,28 @@ namespace Systems
         {
             if (currentBuilding == null)
             {
-                currentBuilding = UnityEngine.Object.Instantiate(build);
+                currentBuilding = Object.Instantiate(build);
             }
             else if (!currentBuilding.tag.Equals(build.tag))
             {
-                UnityEngine.Object.Destroy(currentBuilding);
-                currentBuilding = UnityEngine.Object.Instantiate(build);
+                Object.Destroy(currentBuilding);
+                currentBuilding = Object.Instantiate(build);
             }
         }
-
-        private void BuildSet(GameObject build, Canvas canvas)
+        
+        
+        //TODO:
+        //Change contract on "Create Building" to send "CreateBuildingDto"
+        private async Task BuildSet(GameObject build, Canvas canvas)
         {
-            var buildingId = serverIntegration.client.Building.CreateBuilding(BuildingType.Hut).Result;
-            var buildEntity = world.NewEntityWith(out BuildingComponent newBuild);
-            newBuild.obj = build;
-            newBuild.Guid = buildingId.Id;
-            newBuild.Type = build.tag;
-            newBuild.InBuildCanvas = GuiHelper.InstantiateAllButtons(canvas, world);
-            newBuild.InBuildCanvas.enabled = false;
-            newBuild.AllButtons = newBuild.InBuildCanvas.GetComponentsInChildren<Button>();
-
-            if (build.tag.Equals("Kiosk"))
-            {
-                var kioskKomponent = buildEntity.Set<KioskComponent>();
-                kioskKomponent.LastBeerGeneration = DateTime.Now;
-            }
+            //var newBuilding = new CreateBuildingDto();
+            var buildingDbo = await serverIntegration.client.Building.CreateBuilding(BuildingType.Hut);
+            build.AddNewBuildingEntityFromBuildingDbo(
+                world,
+                canvas,
+                buildingDbo,
+                build.tag.Equals("Kiosk") ? BuildingTag.Kiosk : BuildingTag.Barrack);
+            // buildingDbo.Position = 
         }
     }
 }

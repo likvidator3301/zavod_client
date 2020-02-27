@@ -1,4 +1,5 @@
 ﻿using System;
+using Components.Tags.Buildings;
 using UnityEngine;
 using Leopotam.Ecs;
 using UnityEngine.UI;
@@ -7,7 +8,7 @@ namespace Components
 {
     public class BuildingComponent
     {
-        public string Type;
+        public BuildingTag Tag;
 
         [EcsIgnoreNullCheck]
         public GameObject obj;

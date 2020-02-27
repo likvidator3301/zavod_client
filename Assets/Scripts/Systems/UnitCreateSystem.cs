@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Leopotam.Ecs;
 using Components;
 using Models;
@@ -15,23 +16,23 @@ namespace Systems
         private readonly GameDefinitions gameDefinitions = null;
         private readonly EcsWorld world = null;
 
-        public void Run()
+        public void Run() => CreateUnits();
+
+        private async Task CreateUnits()
         {
             for (var i = 0; i < unitEvents.GetEntitiesCount(); i++) 
             {
                 var newPosition = new Vector3(unitEvents.Get1[i].Position.x + 5, 
-                                              unitEvents.Get1[i].Position.y, 
-                                              unitEvents.Get1[i].Position.z);
+                    unitEvents.Get1[i].Position.y, 
+                    unitEvents.Get1[i].Position.z);
                 var newUnitDto = new CreateUnitDto();
                 newUnitDto.Position = newPosition;
                 newUnitDto.UnitType = unitEvents.Get1[i].UnitTag == UnitTag.Warrior
                     ? UnitType.Warrior
                     : UnitType.Chelovechik;
                 
-                var newUnit = serverIntegration.client.Unit.CreateUnit(newUnitDto).Result;
-                var unityPosition = new UnityEngine.Vector3(newPosition.X, newPosition.Y, newPosition.Z);
-                UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityOnPositionFromUnitDbo(
-                    world, unityPosition, newUnitDto);
+                var newUnit = await serverIntegration.client.Unit.CreateUnit(newUnitDto);
+                UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityFromUnitDbo(world, newUnit);
                 unitEvents.Entities[i].Destroy();
             }
         }

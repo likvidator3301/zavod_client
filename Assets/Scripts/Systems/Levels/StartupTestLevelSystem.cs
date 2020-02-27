@@ -38,10 +38,10 @@ namespace Systems
             var allyUnit = await serverIntegration.client.Unit.CreateUnit(allyUnitDto);
             var enemyUnit = await serverIntegration.client.Unit.CreateUnit(enemyUnitDto);
             
-            UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityOnPositionFromUnitDbo(
-                ecsWorld, allyUnitPosition, allyUnit);
-            UnitsPrefabsHolder.EnemyWarriorPrefab.AddNewUnitEntityOnPositionFromUnitDbo(
-                ecsWorld, enemyUnitPosition, enemyUnit);
+            UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityFromUnitDbo(
+                ecsWorld, allyUnit);
+            UnitsPrefabsHolder.EnemyWarriorPrefab.AddNewUnitEntityFromUnitDbo(
+                ecsWorld, enemyUnit);
         }
     }
 }

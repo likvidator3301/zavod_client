@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Components;
+using Components.Tags.Buildings;
 using Leopotam.Ecs;
 using Models;
 
@@ -46,6 +48,16 @@ namespace Systems
             defenseComponent.InitializeComponent(unitDto);
             healthComponent.InitializeComponent(unitDto);
             movementComponent.InitializeComponent(unitDto);
+        }
+
+        public static void AddComponents(this EcsEntity entity, ServerBuildingDto buildingDto)
+        {
+            var buildingTag = entity.Get<BuildingComponent>().Tag;
+            if (buildingTag == BuildingTag.Kiosk)
+            {
+                var kioskComponent = entity.Set<KioskComponent>();
+                kioskComponent.LastBeerGeneration = DateTime.Now;
+            }
         }
 
         private static T GetComponentFor<T>(UnitTag unit, UnitComponentTag unitComponent)
