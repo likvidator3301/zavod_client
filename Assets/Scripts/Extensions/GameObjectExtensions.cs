@@ -27,15 +27,14 @@ namespace Systems
         }
 
         public static void AddNewBuildingEntityFromBuildingDbo(
-            this GameObject prefab,
+            this GameObject building,
             EcsWorld ecsWorld,
             Canvas canvas,
             ServerBuildingDto buildingDto,
             BuildingTag buildingType)
         {
-            var newBuildingObject = InstantiateNewObject(prefab, buildingDto.Position, Quaternion.identity);
             var newEntity = ecsWorld.NewEntityWith<BuildingComponent>(out var buildingComponent);
-            buildingComponent.SetFields(newBuildingObject, buildingType, buildingDto.Id, canvas, ecsWorld);
+            buildingComponent.SetFields(building, buildingType, buildingDto.Id, GuiHelper.InstantiateAllButtons(canvas, ecsWorld), ecsWorld);
             newEntity.AddComponents(buildingDto);
         }
 
