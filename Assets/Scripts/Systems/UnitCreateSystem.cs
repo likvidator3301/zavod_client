@@ -25,12 +25,14 @@ namespace Systems
                 var newPosition = new Vector3(unitEvents.Get1[i].Position.x + 5, 
                     unitEvents.Get1[i].Position.y, 
                     unitEvents.Get1[i].Position.z);
-                var newUnitDto = new CreateUnitDto();
-                newUnitDto.Position = newPosition;
-                newUnitDto.UnitType = unitEvents.Get1[i].UnitTag == UnitTag.Warrior
-                    ? UnitType.Warrior
-                    : UnitType.Chelovechik;
-                
+                var newUnitDto = new CreateUnitDto
+                {
+                    Position = newPosition,
+                    UnitType = unitEvents.Get1[i].UnitTag == UnitTag.Warrior
+                        ? UnitType.Warrior
+                        : UnitType.Chelovechik
+                };
+
                 var newUnit = await serverIntegration.client.Unit.CreateUnit(newUnitDto);
                 UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityFromUnitDbo(world, newUnit);
                 unitEvents.Entities[i].Destroy();

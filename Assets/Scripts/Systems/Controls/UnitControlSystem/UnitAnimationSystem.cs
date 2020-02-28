@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Linq;
 using Components;
 using Components.UnitsEvents;
@@ -11,15 +12,17 @@ namespace Systems
         private ServerIntegration.ServerIntegration serverIntegration;
         private readonly EcsFilter<UnitAnimationEvent> animationEvents = null;
         private readonly EcsFilter<UnitComponent> units = null;
-        private const float stopMovingAnimationDistance = 1.5f;
+        private const float stopMovingAnimationDistance = 0.1f;
+        private const int sendMovingUnitsDelay = 100;
+        private Stopwatch lastSendMovingUnitsTime = new Stopwatch();
 
         public void Run()
         {
             RunAnimations();
-            StopUnitIfOnTargetPosition();
-            StopAttackIfNotAttacking();
+            StopAttackingUnitsWithoutTargets();
+            StopUnitsOnTargetPosition();
             
-            AddMoveUnitsToClient();
+            AddMovingUnitsToClient();
         }
 
         private void RunAnimations()
@@ -39,11 +42,11 @@ namespace Systems
             }
         }
 
-        private void StopUnitIfOnTargetPosition()
+        private void StopUnitsOnTargetPosition()
         {
-            var unitEntities = units.Entities
+            var movingUnits = units.Entities
                 .Where(u => u.IsNotNullAndAlive());
-            foreach (var unitEntity in unitEntities)
+            foreach (var unitEntity in movingUnits)
             {
                 var unitComponent = unitEntity.Get<UnitComponent>();
                 var currentPosition = unitComponent.Object.transform.position;
@@ -52,24 +55,29 @@ namespace Systems
             }
         }
         
-        private void StopAttackIfNotAttacking()
+        private void StopAttackingUnitsWithoutTargets()
         {
             var unitEntities = units.Entities
-                .Where(u => u.IsNotNullAndAlive());
+                .Where(u => u.IsNotNullAndAlive()
+                        && (u.Get<AttackEvent>() == null 
+                        || u.Get<AttackEvent>().TargetHealthComponent == null 
+                        || u.Get<AttackEvent>().TargetHealthComponent.CurrentHp <= 0));
             foreach (var unitEntity in unitEntities)
             {
-                var isAttacking = unitEntity.Get<AttackEvent>() != null;
-                
-                if (!isAttacking)
+                if (unitEntity.Get<UnitAnimationComponent>() == null || unitEntity.Get<UnitAnimationComponent>().IsAttacking)
                     UnitAnimationHelper.CreateStopAttackingEvent(unitEntity);
             }
         }
         
-        //TODO: Try to explain why u.Get<UnitAnimationComponent> can be null!
-        private void AddMoveUnitsToClient()
+        private void AddMovingUnitsToClient()
         {
+            if (lastSendMovingUnitsTime.ElapsedMilliseconds <= sendMovingUnitsDelay)
+                return;
+            lastSendMovingUnitsTime.Restart();
+            
             var movingUnitsEntities = units.Entities
-                .Where(u => u.IsNotNullAndAlive() && u.Get<UnitAnimationComponent>() != null
+                .Where(u => u.IsNotNullAndAlive()
+                            && u.Get<UnitAnimationComponent>() != null
                             && u.Get<UnitAnimationComponent>().IsMoving);
             foreach (var movingUnit in movingUnitsEntities)
             {

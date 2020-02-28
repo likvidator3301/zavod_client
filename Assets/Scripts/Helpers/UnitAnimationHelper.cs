@@ -7,7 +7,7 @@ namespace Systems
 {
     public class UnitAnimationHelper
     {
-        public static void CreateMovingEvent(EcsEntity unitEntity)
+        public static void CreateMoveEvent(EcsEntity unitEntity)
         {
             var unitHealth = unitEntity.Get<HealthComponent>().CurrentHp;
             var movingAnimationEvent = GetEventWithUnit(unitEntity);
@@ -41,8 +41,10 @@ namespace Systems
         {
             var unitHealth = unitEntity.Get<UnitComponent>().Animator.GetFloat(
                 UnitAnimationState.CurrentHp.ToString());
+            var previousMovingState = unitEntity.Get<UnitComponent>().Animator.GetBool(
+                UnitAnimationState.IsMoving.ToString());
             var attackCancelEvent = GetEventWithUnit(unitEntity);
-            attackCancelEvent.AnimationComponent.SetFields(false, false, unitHealth);
+            attackCancelEvent.AnimationComponent.SetFields(false, previousMovingState, unitHealth);
         }
         
         public static void SetFieldForAnimatorFromComponent(Animator animator, UnitAnimationComponent animationComponent)

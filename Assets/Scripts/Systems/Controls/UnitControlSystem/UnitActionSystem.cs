@@ -34,7 +34,9 @@ namespace Systems
                 .Where(e => e.IsNotNullAndAlive()
                             && e.Get<DieEvent>() == null
                             && e.Get<MoveEvent>() == null
-                            && e.Get<AttackEvent>() != null);
+                            && e.Get<AttackEvent>() != null
+                            && (e.Get<UnitAnimationComponent>() == null
+                                || !e.Get<UnitAnimationComponent>().IsMoving));
             foreach (var attackEventEntity in attackEventEntities)
                 Attack(attackEventEntity);
         }
@@ -45,7 +47,6 @@ namespace Systems
             var targetGuid = attackEvent.TargetGuid;
             var attackingGuid = attackingUnitEntity.Get<UnitComponent>().Guid;
             var targetPosition = attackEvent.TargetPosition;
-            var targetHealthComponent = attackEvent.TargetHealthComponent;
             var attackingUnitAttackComponent = attackingUnitEntity.Get<AttackComponent>();
             var attackingPosition = attackingUnitEntity.Get<UnitComponent>().Object.transform.position;
             if (!AttackHelper.CanAttack(attackingUnitAttackComponent, attackingPosition, targetPosition))
@@ -67,7 +68,7 @@ namespace Systems
             foreach (var moveEventEntity in moveEventEntities)
             {
                 var moveEvent = moveEventEntity.Get<MoveEvent>();
-                UnitAnimationHelper.CreateMovingEvent(moveEventEntity);
+                UnitAnimationHelper.CreateMoveEvent(moveEventEntity);
                 
                 UpdateTargetForUnit(
                     moveEventEntity.Get<UnitComponent>().Agent, 
@@ -101,7 +102,7 @@ namespace Systems
                     continue;
                 }
 
-                UnitAnimationHelper.CreateMovingEvent(followEventEntity);
+                UnitAnimationHelper.CreateMoveEvent(followEventEntity);
                 
                 var targetPosition = targetUnitComponent.Object.transform.position;
                 var unitAgent = followEventEntity.Get<UnitComponent>().Agent;
@@ -126,12 +127,12 @@ namespace Systems
             foreach (var followEventEntity in followEventEntities)
             {
                 var followEvent = followEventEntity.Get<FollowEvent>();
-                if (followEvent == null || followEvent.TargetUnitComponent == null)
+                if (followEvent?.TargetUnitComponent == null)
                 {
                     followEventEntity.Unset<FollowEvent>();
                     continue;
                 }
-
+        
                 var targetUnitComponent = followEvent.TargetUnitComponent;
                 var unitAttackComponent = followEventEntity.Get<AttackComponent>();
                 var unitPosition = followEventEntity.Get<UnitComponent>().Object.transform.position;
@@ -150,7 +151,10 @@ namespace Systems
         private void CreateAttackEventsIfCanAttackAndNotMoving()
         {
             var allyUnits = units.Entities
-                .Where(u => u.IsNotNullAndAlive() && u.Get<UnitComponent>().Tag == UnitTag.Warrior);
+                .Where(u => u.IsNotNullAndAlive() 
+                            && u.Get<UnitComponent>().Tag == UnitTag.Warrior
+                            && (u.Get<UnitAnimationComponent>() == null
+                            || !u.Get<UnitAnimationComponent>().IsMoving));
             var enemyUnits = units.Entities
                 .Where(u => u.IsNotNullAndAlive() && u.Get<UnitComponent>().Tag == UnitTag.EnemyWarrior);
             

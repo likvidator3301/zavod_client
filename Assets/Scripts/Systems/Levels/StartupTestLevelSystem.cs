@@ -29,9 +29,8 @@ namespace Systems
 
         private async Task InitializeLevel()
         {
-            var allyUnitDto = new CreateUnitDto();
-            var enemyUnitDto = new CreateUnitDto();
-            enemyUnitDto.UnitType = UnitType.Chelovechik;
+            var allyUnitDto = new CreateUnitDto {UnitType = UnitType.Warrior};
+            var enemyUnitDto = new CreateUnitDto {UnitType = UnitType.Chelovechik};
             allyUnitDto.Position = new Models.Vector3(){X=allyUnitPosition.x, Y=allyUnitPosition.y, Z=allyUnitPosition.z};
             enemyUnitDto.Position = new Models.Vector3(){X=enemyUnitPosition.x, Y=enemyUnitPosition.y, Z=enemyUnitPosition.z};
             

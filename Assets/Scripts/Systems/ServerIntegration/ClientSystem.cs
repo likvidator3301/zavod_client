@@ -1,12 +1,8 @@
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Components;
 using Leopotam.Ecs;
-using Models;
-using Debug = UnityEngine.Debug;
-using Vector3 = UnityEngine.Vector3;
 
 namespace Systems
 {
@@ -16,7 +12,7 @@ namespace Systems
         private EcsFilter<UnitComponent> units;
         private Stopwatch lastSendAttackUnitsTime = new Stopwatch();
         private Stopwatch lastSendMoveUnitsTime = new Stopwatch();
-        private const int sendDelay = 500;
+        private const int sendDelay = 1000;
 
         public void Init()
         {
@@ -29,6 +25,7 @@ namespace Systems
             if (lastSendAttackUnitsTime.ElapsedMilliseconds > sendDelay)
             {
                 SendAttacks();
+                lastSendAttackUnitsTime.Restart();
             }
 
             if (lastSendMoveUnitsTime.ElapsedMilliseconds > sendDelay)

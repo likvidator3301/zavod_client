@@ -146,14 +146,15 @@ namespace Systems
         
         //TODO:
         //Change contract on "Create Building" to send "CreateBuildingDto"
+        //Can't debug after creating buildingDto
         private async Task BuildSet(GameObject build, Canvas canvas)
         {
             //var newBuilding = new CreateBuildingDto();
-            var buildingDbo = await serverIntegration.client.Building.CreateBuilding(BuildingType.Hut);
+            var buildingDto = await serverIntegration.client.Building.CreateBuilding(BuildingType.Hut);
             build.AddNewBuildingEntityFromBuildingDbo(
                 world,
                 canvas,
-                buildingDbo,
+                buildingDto,
                 build.tag.Equals("Kiosk") ? BuildingTag.Kiosk : BuildingTag.Barrack);
             // buildingDbo.Position = 
         }
