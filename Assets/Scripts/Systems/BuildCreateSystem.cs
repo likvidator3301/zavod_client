@@ -1,5 +1,4 @@
-﻿using System;
-using Leopotam.Ecs;
+﻿using Leopotam.Ecs;
 using UnityEngine;
 using Components;
 using Models;
@@ -7,7 +6,6 @@ using TMPro;
 using UnityEngine.EventSystems;
 using System.Threading.Tasks;
 using Components.Tags.Buildings;
-using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace Systems

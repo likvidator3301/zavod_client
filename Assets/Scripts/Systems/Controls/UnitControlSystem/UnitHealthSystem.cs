@@ -29,16 +29,20 @@ namespace Systems
             var unitObject = unitEntity.Get<UnitComponent>().Object;
             var unitHealthComponent = unitEntity.Get<HealthComponent>();
             var healthBar = unitObject
-                .GetComponentsInChildren<SpriteRenderer>()
-                .FirstOrDefault(comp => comp.CompareTag("HealthBar"));
-            var healthBarDrawer = healthBar.GetComponents<GameObject>()
-                .FirstOrDefault(comp => comp.CompareTag("HealthBarDrawer"));
-            
-            var newHealthBarScales = healthBarDrawer.transform.localScale;
-            newHealthBarScales.x *= (unitHealthComponent.CurrentHp - 5) / unitHealthComponent.MaxHp;
-            newHealthBarScales.x = Math.Max(0, newHealthBarScales.x);
-            
-            healthBarDrawer.transform.localScale = newHealthBarScales;
+                .GetComponentsInChildren<GameObject>();
+            if (healthBar == null)
+                return;
+            // var healthBarDrawer = healthBar
+            //     .GetComponentsInChildren<GameObject>()
+            //     .FirstOrDefault(component => component.CompareTag("HealthBarDrawer"));
+            // if (healthBarDrawer == null)
+            //     return;
+            //
+            // var newHealthBarScales = healthBar.transform.localScale;
+            // newHealthBarScales.x *= (unitHealthComponent.CurrentHp - 5) / unitHealthComponent.MaxHp;
+            // newHealthBarScales.x = Math.Max(0, newHealthBarScales.x);
+            //
+            // healthBar.transform.localScale = newHealthBarScales;
         }
     }
 }

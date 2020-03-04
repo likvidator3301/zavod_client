@@ -6,7 +6,6 @@ using Components.Tags.Buildings;
 using Leopotam.Ecs;
 using Models;
 using UnityEngine;
-using UnityEngine.UI;
 using Object = UnityEngine.Object;
 using Vector3 = UnityEngine.Vector3;
 
