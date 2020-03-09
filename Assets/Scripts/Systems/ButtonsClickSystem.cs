@@ -34,7 +34,7 @@ namespace Systems
             switch (btn.buttonName)
             {
                 case "CreateBarraks":
-                    OnBarrakCreateClick();
+                    OnGarageCreateClick();
                     break;
                 case "Warrior":
                     CreateWarrior(btn);
@@ -52,16 +52,14 @@ namespace Systems
 
         private void CreateKiosk()
         {
-            world.NewEntityWith(out BuildCreateEvent buildEvent);
-            buildEvent.Type = "Kiosk";
-            buildEvent.buildingCanvasAsset = gameDefinitions.GuiDefinitions.DefaultInBuildingMenu;
+            //world.NewEntityWith(out BuildingCreateComponent buildEvent);
+            //buildEvent.Type = Components.Tags.Buildings.BuildingTag.Kiosk;
         }
 
-        private void OnBarrakCreateClick()
+        private void OnGarageCreateClick()
         {
-            world.NewEntityWith(out BuildCreateEvent buildEvent);
-            buildEvent.Type = "barraks";
-            buildEvent.buildingCanvasAsset = gameDefinitions.GuiDefinitions.InBuildingMenu;
+            world.NewEntityWith(out BuildingCreateComponent buildEvent);
+            buildEvent.Type = Components.Tags.Buildings.BuildingTag.Garage;
         }
 
         private void CreateWarrior(ButtonComponent button)

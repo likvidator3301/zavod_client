@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Components;
 using Leopotam.Ecs;
 using UnityEngine;
+using Components.Tags.Buildings;
 
 namespace Systems
 {
@@ -10,12 +12,35 @@ namespace Systems
         private readonly EcsWorld world = null;
         private readonly GameDefinitions definitions = null;
 
+        private EcsEntity resoursesEntity;
+
         public void Init()
         {
             LoadMainCamera();
-            LoadBuildingAssets();
             LoadUiAssets();
             LoadUi();
+            LoadBuildingsSwitches();
+            InitConsole();
+        }
+
+        private void InitConsole()
+        {
+            world.NewEntityWith(out ConsoleMessagesComponent mes);
+            mes.Messages = new List<Message>();
+        }
+
+        private void LoadBuildingsSwitches()
+        {
+            var switchesComponent = resoursesEntity.Set<BuildingSwitchesComponent>();
+
+            foreach (BuildingTag tag in Enum.GetValues(typeof(BuildingTag)))
+            {
+                var type = tag.ToString();
+                var currentSwitch = new BuildingSwitch();
+                currentSwitch.instancedRedBuilding = GameObject.Instantiate(Resources.Load<GameObject>(@"Prefabs/Buildings/" + type + "Red"), new Vector3(-200, 200, -200), Quaternion.Euler(0, 0, 0));
+                currentSwitch.instancedGreenBuilding = GameObject.Instantiate(Resources.Load<GameObject>(@"Prefabs/Buildings/" + type + "Green"), new Vector3(-200, 200, -200), Quaternion.Euler(0, 0, 0));
+                switchesComponent.buildingsSwitch.Add(type, currentSwitch);
+            }
         }
 
         private void LoadMainCamera()
@@ -30,24 +55,46 @@ namespace Systems
             cameraComponent.Camera = UnityEngine.Object.Instantiate(definitions.CameraDefinitions.mainCameraPrefab);
         }
 
-        private void LoadBuildingAssets()
-        {
-            world.NewEntityWith(out BuildingAssetComponent barrak);
-            barrak.buildingAsset = definitions.BuildingDefinitions.BarracsAsset;
-
-            world.NewEntityWith(out BuildingAssetComponent kiosk);
-            kiosk.buildingAsset = definitions.BuildingDefinitions.KioskAsset;
-        }
-
         private void LoadUiAssets()
         {
-            world.NewEntityWith(out PlayerResourcesComponent playerAsset);
+            resoursesEntity = world.NewEntityWith(out PlayerResourcesComponent playerAsset);
             playerAsset.ResoursesUiDisplay = GameObject.Instantiate(definitions.GuiDefinitions.PlayerInfo);
+
+            var assets = resoursesEntity.Set<AssetsComponent>();
+            assets.InBuildingCanvasesAssets = GetInBuildingCanvasesAssets();
+            assets.BuildingsAssets = GetAllBuildingAssets();
+        }
+
+        private Dictionary<string, GameObject> GetAllBuildingAssets()
+        {
+            var assets = new Dictionary<string, GameObject>();
+
+            foreach (BuildingTag tag in Enum.GetValues(typeof(BuildingTag)))
+            {
+                var type = tag.ToString();
+                assets.Add(type, Resources.Load<GameObject>(@"Prefabs\Buildings\" + type));
+            }
+
+            return assets;
+        }
+
+        private Dictionary<string, Canvas> GetInBuildingCanvasesAssets()
+        {
+            var assets = new Dictionary<string, Canvas>();
+
+            foreach (BuildingTag tag in Enum.GetValues(typeof(BuildingTag)))
+            {
+                var type = tag.ToString();
+                assets.Add(type, Resources.Load<Canvas>(@"Prefabs\GUI\BuildingsMenu\" + type + "Menu"));
+            }
+
+            return assets;
         }
 
         private void LoadUi()
         {
-            GuiHelper.InstantiateAllButtons(definitions.GuiDefinitions.BuildMenu, world);
+            var uiCanvases = resoursesEntity.Set<UiCanvasesComponent>();
+            uiCanvases.UserInterface = GuiHelper.InstantiateAllButtons(definitions.GuiDefinitions.BuildMenu, world);
         }
     }
 }

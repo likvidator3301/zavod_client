@@ -29,13 +29,13 @@ namespace Systems
             var unitObject = unitEntity.Get<UnitComponent>().Object;
             var unitHealthComponent = unitEntity.Get<HealthComponent>();
             var healthBar = unitObject
-                .GetComponentsInChildren<SpriteRenderer>()
+                .GetComponentsInChildren<Transform>()
                 .FirstOrDefault(comp => comp.CompareTag("HealthBar"));
-            var healthBarDrawer = healthBar.GetComponents<GameObject>()
+            var healthBarDrawer = healthBar.GetComponentsInChildren<Transform>()
                 .FirstOrDefault(comp => comp.CompareTag("HealthBarDrawer"));
             
             var newHealthBarScales = healthBarDrawer.transform.localScale;
-            newHealthBarScales.x *= (unitHealthComponent.CurrentHp - 5) / unitHealthComponent.MaxHp;
+            newHealthBarScales.x = (unitHealthComponent.CurrentHp) / unitHealthComponent.MaxHp;
             newHealthBarScales.x = Math.Max(0, newHealthBarScales.x);
             
             healthBarDrawer.transform.localScale = newHealthBarScales;

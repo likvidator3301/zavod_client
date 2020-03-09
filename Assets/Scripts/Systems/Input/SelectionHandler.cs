@@ -15,7 +15,7 @@ namespace Systems
         private Vector3 startPosition = Vector3.zero;
         private Vector3 endPosition = Vector3.zero;
         private PlayerComponent player;
-        private const int selectionDeletingDelayWhileSelecting = 5;
+        private const int selectionDeletingDelayWhileSelecting = 20;
 
         public void Run() => HandleSelection();
         
@@ -42,9 +42,9 @@ namespace Systems
                 {
                     endPosition = hitInfoEnd.point;
                     var selectionInfo = new SelectionRectangle(startPosition, endPosition);
+                    var selectionFrame = selectionInfo.GetSelectionFrame();
                     selectedUnits = selectionInfo.GetUnitsInFrame(units);
                     selectedUnits.HighlightObjects();
-                    var selectionFrame = selectionInfo.GetSelectionFrame();
                     await selectionFrame.DestroyObjectWithDelay(selectionDeletingDelayWhileSelecting);
                 }
             }

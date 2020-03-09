@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e802e83954fb24ba02805783cdd1bc, type: 3}
   m_Name: BuildingAssetsDefinitions
   m_EditorClassIdentifier: 
-  BarracsAsset: {fileID: 5032764035151549222, guid: caa6bf7cce95d36408242ecaed8fbcde,
+  BarracsAsset: {fileID: 4213451642261994664, guid: 1e2b11a55b645a2429b9f06446f4b665,
     type: 3}
   SecondsForWarriorCreate: 3
   KioskAsset: {fileID: 225715556806484386, guid: 4e1fb13ac4fb97040904785fa51a4698,

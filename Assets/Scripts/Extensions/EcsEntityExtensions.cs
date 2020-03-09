@@ -53,11 +53,11 @@ namespace Systems
         public static void AddComponents(this EcsEntity entity, ServerBuildingDto buildingDto)
         {
             var buildingTag = entity.Get<BuildingComponent>().Tag;
-            if (buildingTag == BuildingTag.Kiosk)
-            {
-                var kioskComponent = entity.Set<KioskComponent>();
-                kioskComponent.LastBeerGeneration = DateTime.Now;
-            }
+            //if (buildingTag == BuildingTag.Kiosk)
+            //{
+            //    var kioskComponent = entity.Set<KioskComponent>();
+            //    kioskComponent.LastBeerGeneration = DateTime.Now;
+            //}
         }
 
         private static T GetComponentFor<T>(UnitTag unit, UnitComponentTag unitComponent)

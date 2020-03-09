@@ -25,28 +25,41 @@ public class GameLoader : MonoBehaviour
 #endif  
 
         var controlsSystems = new EcsSystems(world)
-            .Add(new BuildCreateSystem())
+            //.Add(new BuildCreateSystem())
+            .Add(new BuildingPlaceSelectionSystem())
+            .Add(new BuildModeVisualisationSystem())
+            .Add(new BuildingInstallValidatorSystem())
+            .Add(new InstallBuildingSystem())
+            .Add(new BuildingRotationSystem())
+            .Add(new BuildExitSystem())
             .Add(new InputSystem())
             .Add(new CameraSystem())
             .Add(new UnitActionHandler())
             .Add(new SelectionHandler())
             .Add(new CheckClickOnBuildsSystem())
             .Add(new ButtonsClickSystem());
+
         var levelSystems = new EcsSystems(world)
             .Add(new StartupTestLevelSystem())
             .Add(new LoadSystem());
+
         var unitSystems = new EcsSystems(world)
             .Add(new UnitStateChangeSystem())
             .Add(new UnitActionSystem())
             .Add(new UnitCreateSystem())
             .Add(new UnitAnimationSystem())
             .Add(new UnitHealthSystem());
+
         var serverIntegrationSystems = new EcsSystems(world)
             .Add(new ClientSystem());
+
         var uiSystems = new EcsSystems(world)
             .Add(new ResoursesDisplaySystem())
             .Add(new ResourcesCollectorSystem())
-            .Add(new UnitLayoutUISystem());
+            .Add(new UnitLayoutUISystem())
+            .Add(new ConsolePrintSystem())
+            .Add(new MessagesReceiverSystem());
+
 
         systems = new EcsSystems(world)
             .Add(controlsSystems)
