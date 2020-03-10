@@ -22,14 +22,15 @@ namespace Systems
 
             var messageComponent = liveMessages.First().Get<ConsoleMessagesComponent>();
 
-            messageComponent.Messages = messageComponent.Messages
-                                                        .Where(m => DateTime.Now - m.TimeOfCreation < m.Lifetime)
-                                                        .ToList();
+            var messagesCollection = messageComponent.Messages
+                                           .Where(m => DateTime.Now - m.TimeOfCreation < m.Lifetime);
 
 
             var consoleContent = new StringBuilder();
 
-            foreach (var mes in messageComponent.Messages)
+            messageComponent.Messages = messagesCollection.ToList();
+
+            foreach (var mes in messagesCollection.Reverse())
             {
                 var message = mes;
 
