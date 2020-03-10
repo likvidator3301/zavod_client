@@ -25,7 +25,6 @@ public class GameLoader : MonoBehaviour
 #endif  
 
         var controlsSystems = new EcsSystems(world)
-            //.Add(new BuildCreateSystem())
             .Add(new BuildingPlaceSelectionSystem())
             .Add(new BuildModeVisualisationSystem())
             .Add(new BuildingInstallValidatorSystem())
@@ -56,6 +55,7 @@ public class GameLoader : MonoBehaviour
         var uiSystems = new EcsSystems(world)
             .Add(new ResoursesDisplaySystem())
             .Add(new ResourcesCollectorSystem())
+            .Add(new KioskInitSystem())
             .Add(new UnitLayoutUISystem())
             .Add(new ConsolePrintSystem())
             .Add(new MessagesReceiverSystem());

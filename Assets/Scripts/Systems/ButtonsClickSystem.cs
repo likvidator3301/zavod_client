@@ -52,8 +52,8 @@ namespace Systems
 
         private void CreateKiosk()
         {
-            //world.NewEntityWith(out BuildingCreateComponent buildEvent);
-            //buildEvent.Type = Components.Tags.Buildings.BuildingTag.Kiosk;
+            world.NewEntityWith(out BuildingCreateComponent buildEvent);
+            buildEvent.Type = Components.Tags.Buildings.BuildingTag.Kiosk;
         }
 
         private void OnGarageCreateClick()
