@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Components
 {
-    public class MovementComponent : MonoBehaviour
+    public class MovementComponent
     {
         public float MoveSpeed { get; set; }
         public float Acceleration { get; set; } = 3;
