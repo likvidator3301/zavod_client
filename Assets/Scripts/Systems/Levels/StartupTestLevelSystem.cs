@@ -33,14 +33,24 @@ namespace Systems
             var allyUnitDto = new CreateUnitDto {UnitType = UnitType.Warrior};
             var secondAllyUnitDto = new CreateUnitDto {UnitType = UnitType.Warrior};
             var enemyUnitDto = new CreateUnitDto {UnitType = UnitType.Chelovechik};
-            allyUnitDto.Position = new Models.Vector3(){X=allyUnitPosition.x, Y=allyUnitPosition.y, Z=allyUnitPosition.z};
+            allyUnitDto.Position = new Models.Vector3()
+            {
+                X=allyUnitPosition.x,
+                Y=allyUnitPosition.y,
+                Z=allyUnitPosition.z
+            };
             secondAllyUnitDto.Position = new Models.Vector3()
             {
                 X=secondAllyUnitPosition.x,
                 Y=secondAllyUnitPosition.y,
                 Z=secondAllyUnitPosition.z
             };
-            enemyUnitDto.Position = new Models.Vector3(){X=enemyUnitPosition.x, Y=enemyUnitPosition.y, Z=enemyUnitPosition.z};
+            enemyUnitDto.Position = new Models.Vector3()
+            {
+                X=enemyUnitPosition.x,
+                Y=enemyUnitPosition.y,
+                Z=enemyUnitPosition.z
+            };
             
             var allyUnit = await serverIntegration.client.Unit.CreateUnit(allyUnitDto);
             var secondAllyUnit = await serverIntegration.client.Unit.CreateUnit(secondAllyUnitDto);

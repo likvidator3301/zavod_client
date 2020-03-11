@@ -19,7 +19,7 @@ namespace Systems.Controls.UnitControlSystem
         private void StartMove()
         {
             var startMovingUnitsEntities = startMovingUnits.Entities
-                .Where(e => e.IsNotNullAndAlive());
+                .Take(startMovingUnits.GetEntitiesCount());
             foreach (var unit in startMovingUnitsEntities)
             {
                 var destinationPosition = unit.Get<StartMovingEvent>().Destination;
@@ -37,7 +37,7 @@ namespace Systems.Controls.UnitControlSystem
         private void Move()
         {
             var movingUnitsEntities = movingUnits.Entities
-                .Where(e => e.IsNotNullAndAlive());
+                .Take(movingUnits.GetEntitiesCount());
             foreach (var unit in movingUnitsEntities)
             {
                 var agent = unit.Get<NavMeshComponent>().Agent;
