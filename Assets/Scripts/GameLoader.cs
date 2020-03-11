@@ -45,11 +45,12 @@ public class GameLoader : MonoBehaviour
             .Add(new UnitCreateSystem());
         
         var unitControlsSystems = new EcsSystems(world)
-            .Add(new UnitMoveSystem());
+            .Add(new UnitMoveSystem())
+            .Add(new UnitFollowSystem())
+            .Add(new UnitAttackSystem());
 
         var serverIntegrationSystems = new EcsSystems(world)
-            .Add(new ClientSystem())
-            .Add(new UnitFollowSystem());
+            .Add(new ClientSystem());
 
         var uiSystems = new EcsSystems(world)
             .Add(new ResoursesDisplaySystem())
