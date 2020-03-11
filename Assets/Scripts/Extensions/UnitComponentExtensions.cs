@@ -12,8 +12,6 @@ namespace Systems
             unitComponent.Object = obj;
             unitComponent.Tag = tag;
             unitComponent.Guid = guid;
-            unitComponent.Animator = obj.GetComponent<Animator>();
-            unitComponent.Agent = obj.GetComponent<NavMeshAgent>();
         }
     }
 }

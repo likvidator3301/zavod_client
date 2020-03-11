@@ -9,7 +9,5 @@ namespace Components
         public GameObject Object { get; set; }
         public UnitTag Tag { get; set; }
         public Guid Guid { get; set; }
-        public Animator Animator { get; set; }
-        public NavMeshAgent Agent { get; set; }
     }
 }

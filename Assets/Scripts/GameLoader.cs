@@ -2,9 +2,8 @@
 using UnityEngine;
 using Leopotam.Ecs;
 using Systems;
-using System;
+using Systems.Controls.UnitControlSystem;
 using Components;
-using Models;
 
 public class GameLoader : MonoBehaviour
 {
@@ -43,11 +42,10 @@ public class GameLoader : MonoBehaviour
             .Add(new LoadSystem());
 
         var unitSystems = new EcsSystems(world)
-            .Add(new UnitStateChangeSystem())
-            .Add(new UnitActionSystem())
-            .Add(new UnitCreateSystem())
-            .Add(new UnitAnimationSystem())
-            .Add(new UnitHealthSystem());
+            .Add(new UnitCreateSystem());
+        
+        var unitControlsSystems = new EcsSystems(world)
+            .Add(new UnitMoveSystem());
 
         var serverIntegrationSystems = new EcsSystems(world)
             .Add(new ClientSystem());
@@ -65,6 +63,7 @@ public class GameLoader : MonoBehaviour
             .Add(controlsSystems)
             .Add(levelSystems)
             .Add(unitSystems)
+            .Add(unitControlsSystems)
             .Add(serverIntegrationSystems)
             .Add(uiSystems)
             .Inject(playerComponent)

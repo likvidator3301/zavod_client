@@ -6,6 +6,7 @@ using Components.Tags.Buildings;
 using Leopotam.Ecs;
 using Models;
 using UnityEngine;
+using UnityEngine.AI;
 using Object = UnityEngine.Object;
 using Vector3 = UnityEngine.Vector3;
 
@@ -14,15 +15,26 @@ namespace Systems
     public static class GameObjectExtensions
     {
         private const float minimumHeight = 2.5f;
+        private const float destinationAccuracy = 0.5f;
         
+        //TODO: find healthBar in unitObject
         public static void AddNewUnitEntityFromUnitDbo(
             this GameObject prefab, EcsWorld ecsWorld, ServerUnitDto unitDto)
         {
             var newUnitObject = InstantiateNewObject(prefab, unitDto.Position, Quaternion.identity);
-            var newEntity = ecsWorld.NewEntityWith<UnitComponent>(out var unitComponent);
+            var newEntity = ecsWorld.NewEntityWith<UnitComponent, UnitAnimationComponent, NavMeshComponent, HealthBarComponent>(
+                out var unitComponent,
+                out var unitAnimationComponent,
+                out var navMeshAgentComponent,
+                out var healthBarComponent);
+            
+            //healthBarComponent = ...
+            unitAnimationComponent.Animator = newUnitObject.GetComponent<Animator>();
+            navMeshAgentComponent.Agent = newUnitObject.GetComponent<NavMeshAgent>();
+            navMeshAgentComponent.Agent.stoppingDistance = destinationAccuracy;
             unitComponent.SetFields(
                 newUnitObject, unitDto.Type == UnitType.Warrior ? UnitTag.Warrior : UnitTag.EnemyWarrior, unitDto.Id);
-            newEntity.AddComponents(unitDto);
+            newEntity.AddUnitComponents(unitDto, newUnitObject);
         }
 
         public static void AddNewBuildingEntityFromBuildingDbo(
@@ -33,8 +45,12 @@ namespace Systems
             BuildingTag buildingType)
         {
             var newEntity = ecsWorld.NewEntityWith<BuildingComponent>(out var buildingComponent);
-            buildingComponent.SetFields(building, buildingType, buildingDto.Id, GuiHelper.InstantiateAllButtons(canvas, ecsWorld), ecsWorld);
-            newEntity.AddComponents(buildingDto);
+            buildingComponent.SetFields(
+                building,
+                buildingType,
+                buildingDto.Id, 
+                GuiHelper.InstantiateAllButtons(canvas, ecsWorld), ecsWorld);
+            newEntity.AddUnitComponents(buildingDto);
         }
 
         public static async Task DestroyObjectWithDelay(this GameObject obj, int waitForMilliseconds = 500)

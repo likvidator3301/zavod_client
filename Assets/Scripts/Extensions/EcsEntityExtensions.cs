@@ -7,6 +7,7 @@ using Components;
 using Components.Tags.Buildings;
 using Leopotam.Ecs;
 using Models;
+using UnityEngine;
 
 namespace Systems
 {
@@ -22,37 +23,29 @@ namespace Systems
         private const string fileType = "json";
         private const int destroyingDelay = 1000;
 
-        public static void AddWarriorComponents(this EcsEntity entity)
+        public static void AddWarriorComponents(this EcsEntity entity, GameObject unitObject)
         {
-            var attackComponent = entity.Set<AttackComponent>();
-            var defenseComponent = entity.Set<DefenseComponent>();
-            var healthComponent = entity.Set<HealthComponent>();
-            var movementComponent = entity.Set<MovementComponent>();
-            attackComponent.InitializeComponent(GetComponentFor<AttackComponent>(
+            entity.Set<AttackComponent>().InitializeComponent(GetComponentFor<AttackComponent>(
                 UnitTag.Warrior, UnitComponentTag.AttackComponent));
-            defenseComponent.InitializeComponent(GetComponentFor<DefenseComponent>(
+            entity.Set<DefenseComponent>().InitializeComponent(GetComponentFor<DefenseComponent>(
                 UnitTag.Warrior, UnitComponentTag.DefenseComponent));
-            healthComponent.InitializeComponent(GetComponentFor<HealthComponent>(
+            entity.Set<HealthComponent>().InitializeComponent(GetComponentFor<HealthComponent>(
                 UnitTag.Warrior, UnitComponentTag.HealthComponent));
-            movementComponent.InitializeComponent(GetComponentFor<MovementComponent>(
-                UnitTag.Warrior, UnitComponentTag.MovementComponent));
+            entity.Set<MovementComponent>().InitializeComponent(GetComponentFor<MovementComponent>(
+                UnitTag.Warrior, UnitComponentTag.MovementComponent), unitObject);
         }
         
-        public static void AddComponents(this EcsEntity entity, ServerUnitDto unitDto)
+        public static void AddUnitComponents(this EcsEntity unitEntity, ServerUnitDto unitDto, GameObject unitObject)
         {
-            var attackComponent = entity.Set<AttackComponent>();
-            var defenseComponent = entity.Set<DefenseComponent>();
-            var healthComponent = entity.Set<HealthComponent>();
-            var movementComponent = entity.Set<MovementComponent>();
-            attackComponent.InitializeComponent(unitDto);
-            defenseComponent.InitializeComponent(unitDto);
-            healthComponent.InitializeComponent(unitDto);
-            movementComponent.InitializeComponent(unitDto);
+            unitEntity.Set<AttackComponent>().InitializeComponent(unitDto);
+            unitEntity.Set<DefenseComponent>().InitializeComponent(unitDto);
+            unitEntity.Set<HealthComponent>().InitializeComponent(unitDto);
+            unitEntity.Set<MovementComponent>().InitializeComponent(unitDto, unitObject);
         }
 
-        public static void AddComponents(this EcsEntity entity, ServerBuildingDto buildingDto)
+        public static void AddUnitComponents(this EcsEntity unitEntity, ServerBuildingDto buildingDto)
         {
-            var buildingTag = entity.Get<BuildingComponent>().Tag;
+            var buildingTag = unitEntity.Get<BuildingComponent>().Tag;
             //if (buildingTag == BuildingTag.Kiosk)
             //{
             //    var kioskComponent = entity.Set<KioskComponent>();

@@ -17,37 +17,37 @@ namespace Systems
 
         private void HandleMovingUnits()
         {
-            // if (Input.GetMouseButtonDown((int)MouseButton.RightMouse))
-                // MoveSelectedUnits();
+            if (Input.GetMouseButtonDown((int)MouseButton.RightMouse))
+                MoveSelectedUnits();
         }
 
-        // private void MoveSelectedUnits()
-        // {
-        //     if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfo, LevelObjectTag.Ground.ToString()))
-        //     {
-        //         if (player.SelectedUnits.Count == 0)
-        //             return;
-        //         
-        //         var unitsPlace = UnitsPlacementHelpert.PlaceUnits(CalculateApproximateCenterOfSelectedUnits(), 
-        //                                                           hitInfo.point, 
-        //                                                           player.SelectedUnits.Count, 
-        //                                                           gameDefinitions.UnitsDefinitions.MaxUnitsInRow, 
-        //                                                           player.SelectedUnits[0].Get<UnitComponent>().Object.transform.lossyScale.x);
-        //         for (var i = 0; i < player.SelectedUnits.Count; i++)
-        //             MoveHelper.CreateMoveEvent(player.SelectedUnits[i], unitsPlace[i]);
-        //     }
-        //     else
-        //     {
-        //         foreach (var unit in player.SelectedUnits)
-        //         {
-        //             var unitTarget = RaycastHelper.GetUnitEntityByRaycastHit(hitInfo, units.Entities);
-        //             if (unitTarget.IsNull())
-        //                 break;
-        //
-        //             MoveHelper.CreateFollowEvent(unit, unitTarget);
-        //         }
-        //     }
-        // }
+        private void MoveSelectedUnits()
+        {
+            if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfo, LevelObjectTag.Ground.ToString()))
+            {
+                if (player.SelectedUnits.Count == 0)
+                    return;
+                
+                var unitsPlace = UnitsPlacementHelpert.PlaceUnits(CalculateApproximateCenterOfSelectedUnits(), 
+                                                                  hitInfo.point, 
+                                                                  player.SelectedUnits.Count, 
+                                                                  gameDefinitions.UnitsDefinitions.MaxUnitsInRow, 
+                                                                  player.SelectedUnits[0].Get<UnitComponent>().Object.transform.lossyScale.x);
+                for (var i = 0; i < player.SelectedUnits.Count; i++)
+                    MoveHelper.CreateMoveEvent(player.SelectedUnits[i], unitsPlace[i]);
+            }
+            else
+            {
+                foreach (var unit in player.SelectedUnits)
+                {
+                    var unitTarget = RaycastHelper.GetUnitEntityByRaycastHit(hitInfo, units.Entities);
+                    if (unitTarget.IsNull())
+                        break;
+        
+                    MoveHelper.CreateFollowEvent(unit, unitTarget);
+                }
+            }
+        }
 
         private Vector3 CalculateApproximateCenterOfSelectedUnits()
         {
