@@ -11,14 +11,16 @@ namespace Systems
             unit.Set<StartMovingEvent>().Destination = position;
         }
 
-        public static void CreateFollowEvent(EcsEntity unit, EcsEntity targetUnit)
-        {
-            
-        }
-
-        public static void StopUnit(EcsEntity unit)
+        public static void Stop(EcsEntity unit)
         {
             unit.Unset<MovingComponent>();
+            StopUnitOnHisPosition(unit);
+        }
+
+        private static void StopUnitOnHisPosition(EcsEntity unit)
+        {
+            var currentPosition = unit.Get<MovementComponent>().CurrentPosition();
+            unit.Get<NavMeshComponent>().Agent.SetDestination(currentPosition);
         }
     }
 }

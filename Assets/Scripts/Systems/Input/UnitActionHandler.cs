@@ -44,7 +44,7 @@ namespace Systems
                     if (unitTarget.IsNull())
                         break;
         
-                    MoveHelper.CreateFollowEvent(unit, unitTarget);
+                    FollowHelper.CreateFollowEvent(unit, unitTarget);
                 }
             }
         }

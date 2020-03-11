@@ -1,5 +1,6 @@
 using System.Linq;
 using Components;
+using Components.Follow;
 using Leopotam.Ecs;
 using UnityEngine;
 
@@ -22,6 +23,7 @@ namespace Systems.Controls.UnitControlSystem
                 .Take(startMovingUnits.GetEntitiesCount());
             foreach (var unit in startMovingUnitsEntities)
             {
+                FollowHelper.StopFollow(unit);
                 var destinationPosition = unit.Get<StartMovingEvent>().Destination;
                 var agent = unit.Get<NavMeshComponent>();
                 var movementComponent = unit.Get<MovementComponent>();
@@ -43,11 +45,15 @@ namespace Systems.Controls.UnitControlSystem
                 var agent = unit.Get<NavMeshComponent>().Agent;
                 var agentDestinationPosition = agent.destination;
                 var destinationPosition = unit.Get<MovingComponent>().Destination;
+                
                 if (agent.isStopped)
-                    MoveHelper.StopUnit(unit);
-
-                if (destinationPosition != agentDestinationPosition)
+                {
+                    MoveHelper.Stop(unit);
+                }
+                else if (destinationPosition != agentDestinationPosition)
+                {
                     agent.SetDestination(destinationPosition);
+                }
             }
         }
     }
