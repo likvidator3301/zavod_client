@@ -4,6 +4,6 @@ namespace Components.Follow
 {
     public class StartFollowingEvent
     {
-        public GameObject Target { get; set; }
+        public MovementComponent TargetMovementComponent { get; set; }
     }
 }

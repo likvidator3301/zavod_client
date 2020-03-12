@@ -24,11 +24,11 @@ namespace Systems.Controls.UnitControlSystem
                 .Take(startFollowUnits.GetEntitiesCount());
             foreach (var unit in startFollowUnitsEntities)
             {
-                var target = unit.Get<StartFollowingEvent>().Target;
-                unit.Set<MovingComponent>().Destination = target.transform.position;
+                var targetMovementComponent = unit.Get<StartFollowingEvent>().TargetMovementComponent;
+                unit.Set<MovingComponent>().Destination = targetMovementComponent.CurrentPosition();
                 
                 unit.Unset<StartFollowingEvent>();
-                unit.Set<FollowingComponent>().Target = target;
+                unit.Set<FollowingComponent>().TargetMovementComponent = targetMovementComponent;
             }
         }
 
@@ -40,14 +40,14 @@ namespace Systems.Controls.UnitControlSystem
             {
                 var followingComponent = unit.Get<FollowingComponent>();
                 
-                if (followingComponent.Target == null)
+                if (followingComponent.TargetMovementComponent == null)
                 {
                     FollowHelper.StopFollow(unit);
                     MoveHelper.Stop(unit);
                 }
                 else
                 {
-                    unit.Get<MovingComponent>().Destination = followingComponent.Target.transform.position;
+                    unit.Get<MovingComponent>().Destination = followingComponent.TargetMovementComponent.CurrentPosition();
                 }
             }
         }

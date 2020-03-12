@@ -8,7 +8,7 @@ namespace Systems
     {
         public static void CreateFollowEvent(EcsEntity unit, EcsEntity targetUnit)
         {
-            unit.Set<StartFollowingEvent>().Target = targetUnit.Get<UnitComponent>().Object;
+            unit.Set<StartFollowingEvent>().TargetMovementComponent = targetUnit.Get<MovementComponent>();
         }
 
         public static void StopFollow(EcsEntity unit)

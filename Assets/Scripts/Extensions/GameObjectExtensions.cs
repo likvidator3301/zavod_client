@@ -21,7 +21,7 @@ namespace Systems
         public static void AddNewUnitEntityFromUnitDbo(
             this GameObject prefab, EcsWorld ecsWorld, ServerUnitDto unitDto)
         {
-            var newUnitObject = InstantiateNewObject(prefab, unitDto.Position, Quaternion.identity);
+            var newUnitObject = prefab.InstantiateNewObject(unitDto.Position, Quaternion.identity);
             var newEntity = ecsWorld.NewEntityWith<UnitComponent, UnitAnimationComponent, NavMeshComponent, HealthBarComponent>(
                 out var unitComponent,
                 out var unitAnimationComponent,
@@ -61,16 +61,18 @@ namespace Systems
             Object.Destroy(obj);
         }
 
-        private static GameObject InstantiateNewObject(GameObject prefab, Vector3 position, Quaternion quaternion)
+        private static GameObject InstantiateNewObject(this GameObject prefab, Vector3 position, Quaternion quaternion)
         {
             var minimumHeightPosition = new Vector3(position.x, Math.Min(position.y, minimumHeight), position.z);
             return Object.Instantiate(prefab, minimumHeightPosition, quaternion);
         }
         
-        private static GameObject InstantiateNewObject(GameObject prefab, Models.Vector3 position, Quaternion quaternion)
+        private static GameObject InstantiateNewObject(this GameObject prefab, Models.Vector3 position, Quaternion quaternion)
         {            
             var unityPosition = new Vector3(position.X, position.Y, position.Z);
             return InstantiateNewObject(prefab, unityPosition, quaternion);
         }
+
+        public static Vector3 GetPosition(this GameObject someObject) => someObject.transform.position;
     }
 }
