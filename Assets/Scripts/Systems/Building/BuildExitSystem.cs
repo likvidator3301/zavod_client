@@ -35,9 +35,6 @@ namespace Systems
                                                                                  .ToString()]);
                 e.Destroy();
             }
-
-            
-            
         }
     }
 }
