@@ -9,10 +9,7 @@ namespace Systems
     {
         public static void CreateAttackEvent(EcsEntity unit, EcsEntity targetUnit)
         {
-            var startAttackingEvent = unit.Set<StartAttackingEvent>();
-            startAttackingEvent.TargetEntity = targetUnit;
-            startAttackingEvent.TargetMovementComponent = targetUnit.Get<MovementComponent>();
-            startAttackingEvent.TargetHealthComponent = targetUnit.Get<HealthComponent>();
+            unit.Set<StartAttackingEvent>().TargetEntity = targetUnit;
         }
 
         public static void StopAttack(EcsEntity unit)
