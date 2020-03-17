@@ -11,10 +11,7 @@ namespace Components
         [EcsIgnoreNullCheck]
         public Canvas LoadScreen;
 
-        ~MainMenuComponent()
-        {
-            MainMenu = null;
-            LoadScreen = null;
-        }
+        [EcsIgnoreNullCheck]
+        public Canvas AutorizationWindow;
     }
 }

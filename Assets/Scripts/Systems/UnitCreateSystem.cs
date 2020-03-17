@@ -11,7 +11,6 @@ namespace Systems
 
     public class UnitCreateSystem : IEcsRunSystem
     {
-        private ServerIntegration.ServerIntegration serverIntegration;
         private readonly EcsFilter<UnitCreateEvent> unitEvents = null;
         private readonly GameDefinitions gameDefinitions = null;
         private readonly EcsWorld world = null;
@@ -33,7 +32,7 @@ namespace Systems
                         : UnitType.Chelovechik
                 };
 
-                var newUnit = await serverIntegration.client.Unit.CreateUnit(newUnitDto);
+                var newUnit = await ServerCommunication.ServerClient.Client.Unit.CreateUnit(newUnitDto);
                 UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityFromUnitDbo(world, newUnit);
                 unitEvents.Entities[i].Destroy();
             }

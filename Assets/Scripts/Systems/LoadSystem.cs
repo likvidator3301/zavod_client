@@ -58,7 +58,7 @@ namespace Systems
         private void LoadUiAssets()
         {
             resoursesEntity = world.NewEntityWith(out PlayerResourcesComponent playerAsset);
-            playerAsset.ResoursesUiDisplay = GameObject.Instantiate(definitions.GuiDefinitions.PlayerInfo);
+            playerAsset.ResoursesUiDisplay = GameObject.Instantiate(Resources.Load<Canvas>(@"Prefabs/GUI/PlayerInfo"));
 
             var assets = resoursesEntity.Set<AssetsComponent>();
             assets.InBuildingCanvasesAssets = GetInBuildingCanvasesAssets();
@@ -94,7 +94,7 @@ namespace Systems
         private void LoadUi()
         {
             var uiCanvases = resoursesEntity.Set<UiCanvasesComponent>();
-            uiCanvases.UserInterface = GuiHelper.InstantiateAllButtons(definitions.GuiDefinitions.BuildMenu, world);
+            uiCanvases.UserInterface = GuiHelper.InstantiateAllButtons(Resources.Load<Canvas>(@"Prefabs/GUI/UserInterface"), world);
         }
     }
 }

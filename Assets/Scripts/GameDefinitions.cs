@@ -5,7 +5,5 @@ using UnityEngine;
 public class GameDefinitions : ScriptableObject
 {
     public CameraDefinition CameraDefinitions;
-    public GuiDefinitions GuiDefinitions;
-    public BuildingsDefinitions BuildingDefinitions;
     public UnitsDefinitions UnitsDefinitions;
 }

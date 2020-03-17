@@ -18,7 +18,6 @@ public class GameLoader : MonoBehaviour
     {
         world = new EcsWorld();
         var playerComponent = new PlayerComponent(Guid.NewGuid());
-        var serverIntegration = new ServerIntegration.ServerIntegration();
 
 #if UNITY_EDITOR
         Leopotam.Ecs.UnityIntegration.EcsWorldObserver.Create(world);
@@ -49,9 +48,6 @@ public class GameLoader : MonoBehaviour
             .Add(new UnitAnimationSystem())
             .Add(new UnitHealthSystem());
 
-        var serverIntegrationSystems = new EcsSystems(world)
-            .Add(new ClientSystem());
-
         var uiSystems = new EcsSystems(world)
             .Add(new ResoursesDisplaySystem())
             .Add(new ResourcesCollectorSystem())
@@ -65,11 +61,9 @@ public class GameLoader : MonoBehaviour
             .Add(controlsSystems)
             .Add(levelSystems)
             .Add(unitSystems)
-            .Add(serverIntegrationSystems)
             .Add(uiSystems)
             .Inject(playerComponent)
             .Inject(gameDefinitions)
-            .Inject(serverIntegration)
             .ProcessInjects();
 
         systems.Init();

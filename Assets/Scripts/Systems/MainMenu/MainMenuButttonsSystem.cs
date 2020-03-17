@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Threading;
+using ServerCommunication;
 
 namespace Systems
 {
@@ -38,6 +38,15 @@ namespace Systems
                     break;
                 case "Options":
                     break;
+                case "Autorization":
+                    OpenAuthWindow();
+                    break;
+                case "AutorizationButton":
+                    AutorizationButton();
+                    break;
+                case "CloseAutorization":
+                    menu.Get1[0].AutorizationWindow.enabled = false;
+                    break;
                 case "Exit":
                     Application.Quit();
                     break;
@@ -52,6 +61,24 @@ namespace Systems
             menu.Get1[0].LoadScreen.enabled = true;
             SceneManager.LoadScene(1);
             SceneManager.UnloadSceneAsync(0);
+        }
+
+        private async void OpenAuthWindow()
+        {
+            var authWindow = menu.Get1[0].AutorizationWindow;
+            authWindow.enabled = true;
+
+            var authDto = await ServerClient.AuthAgent.GetAuthDto();
+            authWindow.GetComponentsInChildren<TMPro.TextMeshProUGUI>()
+                      .Where(gO => gO.name.Equals("Code"))
+                      .First()
+                      .text = authDto.user_code;
+        }
+
+        private async void AutorizationButton()
+        {
+            var authDto = await ServerClient.AuthAgent.GetAuthDto();
+            System.Diagnostics.Process.Start(authDto.verification_url);
         }
     }
 }

@@ -15,7 +15,6 @@ namespace Systems
 
     public class StartupTestLevelSystem : IEcsInitSystem
     {
-        private ServerIntegration.ServerIntegration serverIntegration;
         private const float minHeight = 2.6f;
         private EcsWorld ecsWorld;
         private EcsGrowList<UnitComponent> units;
@@ -34,8 +33,8 @@ namespace Systems
             allyUnitDto.Position = new Models.Vector3(){X=allyUnitPosition.x, Y=allyUnitPosition.y, Z=allyUnitPosition.z};
             enemyUnitDto.Position = new Models.Vector3(){X=enemyUnitPosition.x, Y=enemyUnitPosition.y, Z=enemyUnitPosition.z};
             
-            var allyUnit = await serverIntegration.client.Unit.CreateUnit(allyUnitDto);
-            var enemyUnit = await serverIntegration.client.Unit.CreateUnit(enemyUnitDto);
+            var allyUnit = await ServerCommunication.ServerClient.Client.Unit.CreateUnit(allyUnitDto);
+            var enemyUnit = await ServerCommunication.ServerClient.Client.Unit.CreateUnit(enemyUnitDto);
             
             UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityFromUnitDbo(
                 ecsWorld, allyUnit);

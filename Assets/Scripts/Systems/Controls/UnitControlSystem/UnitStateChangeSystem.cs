@@ -11,7 +11,6 @@ namespace Systems
 {
     public class UnitStateChangeSystem : IEcsRunSystem
     {
-        private ServerIntegration.ServerIntegration serverIntegration;
         private EcsWorld ecsWorld;
         private PlayerComponent player;
         private EcsFilter<DieEvent> dieEvents;
@@ -25,7 +24,7 @@ namespace Systems
             
             foreach (var dieEventEntity in dieEventEntities)
             {
-                var statusCode = await serverIntegration.client.Unit.DeleteUnit(dieEventEntity.Get<UnitComponent>().Guid);
+                var statusCode = await ServerCommunication.ServerClient.Client.Unit.DeleteUnit(dieEventEntity.Get<UnitComponent>().Guid);
                 Debug.Log(statusCode);
                 
                 if (statusCode == HttpStatusCode.OK)

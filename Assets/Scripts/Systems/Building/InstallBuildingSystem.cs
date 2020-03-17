@@ -14,7 +14,6 @@ namespace Systems
 {
     public class InstallBuildingSystem : IEcsRunSystem
     {
-        private ServerIntegration.ServerIntegration serverIntegration;
         private readonly EcsFilter<BuildingCreateComponent> builds = null;
         private readonly EcsFilter<AssetsComponent> assets = null;
         private readonly EcsFilter<PlayerResourcesComponent> playerRes = null;

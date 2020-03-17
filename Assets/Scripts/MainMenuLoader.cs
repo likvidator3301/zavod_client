@@ -16,7 +16,8 @@ public class MainMenuLoader : MonoBehaviour
 #endif  
         systems = new EcsSystems(world)
             .Add(new LoadMainMenuSystem())
-            .Add(new MainMenuButttonsSystem());
+            .Add(new MainMenuButttonsSystem())
+            .Add(new AutorizationCheckSystem());
 
         systems.Init();
 

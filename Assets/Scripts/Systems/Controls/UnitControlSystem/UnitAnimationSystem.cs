@@ -9,7 +9,6 @@ namespace Systems
 {
     public class UnitAnimationSystem : IEcsRunSystem
     {
-        private ServerIntegration.ServerIntegration serverIntegration;
         private readonly EcsFilter<UnitAnimationEvent> animationEvents = null;
         private readonly EcsFilter<UnitComponent> units = null;
         private const float stopMovingAnimationDistance = 0.1f;
@@ -84,7 +83,7 @@ namespace Systems
                 var unitComponent = movingUnit.Get<UnitComponent>();
                 var unityPosition = unitComponent.Object.transform.position;
                 var position = new Models.Vector3 {X = unityPosition.x, Y = unityPosition.y, Z = unityPosition.z};
-                serverIntegration.client.Unit.AddUnitsToMove(unitComponent.Guid, position);
+                ServerCommunication.ServerClient.Client.Unit.AddUnitsToMove(unitComponent.Guid, position);
             }
         }
     }

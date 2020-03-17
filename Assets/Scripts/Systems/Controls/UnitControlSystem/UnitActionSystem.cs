@@ -9,7 +9,6 @@ namespace Systems
 {
     public class UnitActionSystem : IEcsRunSystem
     {
-        private ServerIntegration.ServerIntegration serverIntegration;
         private const float inertiaEliminatorFactor = 3;
         private readonly EcsWorld ecsWorld = null;
         private readonly EcsFilter<UnitComponent> units = null;
@@ -56,7 +55,7 @@ namespace Systems
             }
             
             UnitAnimationHelper.CreateAttackEvent(attackingUnitEntity);
-            serverIntegration.client.Unit.AddUnitsToAttack(attackingGuid, targetGuid);
+            ServerCommunication.ServerClient.Client.Unit.AddUnitsToAttack(attackingGuid, targetGuid);
 
             attackingUnitAttackComponent.LastAttackTime = Time.time;
         }
