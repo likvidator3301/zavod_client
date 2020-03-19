@@ -17,7 +17,6 @@ namespace Systems.Communication
         {
             world.NewEntityWith(out UnitsPreviousStateComponent unitsState);
             world.NewEntityWith(out QueueSendEventsComponent eventsQueue);
-            world.NewEntityWith(out RequestsComponent requests);
 
             ServerClient.AllUnitsInfo = new AllUnitsInfo();
         }

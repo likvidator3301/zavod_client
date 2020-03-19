@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leopotam.Ecs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ namespace Components.Communication
 {
     public class UnitsPreviousStateComponent
     {
+        [EcsIgnoreNullCheck]
         public Dictionary<Guid, Vector3> unitPositions = new Dictionary<Guid, Vector3>();
     }
 }

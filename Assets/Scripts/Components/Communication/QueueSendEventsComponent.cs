@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leopotam.Ecs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace Components.Communication
 {
     public class QueueSendEventsComponent
     {
+        [EcsIgnoreNullCheck]
         public ServerEventsQueue Queue = new ServerEventsQueue();
     }
 }

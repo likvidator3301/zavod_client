@@ -7,33 +7,35 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.AI;
+using ServerCommunication;
 
 namespace Systems.Communication
 {
     public class MoveValidateSystem : IEcsRunSystem
     {
         private readonly EcsFilter<UnitComponent> units = null;
-        private readonly EcsFilter<RequestsComponent> requests = null;
 
         public void Run()
         {
-            var moveRequests = requests.Entities.Where(e => e.IsNotNullAndAlive()).First().Get<RequestsComponent>().moveRequests;
+            var moveRequests = ServerClient.UnitMovementResults;
+            var unitsComponents = units.Entities.Where(e => e.IsNotNullAndAlive()).Select(e => e.Get<UnitComponent>());
 
-            foreach (var unit in units.Entities.Where(e => e.IsNotNullAndAlive()))
+            
+            for (var i = 0; i < moveRequests.Count; i++)
             {
-                var unitComponent = unit.Get<UnitComponent>();
-
-                foreach (var request in moveRequests)
+                var request = moveRequests.Peek();
+                foreach (var unitComponent in unitsComponents)
                 {
                     if (unitComponent.Guid == request.Id)
                     {
                         unitComponent
                             .Object
                             .GetComponent<NavMeshAgent>()
-                            .Move(new Vector3(request.NewPosition.X, request.NewPosition.Y, request.NewPosition.Z));
+                            .SetDestination(new Vector3(request.NewPosition.X, request.NewPosition.Y, request.NewPosition.Z));
                         break;
                     }
                 }
+                moveRequests.Dequeue();
             }
         }
     }

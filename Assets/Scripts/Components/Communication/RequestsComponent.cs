@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Leopotam.Ecs;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace Components.Communication
 {
     public class RequestsComponent
     {
+        [EcsIgnoreNullCheck]
         public List<MoveUnitDto> moveRequests;
     }
 }

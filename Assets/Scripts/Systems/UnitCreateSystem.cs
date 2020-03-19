@@ -33,10 +33,9 @@ namespace Systems
                         ? UnitType.Warrior
                         : UnitType.Chelovechik
                 };
-
+                unitEvent.Destroy();
                 var newUnit = await ServerCommunication.ServerClient.Client.Unit.CreateUnit(newUnitDto);
                 UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityFromUnitDbo(world, newUnit);
-                unitEvent.Destroy();
             }
         }
     }

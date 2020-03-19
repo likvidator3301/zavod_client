@@ -6,6 +6,7 @@ using Components;
 using Components.Communication;
 using System.Threading.Tasks;
 using UnityEngine;
+using ServerCommunication;
 
 namespace Systems.Communication
 {
@@ -13,7 +14,6 @@ namespace Systems.Communication
     {
         private readonly EcsFilter<UnitComponent> units = null;
         private readonly EcsFilter<UnitsPreviousStateComponent> unitPreviousStatesFilter = null;
-        private readonly EcsFilter<QueueSendEventsComponent> sendEventsFilter = null;
 
         public void Run()
         {
@@ -22,14 +22,8 @@ namespace Systems.Communication
                                                       .First()
                                                       .Get<UnitsPreviousStateComponent>()
                                                       .unitPositions;
-            var sendEvents = sendEventsFilter.Entities
-                                             .Where(e => e.IsNotNullAndAlive())
-                                             .First()
-                                             .Get<QueueSendEventsComponent>()
-                                             .Queue
-                                             .UnitPositionsEvents;
 
-            foreach (var unit in units.Entities.Where(u => u.IsNotNullAndAlive()).Select(u => u.Get<UnitComponent>()))
+            foreach (var unit in units.Entities.Where(u => u.IsNotNullAndAlive()).Select(u => u.Get<UnitComponent>()).Where(u => u.Tag == UnitTag.Warrior))
             {
                 if (!unitPreviousStates.ContainsKey(unit.Guid))
                 {
@@ -38,12 +32,10 @@ namespace Systems.Communication
 
                 if (unit.Object.transform.position - unitPreviousStates[unit.Guid] != Vector3.zero) 
                 {
-                    var unitPosUpd = new UnitPositionUpdate
-                    {
-                        Position = unit.Object.transform.position,
-                        UnitId = unit.Guid
-                    };
-                    sendEvents.Enqueue(unitPosUpd);
+                    if (!ServerClient.MoveRequests.ContainsKey(unit.Guid))
+                        ServerClient.MoveRequests.Add(unit.Guid, unit.Object.transform.position);
+
+                    ServerClient.MoveRequests[unit.Guid] = unit.Object.transform.position;
                     unitPreviousStates[unit.Guid] = unit.Object.transform.position;
                 }
             }

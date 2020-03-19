@@ -58,7 +58,6 @@ public class GameLoader : MonoBehaviour
 
         var serverSystem = new EcsSystems(world)
             .Add(new CommunicationInitSystem())
-            .Add(new MovementHandleSystem())
             .Add(new MoveValidateSystem())
             .Add(new WalkObserverSystem());
 
