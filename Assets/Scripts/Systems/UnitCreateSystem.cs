@@ -4,6 +4,7 @@ using Leopotam.Ecs;
 using Components;
 using Models;
 using Vector3 = UnityEngine.Vector3;
+using System.Linq;
 
 namespace Systems
 {
@@ -19,22 +20,23 @@ namespace Systems
 
         private async Task CreateUnits()
         {
-            for (var i = 0; i < unitEvents.GetEntitiesCount(); i++) 
+            foreach (var unitEvent in unitEvents.Entities.Where(e => e.IsNotNullAndAlive())) 
             {
-                var newPosition = new Vector3(unitEvents.Get1[i].Position.x + 5, 
-                    unitEvents.Get1[i].Position.y, 
-                    unitEvents.Get1[i].Position.z);
+                var unitComponent = unitEvent.Get<UnitCreateEvent>();
+                var newPosition = new Vector3(unitComponent.Position.x + 5,
+                    unitComponent.Position.y,
+                    unitComponent.Position.z);
                 var newUnitDto = new CreateUnitDto
                 {
                     Position = newPosition,
-                    UnitType = unitEvents.Get1[i].UnitTag == UnitTag.Warrior
+                    UnitType = unitComponent.UnitTag == UnitTag.Warrior
                         ? UnitType.Warrior
                         : UnitType.Chelovechik
                 };
 
                 var newUnit = await ServerCommunication.ServerClient.Client.Unit.CreateUnit(newUnitDto);
                 UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityFromUnitDbo(world, newUnit);
-                unitEvents.Entities[i].Destroy();
+                unitEvent.Destroy();
             }
         }
     }

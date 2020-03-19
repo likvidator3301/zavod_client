@@ -32,7 +32,7 @@ public class MainMenuLoader : MonoBehaviour
         world.EndFrame();
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         systems.Destroy();
         world.Destroy();

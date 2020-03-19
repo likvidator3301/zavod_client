@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using ServerCommunication;
+using System.Windows;
 
 namespace Systems
 {
@@ -47,6 +48,9 @@ namespace Systems
                 case "CloseAutorization":
                     menu.Get1[0].AutorizationWindow.enabled = false;
                     break;
+                case "CopyButton":
+                    CopyText();
+                    break;
                 case "Exit":
                     Application.Quit();
                     break;
@@ -61,6 +65,18 @@ namespace Systems
             menu.Get1[0].LoadScreen.enabled = true;
             SceneManager.LoadScene(1);
             SceneManager.UnloadSceneAsync(0);
+        }
+
+        private void CopyText()
+        {
+            var authWindow = menu.Get1[0].AutorizationWindow;
+            var text = authWindow.GetComponentsInChildren<TMPro.TextMeshProUGUI>()
+                      .Where(gO => gO.name.Equals("Code"))
+                      .First()
+                      .text;
+
+            GUIUtility.systemCopyBuffer = text;
+            Debug.Log(1);
         }
 
         private async void OpenAuthWindow()

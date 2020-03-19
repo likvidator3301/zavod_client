@@ -9,9 +9,12 @@ using UnityEngine;
 
 namespace Systems
 {
-    public class AutorizationCheckSystem : IEcsRunSystem
+    public class AutorizationCheckSystem : IEcsRunSystem, IEcsDestroySystem
     {
         private readonly EcsFilter<MainMenuComponent> allMenu = null;
+        private readonly EcsWorld world = null;
+
+        private bool isUpdateFields = false;
 
         public void Run()
         {
@@ -19,13 +22,14 @@ namespace Systems
             {
                 var menu = menuEnt.Get<MainMenuComponent>();
 
-                if (!ServerClient.Client.User.IsRegistered)
+                if (!ServerClient.AuthAgent.isAuth)
                 {
                     SetUnregistredStatus(menu);
                 }
-                else
+                else if (!isUpdateFields)
                 {
                     SetRegistredStatus(menu);
+                    isUpdateFields = true;
                 }
             }
         }
@@ -66,11 +70,21 @@ namespace Systems
                 .interactable = false;
 
             var userDto = await ServerClient.Client.User.GetUser();
-            menu.MainMenu
+            var authText = menu.MainMenu
                 .GetComponentsInChildren<TMPro.TextMeshProUGUI>()
                 .Where(t => t.name.Equals("AuthText"))
-                .First()
-                .text = "Добро пожаловать, " + userDto.Email;
+                .FirstOrDefault();
+
+            if (authText != null)
+                authText.text = "Добро пожаловать, " + userDto.Email;
+        }
+
+        public void Destroy()
+        {
+            foreach (var menuEnt in allMenu.Entities.Where(e => e.IsNotNullAndAlive()))
+            {
+                menuEnt.Destroy();
+            }
         }
     }
 }

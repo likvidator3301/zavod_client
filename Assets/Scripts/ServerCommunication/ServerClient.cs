@@ -10,5 +10,6 @@ namespace ServerCommunication
 
         public static ZavodClient.ZavodClient Client { get; } = new ZavodClient.ZavodClient(url);
         public static AutorizationAgent AuthAgent { get; } = new AutorizationAgent();
+        public static AllUnitsInfo AllUnitsInfo { get; set; }
     }
 }

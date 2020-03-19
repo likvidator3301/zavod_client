@@ -2,7 +2,7 @@
 using UnityEngine;
 using Leopotam.Ecs;
 using Systems;
-using System;
+using Systems.Communication;
 using Components;
 using Models;
 
@@ -56,12 +56,19 @@ public class GameLoader : MonoBehaviour
             .Add(new ConsolePrintSystem())
             .Add(new MessagesReceiverSystem());
 
+        var serverSystem = new EcsSystems(world)
+            .Add(new CommunicationInitSystem())
+            .Add(new MovementHandleSystem())
+            .Add(new MoveValidateSystem())
+            .Add(new WalkObserverSystem());
+
 
         systems = new EcsSystems(world)
             .Add(controlsSystems)
             .Add(levelSystems)
             .Add(unitSystems)
             .Add(uiSystems)
+            .Add(serverSystem)
             .Inject(playerComponent)
             .Inject(gameDefinitions)
             .ProcessInjects();
