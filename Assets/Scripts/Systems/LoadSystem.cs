@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Components;
 using Leopotam.Ecs;
 using UnityEngine;
-using Components.Tags.Buildings;
 
 namespace Systems
 {

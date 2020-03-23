@@ -12,14 +12,6 @@ namespace Components
 
         private GameObject unitObject;
 
-        public void InitializeComponent(MovementComponent movementComponent, GameObject unitObject)
-        {
-            MoveSpeed = movementComponent.MoveSpeed;
-            Acceleration = movementComponent.Acceleration;
-            this.unitObject = unitObject;
-        }
-        
-        
         //TODO: Acceleration should be in ServerUnitDto
         public void InitializeComponent(ServerUnitDto unitDto, GameObject unitObject)
         {

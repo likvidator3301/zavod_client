@@ -1,10 +1,7 @@
 ﻿using Components;
 using Leopotam.Ecs;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Systems
 {
@@ -20,7 +17,7 @@ namespace Systems
             {
                 var buildComponent = build.Get<BuildingComponent>();
 
-                if (buildComponent.Tag != Components.Tags.Buildings.BuildingTag.Kiosk)
+                if (buildComponent.Tag != BuildingTag.Kiosk)
                     continue;
 
                 if (build.GetComponentsCount() == 1)

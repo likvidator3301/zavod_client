@@ -1,6 +1,5 @@
 using System;
 using Systems;
-using Components.Tags.Buildings;
 using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.UI;

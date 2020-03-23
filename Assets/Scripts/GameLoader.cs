@@ -3,6 +3,7 @@ using UnityEngine;
 using Leopotam.Ecs;
 using Systems;
 using Systems.Controls.UnitControlSystem;
+using Systems.Zavod;
 using Components;
 
 public class GameLoader : MonoBehaviour
@@ -49,8 +50,15 @@ public class GameLoader : MonoBehaviour
             .Add(new UnitMoveSystem())
             .Add(new UnitStartFollowSystem())
             .Add(new UnitFollowSystem())
+            .Add(new UnitFindAvailableFightsSystem())
+            .Add(new UnitStartAttackSystem())
             .Add(new UnitAttackSystem())
-            .Add(new HealthSystem());
+            .Add(new UnitChangeHealthSystem());
+        
+        var resourcesSystems = new EcsSystems(world)
+            .Add(new ResourceCreateSystem())
+            .Add(new ResourceAddToPlayerSystem())
+            .Add(new ResourceDestroySystem());
 
         var serverIntegrationSystems = new EcsSystems(world)
             .Add(new ClientSystem());
@@ -62,6 +70,9 @@ public class GameLoader : MonoBehaviour
             .Add(new UnitLayoutUISystem())
             .Add(new ConsolePrintSystem())
             .Add(new MessagesReceiverSystem());
+        
+        var zavodSystems = new EcsSystems(world)
+            .Add(new GenerateMoneySystem());
 
 
         systems = new EcsSystems(world)
@@ -69,6 +80,8 @@ public class GameLoader : MonoBehaviour
             .Add(levelSystems)
             .Add(unitSystems)
             .Add(unitControlsSystems)
+            .Add(zavodSystems)
+            .Add(resourcesSystems)
             .Add(serverIntegrationSystems)
             .Add(uiSystems)
             .Inject(playerComponent)
