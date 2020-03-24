@@ -34,7 +34,7 @@ namespace Systems
                 };
 
                 var newUnit = await serverIntegration.client.Unit.CreateUnit(newUnitDto);
-                UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityFromUnitDbo(world, newUnit);
+                UnitsPrefabsHolder.WarriorPrefab.AddNewWarriorEntityFromUnitDbo(world, newUnit);
                 unitEvents.Entities[i].Destroy();
             }
         }

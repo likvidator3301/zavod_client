@@ -9,10 +9,5 @@ namespace Systems
         {
             unit.Set<HealthChangingEvent>().NewHp = newHp;
         }
-
-        public static void CreateDestroyEvent(EcsEntity unit)
-        {
-            unit.Set<DestroyEvent>().Unit = unit;
-        }
     }
 }
