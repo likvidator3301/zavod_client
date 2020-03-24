@@ -19,5 +19,12 @@ namespace Components
             //Acceleration = unitDto.Acceleration;
             this.unitObject = unitObject;
         }
+        
+        //Note: temporary method for no-server Dto context
+        public void InitializeComponent(Vector3 position, GameObject unitObject)
+        {
+            MoveSpeed = 15;
+            this.unitObject = unitObject;
+        }
     }
 }

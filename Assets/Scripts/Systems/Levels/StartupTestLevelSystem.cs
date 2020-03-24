@@ -1,4 +1,6 @@
-﻿namespace Systems
+﻿using System;
+
+namespace Systems
 {
     using System.Threading.Tasks;
     using Components;
@@ -19,6 +21,7 @@
         private readonly Vector3 zavodPosition = new Vector3(60, minZavodHeight, 42.5f);
         private readonly Vector3 moneyBag1Position = new Vector3(60, minHeight, 35f);
         private readonly Vector3 moneyBag2Position = new Vector3(65, minHeight, 35f);
+        private readonly Vector3 deliverPosition = new Vector3(42, minHeight, 35);
 
         public void Init() => InitializeLevel();
 
@@ -50,15 +53,16 @@
             var secondAllyUnit = await serverIntegration.client.Unit.CreateUnit(secondAllyUnitDto);
             var enemyUnit = await serverIntegration.client.Unit.CreateUnit(enemyUnitDto);
             
-            UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityFromUnitDbo(
+            UnitsPrefabsHolder.WarriorPrefab.AddNewWarriorEntityFromUnitDbo(
                 ecsWorld, allyUnit);
-            UnitsPrefabsHolder.WarriorPrefab.AddNewUnitEntityFromUnitDbo(
+            UnitsPrefabsHolder.WarriorPrefab.AddNewWarriorEntityFromUnitDbo(
                 ecsWorld, secondAllyUnit);
-            UnitsPrefabsHolder.EnemyWarriorPrefab.AddNewUnitEntityFromUnitDbo(
+            UnitsPrefabsHolder.EnemyWarriorPrefab.AddNewWarriorEntityFromUnitDbo(
                 ecsWorld, enemyUnit);
             ZavodPrefabHolder.ZavodPrefab.AddNewZavodEntityOnPosition(ecsWorld, zavodPosition);
             MoneyBagPrefabHolder.MoneyBagPrefab.AddResourceEntityOnPosition(ecsWorld, moneyBag1Position, ResourceTag.Money);
             MoneyBagPrefabHolder.MoneyBagPrefab.AddResourceEntityOnPosition(ecsWorld, moneyBag2Position, ResourceTag.Money);
+            UnitsPrefabsHolder.DeliverUnitPrefab.AddNewDeliverEntityOnPosition(ecsWorld, deliverPosition, Guid.NewGuid());
         }
     }
 }

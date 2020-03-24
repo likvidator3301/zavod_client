@@ -56,6 +56,11 @@ namespace Systems
                     var selectedUnit = RaycastHelper.GetUnitEntityByRaycastHit(hitInfoUnit, units.Entities);
                     selectedUnits.Add(selectedUnit);
                 }
+                else if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoDeliver, UnitTag.Deliver.ToString()))
+                {
+                    var selectedUnit = RaycastHelper.GetUnitEntityByRaycastHit(hitInfoDeliver, units.Entities);
+                    selectedUnits.Add(selectedUnit);
+                }
                 player.SelectedUnits = selectedUnits;
                 selectedUnits.HighlightObjects();
             }

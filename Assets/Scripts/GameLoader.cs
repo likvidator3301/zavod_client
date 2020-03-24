@@ -54,11 +54,11 @@ public class GameLoader : MonoBehaviour
             .Add(new UnitStartAttackSystem())
             .Add(new UnitAttackSystem())
             .Add(new UnitChangeHealthSystem());
-        
+
         var resourcesSystems = new EcsSystems(world)
             .Add(new ResourceCreateSystem())
-            .Add(new ResourceAddToPlayerSystem())
-            .Add(new ResourceDestroySystem());
+            .Add(new ResourceFindAvailableToTakeSystem())
+            .Add(new ResourceTakeSystem());
 
         var serverIntegrationSystems = new EcsSystems(world)
             .Add(new ClientSystem());
@@ -73,6 +73,9 @@ public class GameLoader : MonoBehaviour
         
         var zavodSystems = new EcsSystems(world)
             .Add(new GenerateMoneySystem());
+        
+        var destroySystem = new EcsSystems(world)
+            .Add(new DestroySystem());
 
 
         systems = new EcsSystems(world)
@@ -84,6 +87,7 @@ public class GameLoader : MonoBehaviour
             .Add(resourcesSystems)
             .Add(serverIntegrationSystems)
             .Add(uiSystems)
+            .Add(destroySystem)
             .Inject(playerComponent)
             .Inject(gameDefinitions)
             .Inject(serverIntegration)

@@ -1,3 +1,4 @@
+using System;
 using Components;
 using Extensions;
 using Leopotam.Ecs;
@@ -23,6 +24,7 @@ namespace Systems
             resourceComponent.Object = newMoneyBagObject;
             resourceComponent.Position = position;
             resourceComponent.Tag = tag;
+            resourceComponent.Guid = Guid.NewGuid();
             if (resourceCount == -1)
                 resourceComponent.ResourceCount = tag == ResourceTag.Money ? moneyCount : semkiCount;
             else
