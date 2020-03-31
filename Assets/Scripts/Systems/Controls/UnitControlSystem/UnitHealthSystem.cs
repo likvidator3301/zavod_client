@@ -9,7 +9,7 @@ namespace Systems
 {
     public class UnitHealthSystem: IEcsRunSystem
     {
-        private EcsFilter<HealthComponent> healthComponents;
+        private EcsFilter<HealthComponent> healthComponents = null;
 
         public void Run()
         {

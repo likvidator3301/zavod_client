@@ -8,13 +8,12 @@ using Systems;
 
 public class UnitLayoutUISystem : IEcsRunSystem, IEcsInitSystem
 {
-    private EcsWorld world = null;
-    private EcsFilter<ClickEvent> clicks = null;
-    private EcsFilter<UnitSpawnedEvent> unitSpawnedEventFilter = null;
-    private EcsFilter<UnitButton> unitButtonsFilter = null;
+    private readonly EcsWorld world = null;
+    private readonly EcsFilter<UnitSpawnedEvent> unitSpawnedEventFilter = null;
+    private readonly EcsFilter<UnitButton> unitButtonsFilter = null;
 
-    private UnitLayout layout = new UnitLayout();
-    private PlayerComponent player;
+    private readonly UnitLayout layout = new UnitLayout();
+    private readonly PlayerComponent player = null;
 
     private GameObject unitLayoutPrefab;
     private GameObject unitButtonPrefab;

@@ -57,9 +57,7 @@ public class GameLoader : MonoBehaviour
             .Add(new MessagesReceiverSystem());
 
         var serverSystem = new EcsSystems(world)
-            .Add(new CommunicationInitSystem())
-            .Add(new MoveValidateSystem())
-            .Add(new WalkObserverSystem());
+            .Add(new CommunicationInitSystem());
 
 
         systems = new EcsSystems(world)
@@ -67,7 +65,7 @@ public class GameLoader : MonoBehaviour
             .Add(levelSystems)
             .Add(unitSystems)
             .Add(uiSystems)
-            .Add(serverSystem)
+            //.Add(serverSystem)
             .Inject(playerComponent)
             .Inject(gameDefinitions)
             .ProcessInjects();

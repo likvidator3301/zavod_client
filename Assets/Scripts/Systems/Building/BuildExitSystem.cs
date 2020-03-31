@@ -24,7 +24,6 @@ namespace Systems
             if (liveEntities.Count() < 1)
                 return;
 
-            string type;
             var assetsEntity = assets.Entities.First();
 
             foreach (var e in liveEntities)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Leopotam.Ecs;
-using System;
 
 namespace Components
 {

@@ -14,7 +14,6 @@ namespace Systems
     {
         private readonly EcsFilter<ButtonClickEvent> clicks = null;
         private readonly EcsFilter<MainMenuComponent> menu = null;
-        private readonly EcsWorld world = null;
 
         public void Run()
         {
@@ -76,7 +75,6 @@ namespace Systems
                       .text;
 
             GUIUtility.systemCopyBuffer = text;
-            Debug.Log(1);
         }
 
         private async void OpenAuthWindow()

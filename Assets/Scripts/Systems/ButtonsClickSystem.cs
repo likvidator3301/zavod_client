@@ -11,7 +11,6 @@ namespace Systems
     {
         private readonly EcsFilter<ButtonClickEvent> clicks = null;
         private readonly EcsWorld world = null;
-        private readonly GameDefinitions gameDefinitions = null;
         private readonly EcsFilter<BuildingComponent> builds = null;
         private readonly EcsFilter<PlayerResourcesComponent> resources = null;
 

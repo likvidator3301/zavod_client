@@ -10,7 +10,6 @@ namespace Systems
     public class UnitActionSystem : IEcsRunSystem
     {
         private const float inertiaEliminatorFactor = 3;
-        private readonly EcsWorld ecsWorld = null;
         private readonly EcsFilter<UnitComponent> units = null;
         private readonly EcsFilter<AttackEvent> attackEvents = null;
         private readonly EcsFilter<MoveEvent> moveEvents = null;

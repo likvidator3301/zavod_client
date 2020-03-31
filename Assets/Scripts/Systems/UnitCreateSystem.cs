@@ -13,7 +13,6 @@ namespace Systems
     public class UnitCreateSystem : IEcsRunSystem
     {
         private readonly EcsFilter<UnitCreateEvent> unitEvents = null;
-        private readonly GameDefinitions gameDefinitions = null;
         private readonly EcsWorld world = null;
 
         public void Run() => CreateUnits();

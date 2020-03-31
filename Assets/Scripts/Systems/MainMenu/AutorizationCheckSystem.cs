@@ -12,7 +12,6 @@ namespace Systems
     public class AutorizationCheckSystem : IEcsRunSystem, IEcsDestroySystem
     {
         private readonly EcsFilter<MainMenuComponent> allMenu = null;
-        private readonly EcsWorld world = null;
 
         private bool isUpdateFields = false;
 

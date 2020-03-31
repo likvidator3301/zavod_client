@@ -16,7 +16,7 @@ namespace Systems
     public class StartupTestLevelSystem : IEcsInitSystem
     {
         private const float minHeight = 2.6f;
-        private EcsWorld ecsWorld;
+        private EcsWorld ecsWorld = null;
         private EcsGrowList<UnitComponent> units;
         private readonly Vector3 allyUnitPosition = new Vector3(44, minHeight, 40);
         private readonly Vector3 enemyUnitPosition = new Vector3(44, minHeight, 45);

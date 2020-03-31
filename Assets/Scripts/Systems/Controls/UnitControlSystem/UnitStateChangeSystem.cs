@@ -11,9 +11,7 @@ namespace Systems
 {
     public class UnitStateChangeSystem : IEcsRunSystem
     {
-        private EcsWorld ecsWorld;
-        private PlayerComponent player;
-        private EcsFilter<DieEvent> dieEvents;
+        private readonly EcsFilter<DieEvent> dieEvents = null;
 
         public void Run() => DestroyDeadUnits();
 

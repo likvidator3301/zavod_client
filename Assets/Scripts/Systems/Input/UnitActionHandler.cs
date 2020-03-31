@@ -11,7 +11,6 @@ namespace Systems
         private readonly PlayerComponent player = null;
         private readonly GameDefinitions gameDefinitions = null;
         private readonly EcsFilter<UnitComponent> units = null;
-        private readonly EcsWorld ecsWorld = null;
 
         public void Run() => HandleMovingUnits();
 

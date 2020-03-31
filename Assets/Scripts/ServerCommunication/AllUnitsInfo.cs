@@ -19,9 +19,9 @@ namespace ServerCommunication
         public AllUnitsInfo()
         {
             //updTimer.Elapsed += (e, args) => UpdateUnitInfo();
-            sendMovementTimer.Elapsed += (e, args) => SendMovements();
+            //sendMovementTimer.Elapsed += (e, args) => SendMovements();
             //updTimer.Start();
-            sendMovementTimer.Start();
+            //sendMovementTimer.Start();
         }
 
         public async void UpdateUnitInfo()
@@ -41,7 +41,6 @@ namespace ServerCommunication
             {
                 ServerClient.UnitMovementResults.Enqueue(move);
             }
-            Debug.Log(1488);
         }
     }
 }

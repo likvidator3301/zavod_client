@@ -10,11 +10,11 @@ namespace Systems
 {
     public class SelectionHandler : IEcsRunSystem
     {
-        private EcsFilter<UnitComponent> units;
+        private readonly EcsFilter<UnitComponent> units = null;
         private List<EcsEntity> selectedUnits = new List<EcsEntity>();
         private Vector3 startPosition = Vector3.zero;
         private Vector3 endPosition = Vector3.zero;
-        private PlayerComponent player;
+        private readonly PlayerComponent player = null;
         private const int selectionDeletingDelayWhileSelecting = 20;
 
         public void Run() => HandleSelection();
