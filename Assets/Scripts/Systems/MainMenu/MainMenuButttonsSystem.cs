@@ -36,8 +36,6 @@ namespace Systems
                 case "Play":
                     LoadGame();
                     break;
-                case "Options":
-                    break;
                 case "Autorization":
                     OpenAuthWindow();
                     break;
@@ -50,6 +48,12 @@ namespace Systems
                 case "CopyButton":
                     CopyText();
                     break;
+                case "Options":
+                    OpenOptions();
+                    break;
+                case "CancelSettings":
+                    CancelSettings();
+                    break;
                 case "Exit":
                     Application.Quit();
                     break;
@@ -58,12 +62,21 @@ namespace Systems
             }
         }
 
+        private void CancelSettings()
+        {
+            menu.Get1[0].SettingsWindow.enabled = false;
+        }
+
+        private void OpenOptions()
+        {
+            menu.Get1[0].SettingsWindow.enabled = true;
+        }
+
         private void LoadGame()
         {
             menu.Get1[0].MainMenu.enabled = false;
             menu.Get1[0].LoadScreen.enabled = true;
-            SceneManager.LoadScene(1);
-            SceneManager.UnloadSceneAsync(0);
+            SceneManager.LoadScene(1, LoadSceneMode.Single);
         }
 
         private void CopyText()

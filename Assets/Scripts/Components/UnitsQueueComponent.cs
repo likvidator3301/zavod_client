@@ -8,6 +8,6 @@ namespace Components
 {
     internal class UnitsQueueComponent
     {
-        public Queue<UnitCreateEvent> units = new Queue<UnitCreateEvent>();
+        public Queue<UnitCreateEvent> units;
     }
 }

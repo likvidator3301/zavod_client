@@ -37,10 +37,10 @@ namespace Systems
         {
             var buttons = menu.MainMenu.GetComponentsInChildren<Button>();
 
-            buttons
-                .Where(b => b.name.Equals("Play"))
-                .First()
-                .interactable = false;
+            //buttons
+            //    .Where(b => b.name.Equals("Play"))
+            //    .First()
+            //    .interactable = false;
 
             buttons
                 .Where(b => b.name.Equals("Autorization"))

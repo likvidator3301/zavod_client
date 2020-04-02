@@ -24,6 +24,8 @@ namespace Systems
             unitComponent.SetFields(
                 newUnitObject, unitDto.Type == UnitType.Warrior ? UnitTag.Warrior : UnitTag.EnemyWarrior, unitDto.Id);
             newEntity.AddComponents(unitDto);
+            ecsWorld.NewEntityWith(out UnitSpawnedEvent spawnEvent);
+            spawnEvent.Unit = newEntity;
         }
 
         public static void AddNewBuildingEntityFromBuildingDbo(

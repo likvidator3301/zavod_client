@@ -7,5 +7,8 @@ namespace Components
     {
         [EcsIgnoreNullCheck]
         public Canvas UserInterface;
+
+        [EcsIgnoreNullCheck]
+        public Canvas PauseMenu;
     }
 }

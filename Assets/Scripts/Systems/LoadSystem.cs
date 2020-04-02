@@ -33,6 +33,7 @@ namespace Systems
         private void LoadBuildingsSwitches()
         {
             var switchesComponent = resoursesEntity.Set<BuildingSwitchesComponent>();
+            switchesComponent.buildingsSwitch = new Dictionary<string, BuildingSwitch>();   
 
             foreach (BuildingTag tag in Enum.GetValues(typeof(BuildingTag)))
             {
@@ -59,6 +60,8 @@ namespace Systems
         private void LoadUiAssets()
         {
             resoursesEntity = world.NewEntityWith(out PlayerResourcesComponent playerAsset);
+            playerAsset.Beer = 50;
+            playerAsset.Cash = 1000;
             playerAsset.ResoursesUiDisplay = GameObject.Instantiate(Resources.Load<Canvas>(@"Prefabs/GUI/PlayerInfo"));
 
             var assets = resoursesEntity.Set<AssetsComponent>();
@@ -96,6 +99,8 @@ namespace Systems
         {
             var uiCanvases = resoursesEntity.Set<UiCanvasesComponent>();
             uiCanvases.UserInterface = GuiHelper.InstantiateAllButtons(Resources.Load<Canvas>(@"Prefabs/GUI/UserInterface"), world);
+            uiCanvases.PauseMenu = GuiHelper.InstantiateAllButtons(Resources.Load<Canvas>("Prefabs/GUI/PauseMenu"), world);
+            uiCanvases.PauseMenu.enabled = false;
         }
     }
 }

@@ -18,6 +18,7 @@ public class GameLoader : MonoBehaviour
     {
         world = new EcsWorld();
         var playerComponent = new PlayerComponent(Guid.NewGuid());
+        playerComponent.SelectedUnits = new System.Collections.Generic.List<EcsEntity>();
 
 #if UNITY_EDITOR
         Leopotam.Ecs.UnityIntegration.EcsWorldObserver.Create(world);
@@ -54,7 +55,8 @@ public class GameLoader : MonoBehaviour
             .Add(new KioskInitSystem())
             .Add(new UnitLayoutUISystem())
             .Add(new ConsolePrintSystem())
-            .Add(new MessagesReceiverSystem());
+            .Add(new MessagesReceiverSystem())
+            .Add(new OpenPauseMenuSystem());
 
         var serverSystem = new EcsSystems(world)
             .Add(new CommunicationInitSystem());

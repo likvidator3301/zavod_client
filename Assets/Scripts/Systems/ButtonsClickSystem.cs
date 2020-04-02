@@ -4,6 +4,7 @@ using Components;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace Systems
 {
@@ -13,6 +14,7 @@ namespace Systems
         private readonly EcsWorld world = null;
         private readonly EcsFilter<BuildingComponent> builds = null;
         private readonly EcsFilter<PlayerResourcesComponent> resources = null;
+        private readonly EcsFilter<UiCanvasesComponent> canvases = null;
 
         public void Run()
         {
@@ -41,12 +43,23 @@ namespace Systems
                 case "CreateKiosk":
                     CreateKiosk();
                     break;
+                case "BackToGame":
+                    canvases.Get1[0].PauseMenu.enabled = false;
+                    break;
+                case "ExitToMainMenu":
+                    ToMainMenu();
+                    break;
                 case "Exit":
                     Application.Quit();
                     break;
                 default:
                     break;
             }
+        }
+
+        private void ToMainMenu()
+        {
+            SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
         }
 
         private void CreateKiosk()

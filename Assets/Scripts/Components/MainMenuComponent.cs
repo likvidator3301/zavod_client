@@ -13,5 +13,8 @@ namespace Components
 
         [EcsIgnoreNullCheck]
         public Canvas AutorizationWindow;
+
+        [EcsIgnoreNullCheck]
+        public Canvas SettingsWindow;
     }
 }

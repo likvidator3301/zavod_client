@@ -6,7 +6,7 @@ namespace Components
 {
     public class PlayerComponent
     {
-        public List<EcsEntity> SelectedUnits = new List<EcsEntity>();
+        public List<EcsEntity> SelectedUnits;
         public Guid Guid { get; }
         public long Score { get; set; } = 500;
         

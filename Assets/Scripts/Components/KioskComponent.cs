@@ -9,7 +9,7 @@ namespace Components
     internal class KioskComponent
     {
         public DateTime LastBeerGeneration;
-        public TimeSpan BeerGeneratingTiming = TimeSpan.FromSeconds(3 );
+        public TimeSpan BeerGeneratingTiming = TimeSpan.FromSeconds(3);
         public int BeerPerTiming = 10;
     }
 }

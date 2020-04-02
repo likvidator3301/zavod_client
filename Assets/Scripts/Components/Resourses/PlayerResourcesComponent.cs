@@ -6,9 +6,9 @@ namespace Components
 {
     public class PlayerResourcesComponent
     {
-        public int Beer = 50;
+        public int Beer;
 
-        public float Cash = 550f;
+        public float Cash;
 
         [EcsIgnoreNullCheck]
         public Canvas ResoursesUiDisplay;

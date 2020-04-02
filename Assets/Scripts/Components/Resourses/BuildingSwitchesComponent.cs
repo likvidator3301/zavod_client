@@ -7,6 +7,6 @@ namespace Components
     public class BuildingSwitchesComponent
     {
         [EcsIgnoreNullCheck]
-        public Dictionary<string, BuildingSwitch> buildingsSwitch = new Dictionary<string, BuildingSwitch>();
+        public Dictionary<string, BuildingSwitch> buildingsSwitch;
     }
 }
