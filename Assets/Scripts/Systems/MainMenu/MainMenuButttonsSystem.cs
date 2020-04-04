@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using ServerCommunication;
 using System.Windows;
+using System.IO;
 
 namespace Systems
 {
@@ -54,12 +55,41 @@ namespace Systems
                 case "CancelSettings":
                     CancelSettings();
                     break;
+                case "NickOkButton":
+                    TryAcceptNickname();
+                    break;
                 case "Exit":
                     Application.Quit();
                     break;
                 default:
                     break;
             }
+        }
+
+        private void TryAcceptNickname()
+        {
+            var errorField = menu.Get1[0]
+                .NickWindow
+                .GetComponentsInChildren<TMPro.TextMeshProUGUI>()
+                .Where(txt => txt.name == "ErrorNickText")
+                .First();
+
+            var nicknameText = menu.Get1[0]
+                .NickWindow
+                .GetComponentsInChildren<TMPro.TextMeshProUGUI>()
+                .Where(txt => txt.name == "NicknameText")
+                .First();
+
+            if (!NickHelper.IsRightNick(nicknameText.text))
+            {
+                errorField.SetText("Ник короткий или содержит пробелы");
+
+                return;
+            }
+
+            File.WriteAllText(Directory.GetCurrentDirectory() + @"\nick.txt", nicknameText.text, System.Text.Encoding.UTF8);
+            menu.Get1[0].NickWindow.enabled = false;
+            GuiHelper.OnAllButtons(menu.Get1[0].MainMenu);
         }
 
         private void CancelSettings()

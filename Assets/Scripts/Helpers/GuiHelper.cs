@@ -8,6 +8,27 @@ namespace Systems
 {
     public static class GuiHelper
     {
+        public static void OffAllButtons(Canvas canvas)
+        {
+            var buttons = canvas.GetComponentsInChildren<Button>();
+
+            foreach (var button in buttons)
+            {
+                button.interactable = false;
+            }
+        }
+
+        public static void OnAllButtons(Canvas canvas)
+        {
+            var buttons = canvas.GetComponentsInChildren<Button>();
+
+            foreach (var button in buttons)
+            {
+                button.interactable = true;
+            }
+        }
+
+
         public static Canvas InstantiateAllButtons(Canvas canvasAsset, EcsWorld world)
         {
             var newCanvas = UnityEngine.Object.Instantiate(canvasAsset);
