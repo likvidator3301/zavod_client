@@ -9,7 +9,7 @@ namespace Systems
     {
         public static void CreateAttackEvent(EcsEntity unit, EcsEntity targetUnit)
         {
-            unit.Set<StartAttackingEvent>().TargetEntity = targetUnit;
+            unit.Set<StartAttackEvent>().TargetEntity = targetUnit;
         }
 
         public static void StopAttack(EcsEntity unit)
@@ -24,8 +24,8 @@ namespace Systems
         {
             return unitAttackComponent.LastAttackTime + unitAttackComponent.AttackDelay <= Time.time
                 && Vector3.Distance(
-                    unitMovementComponent.CurrentPosition(), 
-                    targetMovementComponent.CurrentPosition()) <= unitAttackComponent.AttackRange;
+                    unitMovementComponent.CurrentPosition, 
+                    targetMovementComponent.CurrentPosition) <= unitAttackComponent.AttackRange;
         }
     }
 }

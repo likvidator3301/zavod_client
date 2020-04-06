@@ -18,11 +18,14 @@ public class UnitChangeHealthSystem: IEcsRunSystem
         foreach (var unit in changingHpUnitsEntities)
         {
             var unitHealthComponent = unit.Get<HealthComponent>();
-            Debug.Log($"Previous HP: {unitHealthComponent.CurrentHp}");
             unitHealthComponent.CurrentHp = unit.Get<HealthChangingEvent>().NewHp;
-            Debug.Log($"New HP: {unitHealthComponent.CurrentHp}");
-            
             unit.Unset<HealthChangingEvent>();
+            
+            if (unitHealthComponent.CurrentHp <= 0)
+            {
+                unit.Set<DestroyEvent>().Object = unit.Get<UnitComponent>().Object;
+                return;
+            }
         }
     }
 }

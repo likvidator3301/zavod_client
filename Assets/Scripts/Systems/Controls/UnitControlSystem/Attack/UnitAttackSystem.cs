@@ -7,7 +7,7 @@ using Leopotam.Ecs;
 
 public class UnitAttackSystem: IEcsRunSystem
 {
-    private readonly EcsFilter<AttackingComponent, AttackingComponent> attackingUnits;
+    private readonly EcsFilter<AttackingComponent, AttackComponent, MovementComponent> attackingUnits;
     
     public void Run() => Attack();
 
@@ -20,16 +20,18 @@ public class UnitAttackSystem: IEcsRunSystem
             var attackingComponent = unit.Get<AttackingComponent>();
             var unitAttackComponent = unit.Get<AttackComponent>();
             var unitMovementComponent = unit.Get<MovementComponent>();
-            var targetMovementComponent = attackingComponent.TargetEntity.Get<MovementComponent>();
-            var targetHealthComponent = attackingComponent.TargetEntity.Get<HealthComponent>();
-            var targetUnit = attackingComponent.TargetEntity;
             
-            if (!targetUnit.IsNotNullAndAlive() || unit.Get<FollowingComponent>() == null)
+            var targetUnit = attackingComponent.TargetEntity;
+            if (!targetUnit.IsNotNullAndAlive())
             {
-                //TODO: Entity not in filter error
                 AttackHelper.StopAttack(unit);
+                return;
             }
-            else if (AttackHelper.CanAttack(unitAttackComponent, unitMovementComponent, targetMovementComponent))
+            
+            var targetMovementComponent = targetUnit.Get<MovementComponent>();
+            var targetHealthComponent = targetUnit.Get<HealthComponent>();
+            
+            if (AttackHelper.CanAttack(unitAttackComponent, unitMovementComponent, targetMovementComponent))
             {
                 var newHp = targetHealthComponent.CurrentHp - unitAttackComponent.AttackDamage;
                 HealthHelper.CreateChangeHpEvent(targetUnit, newHp);

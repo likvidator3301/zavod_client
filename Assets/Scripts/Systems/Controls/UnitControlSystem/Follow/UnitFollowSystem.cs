@@ -25,7 +25,7 @@ public class UnitFollowSystem: IEcsRunSystem
              }
              else
              {
-                 unit.Get<MovingComponent>().Destination = followingComponent.TargetMovementComponent.CurrentPosition();
+                 unit.Get<MovingComponent>().Destination = followingComponent.TargetMovementComponent.CurrentPosition;
              }
          }
      }

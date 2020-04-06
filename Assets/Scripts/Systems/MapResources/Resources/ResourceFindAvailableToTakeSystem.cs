@@ -25,7 +25,7 @@ namespace Systems.Zavod
             
             foreach (var deliverEntity in deliversEntities)
             {
-                var deliverPosition = deliverEntity.Get<MovementComponent>().CurrentPosition();
+                var deliverPosition = deliverEntity.Get<MovementComponent>().CurrentPosition;
                 foreach (var resourceEntity in resourcesEntities)
                 {
                     var resourceGuid = resourceEntity.Get<ResourceComponent>().Guid;

@@ -1,25 +1,25 @@
 using System.Linq;
+using Systems;
 using Components;
 using Components.Attack;
 using Leopotam.Ecs;
 
 public class UnitStartAttackSystem: IEcsRunSystem
 {
-    private readonly EcsFilter<StartAttackingEvent, AttackComponent> startAttackingUnits;
+    private readonly EcsFilter<StartAttackEvent, AttackComponent> startAttackingUnits;
     
     public void Run() => StartAttack();
     
     private void StartAttack()
     {
-        var startAttackingUnitsEntities = startAttackingUnits.Entities
+        var startAttackUnitsEntities = startAttackingUnits.Entities
             .Take(startAttackingUnits.GetEntitiesCount());
-        foreach (var unit in startAttackingUnitsEntities)
+        foreach (var unit in startAttackUnitsEntities)
         {
-            var startAttackingEvent = unit.Get<StartAttackingEvent>();
-            //TODO: Entity already in filter
-            unit.Set<AttackingComponent>().TargetEntity = startAttackingEvent.TargetEntity;
+            var startAttackEvent = unit.Get<StartAttackEvent>();
+            unit.Set<AttackingComponent>().TargetEntity = startAttackEvent.TargetEntity;
         
-            unit.Unset<StartAttackingEvent>();
+            unit.Unset<StartAttackEvent>();
         }
     }
 }

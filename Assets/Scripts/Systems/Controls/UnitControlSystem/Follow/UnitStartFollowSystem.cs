@@ -16,7 +16,7 @@ public class UnitStartFollowSystem: IEcsRunSystem
         foreach (var unit in startFollowUnitsEntities)
         {
             var targetMovementComponent = unit.Get<StartFollowingEvent>().TargetMovementComponent;
-            unit.Set<MovingComponent>().Destination = targetMovementComponent.CurrentPosition();
+            unit.Set<MovingComponent>().Destination = targetMovementComponent.CurrentPosition;
             
             unit.Unset<StartFollowingEvent>();
             unit.Set<FollowingComponent>().TargetMovementComponent = targetMovementComponent;

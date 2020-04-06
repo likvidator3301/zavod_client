@@ -8,7 +8,7 @@ namespace Systems
 {
     public class DestroySystem: IEcsRunSystem
     {
-        private readonly EcsFilter<DestroyEvent> destroyEvents;
+        private readonly EcsFilter<DestroyEvent, UnitComponent> destroyEvents;
         
         public void Run() => DestroyEntities();
 

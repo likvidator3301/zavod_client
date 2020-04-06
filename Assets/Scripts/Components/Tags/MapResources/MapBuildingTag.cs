@@ -1,4 +1,5 @@
 public enum MapBuildingTag
 {
-    Zavod
+    Zavod,
+    Base
 }

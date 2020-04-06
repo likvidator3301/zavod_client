@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Components.Attack
 {
-    public class StartAttackingEvent
+    public class StartAttackEvent
     {
         public EcsEntity TargetEntity { get; set; }
     }
