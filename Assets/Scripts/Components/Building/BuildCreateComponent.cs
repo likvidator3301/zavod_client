@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using Leopotam.Ecs;
-using Components.Tags.Buildings;
 
 namespace Components
 {

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Scripts/NoEcsComponents/Communications.meta
 guid: da7f69eab90283d46ae3505e404c7ae7
+=======
+guid: 4bf39084030c14cfeb8b90680b6d5fde
+>>>>>>> Playable_map_preparations:Assets/FantasyCharactersDwarf-Free/Prefab.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

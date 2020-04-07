@@ -3,8 +3,9 @@ using UnityEngine;
 using Leopotam.Ecs;
 using Systems;
 using Systems.Communication;
+using Systems.Controls.UnitControlSystem;
+using Systems.Zavod;
 using Components;
-using Models;
 
 public class GameLoader : MonoBehaviour
 {
@@ -43,11 +44,22 @@ public class GameLoader : MonoBehaviour
             .Add(new LoadSystem());
 
         var unitSystems = new EcsSystems(world)
-            .Add(new UnitStateChangeSystem())
-            .Add(new UnitActionSystem())
-            .Add(new UnitCreateSystem())
-            .Add(new UnitAnimationSystem())
-            .Add(new UnitHealthSystem());
+            .Add(new UnitCreateSystem());
+        
+        var unitControlsSystems = new EcsSystems(world)
+            .Add(new UnitStartMoveSystem())
+            .Add(new UnitMoveSystem())
+            .Add(new UnitStartFollowSystem())
+            .Add(new UnitFollowSystem())
+            .Add(new UnitFindAvailableFightsSystem())
+            .Add(new UnitStartAttackSystem())
+            .Add(new UnitAttackSystem())
+            .Add(new UnitChangeHealthSystem());
+
+        var resourcesSystems = new EcsSystems(world)
+            .Add(new ResourceCreateSystem())
+            .Add(new ResourceFindAvailableToTakeSystem())
+            .Add(new ResourceTakeSystem());
 
         var uiSystems = new EcsSystems(world)
             .Add(new ResoursesDisplaySystem())
@@ -59,15 +71,25 @@ public class GameLoader : MonoBehaviour
             .Add(new OpenPauseMenuSystem());
 
         var serverSystem = new EcsSystems(world)
-            .Add(new CommunicationInitSystem());
-
+            .Add(new CommunicationInitSystem())
+            .Add(new MessagesReceiverSystem());
+        
+        var zavodSystems = new EcsSystems(world)
+            .Add(new GenerateMoneySystem());
+        
+        var destroySystem = new EcsSystems(world)
+            .Add(new DestroySystem());
 
         systems = new EcsSystems(world)
             .Add(controlsSystems)
             .Add(levelSystems)
             .Add(unitSystems)
+            .Add(unitControlsSystems)
+            .Add(zavodSystems)
+            .Add(resourcesSystems)
+            .Add(serverIntegrationSystems)
             .Add(uiSystems)
-            //.Add(serverSystem)
+            .Add(destroySystem)
             .Inject(playerComponent)
             .Inject(gameDefinitions)
             .ProcessInjects();

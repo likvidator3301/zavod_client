@@ -65,13 +65,13 @@ namespace Systems
         private void CreateKiosk()
         {
             world.NewEntityWith(out BuildingCreateComponent buildEvent);
-            buildEvent.Type = Components.Tags.Buildings.BuildingTag.Kiosk;
+            buildEvent.Type = BuildingTag.Kiosk;
         }
 
         private void OnGarageCreateClick()
         {
             world.NewEntityWith(out BuildingCreateComponent buildEvent);
-            buildEvent.Type = Components.Tags.Buildings.BuildingTag.Garage;
+            buildEvent.Type = BuildingTag.Garage;
         }
 
         private void CreateWarrior(ButtonComponent button)

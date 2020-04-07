@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Components;
+using Extensions;
 using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -54,6 +54,11 @@ namespace Systems
                 if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoUnit, UnitTag.Warrior.ToString()))
                 {
                     var selectedUnit = RaycastHelper.GetUnitEntityByRaycastHit(hitInfoUnit, units.Entities);
+                    selectedUnits.Add(selectedUnit);
+                }
+                else if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoDeliver, UnitTag.Deliver.ToString()))
+                {
+                    var selectedUnit = RaycastHelper.GetUnitEntityByRaycastHit(hitInfoDeliver, units.Entities);
                     selectedUnits.Add(selectedUnit);
                 }
                 player.SelectedUnits = selectedUnits;

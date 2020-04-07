@@ -42,8 +42,8 @@ namespace Systems
                     var unitTarget = RaycastHelper.GetUnitEntityByRaycastHit(hitInfo, units.Entities);
                     if (unitTarget.IsNull())
                         break;
-
-                    MoveHelper.CreateFollowEvent(unit, unitTarget);
+        
+                    FollowHelper.CreateFollowEvent(unit, unitTarget);
                 }
             }
         }

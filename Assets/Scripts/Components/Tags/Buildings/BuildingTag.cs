@@ -1,8 +1,5 @@
-namespace Components.Tags.Buildings
+public enum BuildingTag
 {
-    public enum BuildingTag
-    {
-        Garage,
-        Kiosk
-    }
+    Garage,
+    Kiosk
 }
