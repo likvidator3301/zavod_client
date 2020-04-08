@@ -87,7 +87,6 @@ public class GameLoader : MonoBehaviour
             .Add(unitControlsSystems)
             .Add(zavodSystems)
             .Add(resourcesSystems)
-            .Add(serverIntegrationSystems)
             .Add(uiSystems)
             .Add(destroySystem)
             .Inject(playerComponent)

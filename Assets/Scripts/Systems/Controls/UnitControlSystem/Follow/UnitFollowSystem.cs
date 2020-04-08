@@ -13,7 +13,7 @@ public class UnitFollowSystem: IEcsRunSystem
      private void Follow()
      {
          var followUnitsEntities = followUnits.Entities
-             .Take(followUnits.GetEntitiesCount());
+             .Where(u => u.IsNotNullAndAlive());
          foreach (var unit in followUnitsEntities)
          {
              var followingComponent = unit.Get<FollowingComponent>();

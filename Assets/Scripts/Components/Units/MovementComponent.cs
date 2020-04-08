@@ -8,7 +8,9 @@ namespace Components
     {
         public float MoveSpeed { get; set; }
         public float Acceleration { get; set; } = 3;
-        public Vector3 CurrentPosition => unitObject.transform.position;
+        public Vector3 CurrentPosition => unitObject is null 
+                                            ? Vector3.zero 
+                                            : unitObject.transform.position;
         public Quaternion Rotation => unitObject.transform.rotation;
 
         private GameObject unitObject;

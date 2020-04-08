@@ -11,7 +11,6 @@ namespace Systems
 
     public class StartupTestLevelSystem : IEcsInitSystem
     {
-        private ServerIntegration.ServerIntegration serverIntegration;
         private const float minHeight = 0;
         private const float minZavodHeight = 4.36f;
         private EcsWorld ecsWorld;

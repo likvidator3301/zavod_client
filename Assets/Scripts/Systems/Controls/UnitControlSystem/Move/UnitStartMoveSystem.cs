@@ -20,8 +20,8 @@ public class UnitStartMoveSystem: IEcsRunSystem
             var agent = unit.Get<NavMeshComponent>();
             var movementComponent = unit.Get<MovementComponent>();
             agent.Agent.SetDestination(destinationPosition);
-            agent.Agent.speed = movementComponent.MoveSpeed;
-            agent.Agent.acceleration = movementComponent.Acceleration;
+            //agent.Agent.speed = movementComponent.MoveSpeed;
+            //agent.Agent.acceleration = movementComponent.Acceleration;
 
             unit.Unset<StartMovingEvent>();
             unit.Set<MovingComponent>().Destination = destinationPosition;
