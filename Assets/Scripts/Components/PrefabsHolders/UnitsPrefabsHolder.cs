@@ -17,7 +17,7 @@ namespace Components
             EnemyWarriorPrefab =  Resources.Load<GameObject>(
                 Path.Combine($@"{pathToPrefabs}/Warrior/Dwarf BerserkerM"));
             DeliverUnitPrefab = Resources.Load<GameObject>(
-                Path.Combine($@"{pathToPrefabs}/Deliver/Deliver"));
+                Path.Combine($@"{pathToPrefabs}/Runner"));
         }
     }
 }

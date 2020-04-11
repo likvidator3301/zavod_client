@@ -34,8 +34,8 @@ namespace Systems
         {
             switch (btn.buttonName)
             {
-                case "Play":
-                    LoadGame();
+                case "CreateSession":
+                    CreateSession();
                     break;
                 case "Autorization":
                     OpenAuthWindow();
@@ -102,11 +102,9 @@ namespace Systems
             menu.Get1[0].SettingsWindow.enabled = true;
         }
 
-        private void LoadGame()
+        private void CreateSession()
         {
-            menu.Get1[0].MainMenu.enabled = false;
-            menu.Get1[0].LoadScreen.enabled = true;
-            SceneManager.LoadScene(1, LoadSceneMode.Single);
+            
         }
 
         private void CopyText()

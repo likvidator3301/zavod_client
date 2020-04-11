@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 6874142844612251174}
   - component: {fileID: 2526511343876270557}
   m_Layer: 0
-  m_Name: Deliver
-  m_TagString: Deliver
+  m_Name: EnemyRunner
+  m_TagString: Runner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: f908654030defa34ab2fdc47b056fa30, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

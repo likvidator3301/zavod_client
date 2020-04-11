@@ -4,6 +4,6 @@
     {
         Warrior,
         EnemyWarrior,
-        Deliver
+        Runner
     }
 }

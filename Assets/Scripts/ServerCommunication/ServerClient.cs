@@ -14,6 +14,6 @@ namespace ServerCommunication
         public static AutorizationAgent AuthAgent { get; } = new AutorizationAgent();
         public static AllUnitsInfo AllUnitsInfo { get; set; }
         public static Dictionary<Guid, UnityEngine.Vector3> MoveRequests { get; } = new Dictionary<Guid, UnityEngine.Vector3>();
-        public static Queue<MoveUnitDto> UnitMovementResults { get; } = new Queue<MoveUnitDto>();
+        public static Queue<OutputUnitState> UnitMovementResults { get; } = new Queue<OutputUnitState>();
     }
 }

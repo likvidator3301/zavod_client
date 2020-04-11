@@ -10,12 +10,8 @@ namespace Components
         public float AttackRange { get; set; }
         public float LastAttackTime { get; set; }
 
-        public void InitializeComponent(ServerUnitDto unitDto)
+        public void InitializeComponent(UnitType unitType)
         {
-            AttackDamage = unitDto.AttackDamage;
-            AttackDelay = unitDto.AttackDelay;
-            AttackRange = unitDto.AttackRange;
-            LastAttackTime = unitDto.LastAttackTime;
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Systems
             LoadUi();
             LoadBuildingsSwitches();
             InitConsole();
+            LoadUnitsAssets();
         }
 
         private void InitConsole()
@@ -92,6 +93,19 @@ namespace Systems
             }
 
             return assets;
+        }
+
+        private void LoadUnitsAssets()
+        {
+            world.NewEntityWith(out UnitAssetsComponent unitAssets);
+            unitAssets.assetsByTag = new Dictionary<string, GameObject>();
+
+            foreach (UnitTag tag in Enum.GetValues(typeof(UnitTag)))
+            {
+                var type = tag.ToString();
+                var path = @"Prefabs/Units/" + type;
+                unitAssets.assetsByTag.Add(type, Resources.Load<GameObject>(path));
+            }
         }
 
         private void LoadUi()

@@ -11,7 +11,7 @@ namespace ServerCommunication
 {
     public class AllUnitsInfo
     {
-        public List<ServerUnitDto> AllUnits;
+        public List<OutputUnitState> AllUnits;
 
         private readonly Timer updTimer = new Timer(1000);
         private readonly Timer sendMovementTimer = new Timer(800);
@@ -26,21 +26,11 @@ namespace ServerCommunication
 
         public async void UpdateUnitInfo()
         {
-            AllUnits = await ServerClient.Client.Unit.GetAll();
+            AllUnits = await ServerClient.Client.Unit.GetAllUnitStates();
         }
 
         public async void SendMovements()
         {
-            foreach (var u in ServerClient.MoveRequests)
-            {
-                ServerClient.Client.Unit.AddUnitsToMove(u.Key, new Models.Vector3(u.Value.x, u.Value.y, u.Value.z));
-            }
-            var moves = await ServerClient.Client.Unit.SendMoveUnits();
-
-            foreach(var move in moves)
-            {
-                ServerClient.UnitMovementResults.Enqueue(move);
-            }
         }
     }
 }

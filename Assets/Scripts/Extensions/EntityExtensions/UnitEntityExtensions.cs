@@ -18,12 +18,12 @@ namespace Systems
         private const string pathToInfo = @"./Units";
 #endif
         
-        public static void AddWarriorComponents(this EcsEntity unitEntity, ServerUnitDto unitDto, GameObject unitObject)
+        public static void AddWarriorComponents(this EcsEntity unitEntity, GameObject unitObject)
         {
-            unitEntity.Set<AttackComponent>().InitializeComponent(unitDto);
-            unitEntity.Set<DefenseComponent>().InitializeComponent(unitDto);
-            unitEntity.Set<HealthComponent>().InitializeComponent(unitDto);
-            unitEntity.Set<MovementComponent>().InitializeComponent(unitDto, unitObject);
+            unitEntity.Set<AttackComponent>().InitializeComponent(UnitType.Warrior);
+            unitEntity.Set<DefenseComponent>().InitializeComponent(UnitType.Warrior);
+            //unitEntity.Set<HealthComponent>().InitializeComponent(UnitType.Warrior);
+            unitEntity.Set<MovementComponent>().InitializeComponent(unitObject);
         }
 
         public static void AddDeliverComponents(this EcsEntity unitEntity, Vector3 position, GameObject unitObject)

@@ -7,10 +7,9 @@ namespace Components
         public float MaxHp { get; set; }
         public float CurrentHp { get; set; }
         
-        public void InitializeComponent(ServerUnitDto unitDto)
+        public void InitializeComponent(UnitType unitType)
         {
-            MaxHp = unitDto.MaxHp;
-            CurrentHp = unitDto.CurrentHp;
+            //CurrentHp = unitDto.Health;
         }
     }
 }

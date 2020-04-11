@@ -48,8 +48,9 @@ namespace Systems
         public List<EcsEntity> GetUnitsInFrame(IEnumerable<EcsEntity> units)
         {
             return units
+                .Where(u => u.IsNotNullAndAlive())
                 .Where(u => (u.Get<UnitComponent>().Tag == UnitTag.Warrior
-                             || u.Get<UnitComponent>().Tag == UnitTag.Deliver)
+                             || u.Get<UnitComponent>().Tag == UnitTag.Runner)
                             && IsWithinFrame(u.Get<UnitComponent>().Object.transform.position))
                 .ToList();
         }

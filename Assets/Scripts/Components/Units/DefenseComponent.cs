@@ -6,9 +6,9 @@ namespace Components
     {
         public float Defense { get; set; }
         
-        public void InitializeComponent(ServerUnitDto unitDto)
+        public void InitializeComponent(UnitType unitType)
         {
-            Defense = unitDto.Defense;
+            //Defense = unitDto.Defense;
         }
     }
 }
