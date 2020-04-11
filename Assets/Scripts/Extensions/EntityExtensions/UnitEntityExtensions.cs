@@ -5,6 +5,7 @@ using Components;
 using Leopotam.Ecs;
 using Models;
 using UnityEngine;
+using UnityEngine.AI;
 using Vector3 = UnityEngine.Vector3;
 
 namespace Systems
@@ -24,6 +25,8 @@ namespace Systems
             unitEntity.Set<DefenseComponent>().InitializeComponent(UnitType.Warrior);
             //unitEntity.Set<HealthComponent>().InitializeComponent(UnitType.Warrior);
             unitEntity.Set<MovementComponent>().InitializeComponent(unitObject);
+            unitEntity.Set<NavMeshComponent>();
+            unitEntity.Get<NavMeshComponent>().Agent = unitObject.GetComponent<NavMeshAgent>();
         }
 
         public static void AddDeliverComponents(this EcsEntity unitEntity, Vector3 position, GameObject unitObject)
