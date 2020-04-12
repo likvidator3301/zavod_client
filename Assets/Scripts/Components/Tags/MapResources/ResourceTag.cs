@@ -1,5 +1,5 @@
 public enum ResourceTag
 {
     Money,
-    Semki
+    Beer
 }

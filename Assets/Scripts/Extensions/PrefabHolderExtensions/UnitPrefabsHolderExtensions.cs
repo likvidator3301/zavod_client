@@ -50,7 +50,7 @@ namespace Systems
             unitComponent.SetFields(
                 newUnitObject, tag, guid);
             newEntity.AddDeliverComponents(position, newUnitObject);
-            deliverComponent.MaxResourceCount = 150;
+            deliverComponent.MaxResourcesTakenCount = 3;
         }
     }
 }

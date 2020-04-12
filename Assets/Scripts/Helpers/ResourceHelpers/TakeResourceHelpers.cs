@@ -12,17 +12,14 @@ namespace Systems
             var resourceComponent = resourceEntity.Get<ResourceComponent>();
 
             var takeResourceEvent = unitEntity.Set<ResourceTakeEvent>();
-            takeResourceEvent.Count = resourceComponent.ResourceCount;
-            takeResourceEvent.Tag = resourceComponent.Tag;
+            takeResourceEvent.Resource = resourceComponent;
         }
 
-        public static bool CanBeTaken(EcsEntity unitEntity, EcsEntity resourceEntity)
+        public static bool CanBeTaken(EcsEntity unitEntity)
         {   
             var deliverComponent = unitEntity.Get<ResourceDeliverComponent>();
-            var resourceComponent = resourceEntity.Get<ResourceComponent>();
-            
-            return deliverComponent.MoneyCount + deliverComponent.SemkiCount + resourceComponent.ResourceCount <=
-                   deliverComponent.MaxResourceCount;
+
+            return deliverComponent.MaxResourcesTakenCount > deliverComponent.Resources.Count;
         }
     }
 }

@@ -1,9 +1,10 @@
+using System.Collections.Generic;
+
 namespace Components
 {
     public class ResourceDeliverComponent
     {
-        public int MoneyCount { get; set; }
-        public int SemkiCount { get; set; }
-        public int MaxResourceCount { get; set; }
+        public List<ResourceComponent> Resources = new List<ResourceComponent>();
+        public int MaxResourcesTakenCount { get; set; }
     }
 }

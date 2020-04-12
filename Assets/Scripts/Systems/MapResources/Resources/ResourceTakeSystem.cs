@@ -20,19 +20,7 @@ namespace Systems.Zavod
             {
                 var deliverComponent = takeEntity.Get<ResourceDeliverComponent>();
                 var takeEvent = takeEntity.Get<ResourceTakeEvent>();
-
-                switch (takeEvent.Tag)
-                {
-                    case ResourceTag.Money:
-                        deliverComponent.MoneyCount += takeEvent.Count;
-                        break;
-                    case ResourceTag.Semki:
-                        deliverComponent.SemkiCount += takeEvent.Count;
-                        break;
-                }
-                
-                Debug.Log($"Current money count: {deliverComponent.MoneyCount}");
-                Debug.Log($"Current semki count: {deliverComponent.SemkiCount}\n");
+                deliverComponent.Resources.Add(takeEvent.Resource);
                 
                 takeEntity.Unset<ResourceTakeEvent>();
             }
