@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Components
 {
-    public class PlayerWaitingEvent
+    public class StartSessionEvent
     {
 
     }

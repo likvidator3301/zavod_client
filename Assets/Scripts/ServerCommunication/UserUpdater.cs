@@ -21,9 +21,7 @@ namespace ServerCommunication
         private async void UserUpdate()
         {
             if (ServerClient.Client.User.IsRegistered)
-            {
                 ServerClient.userInfo = await ServerClient.Client.User.GetUser();
-            }
         }
 
         ~UserUpdater()

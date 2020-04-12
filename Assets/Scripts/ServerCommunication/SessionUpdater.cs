@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using UnityEngine;
 
 namespace ServerCommunication
 {
@@ -13,7 +14,7 @@ namespace ServerCommunication
 
         public SessionUpdater()
         {
-            sessionUpdateTimer = new Timer(1421);
+            sessionUpdateTimer = new Timer(421);
             sessionUpdateTimer.Elapsed += (e, o) => SessionUpdate();
             sessionUpdateTimer.Start();
         }

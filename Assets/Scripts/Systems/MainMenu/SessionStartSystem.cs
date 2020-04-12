@@ -12,9 +12,9 @@ using UnityEngine.SceneManagement;
 
 namespace Systems
 {
-    class SessionConnectSystem : IEcsRunSystem
+    class SessionStartSystem : IEcsRunSystem
     {
-        private readonly EcsFilter<PlayerWaitingEvent> sessionEvents = null;
+        private readonly EcsFilter<StartSessionEvent> sessionEvents = null;
 
         public void Run()
         {
@@ -22,12 +22,9 @@ namespace Systems
             if (events.Count() <= 0)
                 return;
 
-            Debug.LogError("Есть эвенты для подключения");
-
             if (ServerClient.Sessions.CurrentSessionInfo != null 
                 && ServerClient.Sessions.CurrentSessionInfo.Players.Count >= 2)
             {
-                Debug.LogError("Вошел в цикл");
                 foreach (var sessionEvent in events)
                     sessionEvent.Destroy();
 

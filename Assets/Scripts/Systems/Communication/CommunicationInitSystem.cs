@@ -12,7 +12,6 @@ namespace Systems.Communication
     {
         public void Init()
         {
-            ServerClient.AllUnitsInfo = new AllUnitsInfo();
         }
     }
 }

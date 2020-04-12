@@ -89,8 +89,8 @@ public class GameLoader : MonoBehaviour
             .Add(resourcesSystems)
             .Add(uiSystems)
             .Add(destroySystem)
-            .Inject(playerComponent)
             .Inject(gameDefinitions)
+            .Inject(playerComponent)
             .ProcessInjects();
 
         systems.Init();

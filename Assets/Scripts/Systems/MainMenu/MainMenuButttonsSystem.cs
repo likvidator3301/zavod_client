@@ -16,6 +16,7 @@ namespace Systems
     {
         private readonly EcsFilter<ButtonClickEvent> clicks = null;
         private readonly EcsFilter<MainMenuComponent> menu = null;
+        private readonly EcsFilter<StartSessionEvent> waitEvents = null;
         private readonly EcsWorld world = null;
 
         public void Run()
@@ -123,14 +124,12 @@ namespace Systems
             {
                 sessionReq.SessionId = goodSessions.First().Id;
                 await ServerClient.Client.Session.EnterSessions(sessionReq);
-                Debug.LogError("Нашел сессию для присоединения\n" + goodSessions.Count() + "\nВсего сессий" + ServerClient.Sessions.AllSessions.Count);
             } 
             else
             {
                 sessionReq.SessionId = await ServerClient.Client.Session.CreateSession("SomeMap");
                 await ServerClient.Client.Session.EnterSessions(sessionReq);
-                world.NewEntityWith(out PlayerWaitingEvent playerWaiting);
-                Debug.LogError("Создаю свою сессию\n" + goodSessions.Count() + "\nВсего сессий" + ServerClient.Sessions.AllSessions.Count);
+                world.NewEntityWith(out StartSessionEvent playerWaiting);
             }
 
             ServerClient.Sessions.CurrentSessionGuid = sessionReq.SessionId;
@@ -138,6 +137,11 @@ namespace Systems
 
         private void CancelSession()
         {
+            foreach (var e in waitEvents.Entities.Where(ent => ent.IsNotNullAndAlive()))
+                e.Destroy();
+            ServerClient.Sessions.CurrentSessionGuid = Guid.Empty;
+            ServerClient.Sessions.CurrentSessionInfo = null;
+
             menu.Get1[0].SessionCreateWindow.enabled = false;
         }
 
