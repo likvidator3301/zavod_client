@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using ServerCommunication;
 using System.Windows;
 using System.IO;
+using Models;
 
 namespace Systems
 {
@@ -15,6 +16,7 @@ namespace Systems
     {
         private readonly EcsFilter<ButtonClickEvent> clicks = null;
         private readonly EcsFilter<MainMenuComponent> menu = null;
+        private readonly EcsWorld world = null;
 
         public void Run()
         {
@@ -34,8 +36,11 @@ namespace Systems
         {
             switch (btn.buttonName)
             {
-                case "CreateSession":
-                    CreateSession();
+                case "Play":
+                    Play();
+                    break;
+                case "CancelSession":
+                    CancelSession();
                     break;
                 case "Autorization":
                     OpenAuthWindow();
@@ -102,9 +107,38 @@ namespace Systems
             menu.Get1[0].SettingsWindow.enabled = true;
         }
 
-        private void CreateSession()
+        private async void Play()
         {
-            
+            var sessionReq = new EnterSessionRequest()
+            {
+                Nickname = File.ReadAllText(Directory.GetCurrentDirectory() + @"\nick.txt")
+            };
+
+            menu.Get1[0].SessionCreateWindow.enabled = true;
+            var goodSessions = ServerClient.Sessions.AllSessions
+                .Where(e => e.Players.Count < 2)
+                .Where(e => e.State == SessionState.Preparing);
+
+            if (goodSessions.Count() > 0)
+            {
+                sessionReq.SessionId = goodSessions.First().Id;
+                await ServerClient.Client.Session.EnterSessions(sessionReq);
+                Debug.LogError("Нашел сессию для присоединения\n" + goodSessions.Count() + "\nВсего сессий" + ServerClient.Sessions.AllSessions.Count);
+            } 
+            else
+            {
+                sessionReq.SessionId = await ServerClient.Client.Session.CreateSession("SomeMap");
+                await ServerClient.Client.Session.EnterSessions(sessionReq);
+                world.NewEntityWith(out PlayerWaitingEvent playerWaiting);
+                Debug.LogError("Создаю свою сессию\n" + goodSessions.Count() + "\nВсего сессий" + ServerClient.Sessions.AllSessions.Count);
+            }
+
+            ServerClient.Sessions.CurrentSessionGuid = sessionReq.SessionId;
+        }
+
+        private void CancelSession()
+        {
+            menu.Get1[0].SessionCreateWindow.enabled = false;
         }
 
         private void CopyText()

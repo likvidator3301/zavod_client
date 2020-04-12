@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Components;
 using Leopotam.Ecs;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace Systems
         {
             var buttons = canvas.GetComponentsInChildren<Button>();
 
-            foreach (var button in buttons)
+            foreach (var button in buttons.Where(b => b.name != "Autorization"))
             {
                 button.interactable = false;
             }
@@ -22,7 +23,7 @@ namespace Systems
         {
             var buttons = canvas.GetComponentsInChildren<Button>();
 
-            foreach (var button in buttons)
+            foreach (var button in buttons.Where(b => b.name != "Autorization"))
             {
                 button.interactable = true;
             }

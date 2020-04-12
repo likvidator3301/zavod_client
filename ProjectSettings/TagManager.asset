@@ -18,6 +18,7 @@ TagManager:
   - HealthBar
   - HealthBarDrawer
   - Console
+  - Runner
   - Deliver
   layers:
   - Default

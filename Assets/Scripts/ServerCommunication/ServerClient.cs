@@ -15,5 +15,10 @@ namespace ServerCommunication
         public static AllUnitsInfo AllUnitsInfo { get; set; }
         public static Dictionary<Guid, UnityEngine.Vector3> MoveRequests { get; } = new Dictionary<Guid, UnityEngine.Vector3>();
         public static Queue<OutputUnitState> UnitMovementResults { get; } = new Queue<OutputUnitState>();
+        public static SessionInfo Sessions { get; } = new SessionInfo();
+        public static ServerUserDto userInfo;
+
+        private static SessionUpdater sessionUpdater = new SessionUpdater();
+        private static UserUpdater userUpdater = new UserUpdater();
     }
 }

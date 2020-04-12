@@ -13,7 +13,6 @@ namespace Systems
     {
         private readonly EcsFilter<MainMenuComponent> allMenu = null;
 
-        private bool isUpdateFields = false;
 
         public void Run()
         {
@@ -25,10 +24,9 @@ namespace Systems
                 {
                     SetUnregistredStatus(menu);
                 }
-                else if (!isUpdateFields)
+                else
                 {
                     SetRegistredStatus(menu);
-                    isUpdateFields = true;
                 }
             }
         }
@@ -37,10 +35,10 @@ namespace Systems
         {
             var buttons = menu.MainMenu.GetComponentsInChildren<Button>();
 
-            //buttons
-            //    .Where(b => b.name.Equals("Play"))
-            //    .First()
-            //    .interactable = false;
+            buttons
+                .Where(b => b.name.Equals("Play"))
+                .First()
+                .interactable = false;
 
             buttons
                 .Where(b => b.name.Equals("Autorization"))
@@ -54,7 +52,7 @@ namespace Systems
                 .text = "Вы не авторизированы";
         }
 
-        private async void SetRegistredStatus(MainMenuComponent menu)
+        private void SetRegistredStatus(MainMenuComponent menu)
         {
             var buttons = menu.MainMenu.GetComponentsInChildren<Button>();
 
@@ -68,14 +66,18 @@ namespace Systems
                 .First()
                 .interactable = false;
 
-            var userDto = await ServerClient.Client.User.GetUser();
             var authText = menu.MainMenu
                 .GetComponentsInChildren<TMPro.TextMeshProUGUI>()
                 .Where(t => t.name.Equals("AuthText"))
                 .FirstOrDefault();
 
-            if (authText != null)
-                authText.text = "Добро пожаловать, " + userDto.Email;
+            if (authText == null)
+                return;
+
+            authText.text = "Подключение...";
+
+            if (ServerClient.userInfo != null)
+                authText.text = "Добро пожаловать, " + ServerClient.userInfo.Email;
         }
 
         public void Destroy()

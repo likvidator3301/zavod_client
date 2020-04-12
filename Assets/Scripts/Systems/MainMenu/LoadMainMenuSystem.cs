@@ -14,10 +14,12 @@ namespace Systems {
             var mainMenu = GuiHelper.InstantiateAllButtons(Resources.Load<Canvas>("Prefabs/GUI/MainMenu/MainMenu"), world);
             var autorizationWindow = GuiHelper.InstantiateAllButtons(Resources.Load<Canvas>("Prefabs/GUI/MainMenu/Autorization"), world);
             var optionsMenu = GuiHelper.InstantiateAllButtons(Resources.Load<Canvas>("Prefabs/GUI/MainMenu/SettingsMenu"), world);
+            var sessionCreateWindow = GuiHelper.InstantiateAllButtons(Resources.Load<Canvas>("Prefabs/GUI/MainMenu/SessionCreateWindow"), world);
 
             loadScreen.enabled = false;
             autorizationWindow.enabled = false;
             optionsMenu.enabled = false;
+            sessionCreateWindow.enabled = false;
 
             world.NewEntityWith(out MainMenuComponent menuComp);
             menuComp.LoadScreen = loadScreen;
@@ -25,6 +27,7 @@ namespace Systems {
             menuComp.AutorizationWindow = autorizationWindow;
             menuComp.SettingsWindow = optionsMenu;
             menuComp.NickWindow = LoadNickname(mainMenu);
+            menuComp.SessionCreateWindow = sessionCreateWindow;
         }
 
 

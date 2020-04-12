@@ -19,5 +19,8 @@ namespace Components
 
         [EcsIgnoreNullCheck]
         public Canvas NickWindow;
+
+        [EcsIgnoreNullCheck]
+        public Canvas SessionCreateWindow;
     }
 }
