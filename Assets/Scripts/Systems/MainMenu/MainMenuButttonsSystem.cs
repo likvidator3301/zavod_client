@@ -124,6 +124,7 @@ namespace Systems
             {
                 sessionReq.SessionId = goodSessions.First().Id;
                 await ServerClient.Client.Session.EnterSessions(sessionReq);
+                world.NewEntityWith(out WaitingSessionStartEvent playerWaiting);
             } 
             else
             {

@@ -14,7 +14,7 @@ namespace ServerCommunication
 
         public SessionUpdater()
         {
-            sessionUpdateTimer = new Timer(421);
+            sessionUpdateTimer = new Timer(831);
             sessionUpdateTimer.Elapsed += (e, o) => SessionUpdate();
             sessionUpdateTimer.Start();
         }

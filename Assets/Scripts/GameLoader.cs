@@ -65,7 +65,7 @@ public class GameLoader : MonoBehaviour
             .Add(new ResoursesDisplaySystem())
             .Add(new ResourcesCollectorSystem())
             .Add(new KioskInitSystem())
-            .Add(new UnitLayoutUISystem())
+            //.Add(new UnitLayoutUISystem())
             .Add(new ConsolePrintSystem())
             .Add(new MessagesReceiverSystem())
             .Add(new OpenPauseMenuSystem());
