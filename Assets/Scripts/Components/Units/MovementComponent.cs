@@ -10,6 +10,7 @@ namespace Components
         public float Acceleration { get; set; } = 3;
         public Vector3 CurrentPosition => unitObject.transform.position;
         public Quaternion Rotation => unitObject.transform.rotation;
+        public bool IsObjectAlive => unitObject != null;
 
         private GameObject unitObject;
 
