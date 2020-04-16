@@ -16,13 +16,14 @@ namespace Systems.Zavod
         {
             var takeEntities = takeEvents.Entities
                 .Take(takeEvents.GetEntitiesCount());
-            foreach (var takeEntity in takeEntities)
+            foreach (var takeResourceEntity in takeEntities)
             {
-                var deliverComponent = takeEntity.Get<ResourceDeliverComponent>();
-                var takeEvent = takeEntity.Get<ResourceTakeEvent>();
-                deliverComponent.Resources.Add(takeEvent.Resource);
+                var deliverComponent = takeResourceEntity.Get<ResourceDeliverComponent>();
+                var takeEvent = takeResourceEntity.Get<ResourceTakeEvent>();
+                deliverComponent.Resources.Add(takeEvent.ResourceEntity.Get<ResourceComponent>());
+                ResourceDestroyHelpers.CreateDestroyEvent(takeEvent.ResourceEntity);
                 
-                takeEntity.Unset<ResourceTakeEvent>();
+                takeResourceEntity.Unset<ResourceTakeEvent>();
             }
         }
     }

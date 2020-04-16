@@ -41,10 +41,7 @@ namespace Systems.Base
                             break;
                         }
                     }
-
-                    Debug.Log($"{resource.Tag}: {resource.ResourceCount}");
                 }
-                Debug.Log("RESOURCES WERE DELIVERED TO BASE \n\r");
                 
                 resources.Clear();
                 takeResourceEntity.Unset<TakeResourcesFromDeliverEvent>();
