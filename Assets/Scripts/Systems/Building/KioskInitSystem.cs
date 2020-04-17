@@ -17,7 +17,7 @@ namespace Systems
             {
                 var buildComponent = build.Get<BuildingComponent>();
 
-                if (buildComponent.Tag != BuildingTag.Kiosk)
+                if (buildComponent.Tag != BuildingTag.Stall)
                     continue;
 
                 if (build.GetComponentsCount() == 1)

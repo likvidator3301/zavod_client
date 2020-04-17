@@ -21,12 +21,22 @@ namespace ServerCommunication
 
         private async void SessionUpdate()
         {
-            ServerClient.Sessions.AllSessions = await ServerClient.Client.Session.GetAllSessions();
-
-            if (ServerClient.Sessions.CurrentSessionGuid == Guid.Empty)
+            if (ServerClient.Communication == null)
                 return;
 
-            ServerClient.Sessions.CurrentSessionInfo = await ServerClient.Client.Session.GetSession(ServerClient.Sessions.CurrentSessionGuid);
+            ServerClient.Communication.Sessions.AllSessions = await ServerClient.Communication.Client.Session.GetAllSessions();
+
+            if (ServerClient.Communication.Sessions.CurrentSessionGuid == Guid.Empty)
+                return;
+
+            ServerClient
+                .Communication
+                .Sessions
+                .CurrentSessionInfo = await ServerClient
+                                            .Communication
+                                            .Client
+                                            .Session
+                                            .GetSession(ServerClient.Communication.Sessions.CurrentSessionGuid);
         }
 
         ~SessionUpdater()

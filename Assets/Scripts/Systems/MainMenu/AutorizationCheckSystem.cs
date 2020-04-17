@@ -20,7 +20,7 @@ namespace Systems
             {
                 var menu = menuEnt.Get<MainMenuComponent>();
 
-                if (!ServerClient.AuthAgent.isAuth)
+                if (!ServerClient.Communication.AuthAgent.isAuth)
                 {
                     SetUnregistredStatus(menu);
                 }
@@ -76,8 +76,8 @@ namespace Systems
 
             authText.text = "Подключение...";
 
-            if (ServerClient.userInfo != null)
-                authText.text = "Добро пожаловать, " + ServerClient.userInfo.Email;
+            if (ServerClient.Communication.userInfo != null)
+                authText.text = "Добро пожаловать, " + ServerClient.Communication.userInfo.Email;
         }
 
         public void Destroy()

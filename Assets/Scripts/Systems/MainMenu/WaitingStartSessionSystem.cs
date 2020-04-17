@@ -17,8 +17,8 @@ namespace Systems
             var goodEvents = sessionEvents.Entities.Where(e => e.IsNotNullAndAlive());
 
             if (goodEvents.Count() == 0
-                || (ServerCommunication.ServerClient.Sessions.CurrentSessionInfo != null
-                    && ServerCommunication.ServerClient.Sessions.CurrentSessionInfo.State == Models.SessionState.Preparing))
+                || (ServerCommunication.ServerClient.Communication.Sessions.CurrentSessionInfo != null
+                    && ServerCommunication.ServerClient.Communication.Sessions.CurrentSessionInfo.State == Models.SessionState.Preparing))
                 return;
 
             foreach (var ent in goodEvents)

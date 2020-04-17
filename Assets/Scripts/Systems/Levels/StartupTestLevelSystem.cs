@@ -29,7 +29,6 @@ namespace Systems
             MapBuildingsPrefabsHolder.BasePrefab.AddNewBaseEntityOnPosition(ecsWorld, basePosition);
             MoneyBagPrefabHolder.MoneyBagPrefab.AddResourceEntityOnPosition(ecsWorld, moneyBag1Position, ResourceTag.Money);
             MoneyBagPrefabHolder.MoneyBagPrefab.AddResourceEntityOnPosition(ecsWorld, moneyBag2Position, ResourceTag.Money);
-            UnitsPrefabsHolder.DeliverUnitPrefab.AddNewDeliverEntityOnPosition(ecsWorld, deliverPosition, Guid.NewGuid());
         }
     }
 }

@@ -72,7 +72,8 @@ public class GameLoader : MonoBehaviour
 
         var serverSystem = new EcsSystems(world)
             .Add(new CommunicationInitSystem())
-            .Add(new MessagesReceiverSystem());
+            .Add(new UpdateEnemyUnitsSystem())
+            .Add(new UnitPositionsSendSystem());
         
         var zavodSystems = new EcsSystems(world)
             .Add(new GenerateMoneySystem());
@@ -89,6 +90,7 @@ public class GameLoader : MonoBehaviour
             .Add(resourcesSystems)
             .Add(uiSystems)
             .Add(destroySystem)
+            .Add(serverSystem)
             .Inject(gameDefinitions)
             .Inject(playerComponent)
             .ProcessInjects();

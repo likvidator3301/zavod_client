@@ -7,6 +7,6 @@ namespace Components
     public class UnitAssetsComponent
     {
         [EcsIgnoreNullCheck]
-        public Dictionary<string, GameObject> assetsByTag;
+        public Dictionary<string, GameObject> assetsByName;
     }
 }

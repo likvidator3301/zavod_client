@@ -116,32 +116,32 @@ namespace Systems
             };
 
             menu.Get1[0].SessionCreateWindow.enabled = true;
-            var goodSessions = ServerClient.Sessions.AllSessions
+            var goodSessions = ServerClient.Communication.Sessions.AllSessions
                 .Where(e => e.Players.Count < 2)
                 .Where(e => e.State == SessionState.Preparing);
 
             if (goodSessions.Count() > 0)
             {
                 sessionReq.SessionId = goodSessions.First().Id;
-                await ServerClient.Client.Session.EnterSessions(sessionReq);
+                await ServerClient.Communication.Client.Session.EnterSessions(sessionReq);
                 world.NewEntityWith(out WaitingSessionStartEvent playerWaiting);
             } 
             else
             {
-                sessionReq.SessionId = await ServerClient.Client.Session.CreateSession("SomeMap");
-                await ServerClient.Client.Session.EnterSessions(sessionReq);
+                sessionReq.SessionId = await ServerClient.Communication.Client.Session.CreateSession("SomeMap");
+                await ServerClient.Communication.Client.Session.EnterSessions(sessionReq);
                 world.NewEntityWith(out StartSessionEvent playerWaiting);
             }
 
-            ServerClient.Sessions.CurrentSessionGuid = sessionReq.SessionId;
+            ServerClient.Communication.Sessions.CurrentSessionGuid = sessionReq.SessionId;
         }
 
         private void CancelSession()
         {
             foreach (var e in waitEvents.Entities.Where(ent => ent.IsNotNullAndAlive()))
                 e.Destroy();
-            ServerClient.Sessions.CurrentSessionGuid = Guid.Empty;
-            ServerClient.Sessions.CurrentSessionInfo = null;
+            ServerClient.Communication.Sessions.CurrentSessionGuid = Guid.Empty;
+            ServerClient.Communication.Sessions.CurrentSessionInfo = null;
 
             menu.Get1[0].SessionCreateWindow.enabled = false;
         }
@@ -162,7 +162,7 @@ namespace Systems
             var authWindow = menu.Get1[0].AutorizationWindow;
             authWindow.enabled = true;
 
-            var authDto = await ServerClient.AuthAgent.GetAuthDto();
+            var authDto = await ServerClient.Communication.AuthAgent.GetAuthDto();
             authWindow.GetComponentsInChildren<TMPro.TextMeshProUGUI>()
                       .Where(gO => gO.name.Equals("Code"))
                       .First()
@@ -171,7 +171,7 @@ namespace Systems
 
         private async void AutorizationButton()
         {
-            var authDto = await ServerClient.AuthAgent.GetAuthDto();
+            var authDto = await ServerClient.Communication.AuthAgent.GetAuthDto();
             System.Diagnostics.Process.Start(authDto.verification_url);
         }
     }

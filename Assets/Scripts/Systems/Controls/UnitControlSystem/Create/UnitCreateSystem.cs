@@ -1,43 +1,40 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Leopotam.Ecs;
 using Components;
-using Models;
-using Vector3 = UnityEngine.Vector3;
 using UnityEngine;
+using ServerCommunication;
+using System.Linq;
+using Models;
 
 namespace Systems
 {
-    using Vector3 = Models.Vector3;
-
     public class UnitCreateSystem : IEcsRunSystem
     {
         private readonly EcsFilter<UnitCreateEvent> unitEvents = null;
         private readonly EcsFilter<UnitAssetsComponent> unitAssets = null;
-        private readonly GameDefinitions gameDefinitions = null;
         private readonly EcsWorld world = null;
 
-        public void Run() => CreateUnits();
-
-        private async Task CreateUnits()
+        public void Run()
         {
-            for (var i = 0; i < unitEvents.GetEntitiesCount(); i++)
+            foreach (var unitEvent in unitEvents.Entities.Where(u => u.IsNotNullAndAlive()))
             {
-                var newPosition = new UnityEngine.Vector3(unitEvents.Get1[i].Position.x + 5,
-                    unitEvents.Get1[i].Position.y,
-                    unitEvents.Get1[i].Position.z);
+                var eventComp = unitEvent.Get<UnitCreateEvent>();
+                var isEnemy = ServerClient.Communication.userInfo.MyPlayer.Id != eventComp.PlayerId;
+                var unitName = (isEnemy ? "Enemy" : "")
+                                + eventComp.UnitTag.ToString();
 
-                var unitInstance = GameObject.Instantiate(unitAssets.Get1[0].assetsByTag[unitEvents.Get1[i].UnitTag.ToString()]);
-                unitInstance.transform.position = newPosition;
-
+                var unitInstance = GameObject.Instantiate(unitAssets.Get1[0].assetsByName[unitName], eventComp.Position, Quaternion.Euler(0, 0, 0));
 
                 var unitEntity = world.NewEntityWith(out UnitComponent unit);
-                unit.Guid = new Guid();
+                unit.Guid = eventComp.Id == Guid.Empty ? Guid.NewGuid() : eventComp.Id;
                 unit.Object = unitInstance;
-                unit.Tag = unitEvents.Get1[i].UnitTag;
-                unitEntity.AddWarriorComponents(unitInstance);
+                unit.Tag = eventComp.UnitTag;
+                unitEntity.AddDefaultUnitComponents(unitInstance, eventComp.Health);
 
-                unitEvents.Entities[i].Destroy();
+                if (isEnemy)
+                    unitEntity.Set<EnemyUnitComponent>().PlayerId = eventComp.Id;
+
+                unitEvent.Destroy();
             }
         }
     }

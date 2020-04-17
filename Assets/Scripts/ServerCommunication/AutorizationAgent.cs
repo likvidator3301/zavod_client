@@ -9,19 +9,25 @@ namespace ServerCommunication
 {
     public class AutorizationAgent
     {
-        public bool isAuth = ServerClient.Client.User.IsRegistered;
+        public bool isAuth;
 
         private GoogleAuthDto authDto;
 
         public AutorizationAgent()
         {
-            ServerClient.Client.User.OnRegisterSuccessful += (a) => isAuth = true;
+            
+        }
+
+        public AutorizationAgent(ZavodClient.ZavodClient client)
+        {
+            isAuth = client.User.IsRegistered;
+            client.User.OnRegisterSuccessful += (a) => isAuth = true;
         }
 
         public async Task<GoogleAuthDto> GetAuthDto()
         {
             if (authDto is null)
-                authDto = await ServerClient.Client.User.GetAuthCode();
+                authDto = await ServerClient.Communication.Client.User.GetAuthCode();
             return authDto;
         }
     }

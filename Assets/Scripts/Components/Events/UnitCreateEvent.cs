@@ -7,5 +7,8 @@ namespace Components
     {
         public UnitTag UnitTag;
         public Vector3 Position;
+        public Guid Id;
+        public Guid PlayerId;
+        public int Health;
     }
 }

@@ -22,13 +22,13 @@ namespace Systems
             if (events.Count() <= 0)
                 return;
 
-            if (ServerClient.Sessions.CurrentSessionInfo != null 
-                && ServerClient.Sessions.CurrentSessionInfo.Players.Count >= 2)
+            if (ServerClient.Communication.Sessions.CurrentSessionInfo != null 
+                && ServerClient.Communication.Sessions.CurrentSessionInfo.Players.Count >= 2)
             {
                 foreach (var sessionEvent in events)
                     sessionEvent.Destroy();
 
-                ServerClient.Client.Session.StartSession(ServerClient.Sessions.CurrentSessionGuid);
+                ServerClient.Communication.Client.Session.StartSession(ServerClient.Communication.Sessions.CurrentSessionGuid);
 
                 SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
             }

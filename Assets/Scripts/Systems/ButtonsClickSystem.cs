@@ -65,7 +65,7 @@ namespace Systems
         private void CreateKiosk()
         {
             world.NewEntityWith(out BuildingCreateComponent buildEvent);
-            buildEvent.Type = BuildingTag.Kiosk;
+            buildEvent.Type = BuildingTag.Stall;
         }
 
         private void OnGarageCreateClick()
@@ -84,10 +84,12 @@ namespace Systems
             var GameObjectOfButton = GetParentGameObjectFromButton(button.button);
             world.NewEntityWith(out UnitCreateEvent unitCreate);
             unitCreate.UnitTag = UnitTag.Warrior;
-
-            unitCreate.Position = GameObjectOfButton == null
+            unitCreate.PlayerId = ServerCommunication.ServerClient.Communication.userInfo.MyPlayer.Id;
+            var unitPos = GameObjectOfButton == null
                 ? throw new NullReferenceException()
                 : GameObjectOfButton.transform.position;
+            unitCreate.Position = new Vector3(unitPos.x + 5, unitPos.y, unitPos.z);
+            unitCreate.Health = 150;
         }
 
         private GameObject GetParentGameObjectFromButton(Button button)

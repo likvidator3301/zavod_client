@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Components;
 using Leopotam.Ecs;
+using ServerCommunication;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -98,13 +99,15 @@ namespace Systems
         private void LoadUnitsAssets()
         {
             world.NewEntityWith(out UnitAssetsComponent unitAssets);
-            unitAssets.assetsByTag = new Dictionary<string, GameObject>();
+            unitAssets.assetsByName = new Dictionary<string, GameObject>();
 
             foreach (UnitTag tag in Enum.GetValues(typeof(UnitTag)))
             {
                 var type = tag.ToString();
                 var path = @"Prefabs/Units/" + type;
-                unitAssets.assetsByTag.Add(type, Resources.Load<GameObject>(path));
+                var enemyPath = @"Prefabs/Units/Enemy" + type;
+                unitAssets.assetsByName.Add(type, Resources.Load<GameObject>(path));
+                unitAssets.assetsByName.Add("Enemy" + type, Resources.Load<GameObject>(enemyPath));
             }
         }
 

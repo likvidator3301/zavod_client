@@ -3,7 +3,6 @@
     public enum UnitTag
     {
         Warrior,
-        EnemyWarrior,
         Runner
     }
 }

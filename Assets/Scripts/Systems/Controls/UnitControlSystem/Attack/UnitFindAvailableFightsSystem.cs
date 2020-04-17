@@ -6,19 +6,22 @@ using Leopotam.Ecs;
 
 public class UnitFindAvailableFightsSystem: IEcsRunSystem
 {
-    private readonly EcsFilter<UnitComponent, MovementComponent> unitsPositions;
+    private readonly EcsFilter<UnitComponent, MovementComponent>.Exclude<EnemyUnitComponent> unitsPositions;
+    private readonly EcsFilter<UnitComponent, MovementComponent, EnemyUnitComponent> enemyUnits;
     
     public void Run() => FindAvailableFights();
     
     private void FindAvailableFights()
     {
         var unitsPositionsEntities = unitsPositions.Entities
+            .Where(e => e.IsNotNullAndAlive())
             .Take(unitsPositions.GetEntitiesCount())
             .Where(u => u.Get<AttackingComponent>() == null);
-        var allyUnitsPositionsEntities = unitsPositionsEntities
-            .Where(u => u.Get<UnitComponent>().Tag == UnitTag.Warrior);
-        var enemyUnitsPositionsEntities = unitsPositionsEntities
-            .Where(u => u.Get<UnitComponent>().Tag == UnitTag.EnemyWarrior);
+        var enemyUnitsPositionsEntities = enemyUnits.Entities
+            .Where(e => e.IsNotNullAndAlive())
+            .Take(unitsPositions.GetEntitiesCount())
+            .Where(u => u.Get<AttackingComponent>() == null);
+        var allyUnitsPositionsEntities = unitsPositionsEntities;
         
         foreach (var allyUnit in allyUnitsPositionsEntities)
         {
