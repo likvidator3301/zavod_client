@@ -32,7 +32,7 @@ namespace Systems
                 unitEntity.AddDefaultUnitComponents(unitInstance, eventComp.Health);
 
                 if (isEnemy)
-                    unitEntity.Set<EnemyUnitComponent>().PlayerId = eventComp.Id;
+                    unitEntity.Set<EnemyUnitComponent>().PlayerId = eventComp.PlayerId;
 
                 unitEvent.Destroy();
             }
