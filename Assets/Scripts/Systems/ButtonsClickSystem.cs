@@ -89,6 +89,7 @@ namespace Systems
                 ? throw new NullReferenceException()
                 : GameObjectOfButton.transform.position;
             unitCreate.Position = new Vector3(unitPos.x + 5, unitPos.y, unitPos.z);
+            unitCreate.Id = Guid.NewGuid();
             unitCreate.Health = 150;
         }
 

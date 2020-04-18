@@ -26,11 +26,11 @@ namespace Systems
                 var unitInstance = GameObject.Instantiate(unitAssets.Get1[0].assetsByName[unitName], eventComp.Position, Quaternion.Euler(0, 0, 0));
 
                 var unitEntity = world.NewEntityWith(out UnitComponent unit);
-                unit.Guid = eventComp.Id == Guid.Empty ? Guid.NewGuid() : eventComp.Id;
+                unit.Guid = eventComp.Id;
                 unit.Object = unitInstance;
                 unit.Tag = eventComp.UnitTag;
                 unitEntity.AddDefaultUnitComponents(unitInstance, eventComp.Health);
-
+                Debug.LogError(unit.Guid);
                 if (isEnemy)
                     unitEntity.Set<EnemyUnitComponent>().PlayerId = eventComp.PlayerId;
 
