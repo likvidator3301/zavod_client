@@ -5,6 +5,7 @@ using System.Linq;
 using Components;
 using ServerCommunication;
 using UnityEngine.AI;
+using System.IO;
 
 namespace Systems.Communication
 {
@@ -16,10 +17,12 @@ namespace Systems.Communication
         public void Run()
         {
             var unitsEntity = units.Entities.Where(e => e.IsNotNullAndAlive());
+            var serverUnits = ServerClient.Communication.InGameInfo.UnitsInfo
+                                                        .Where(u => u.PlayerId != ServerClient.Communication.userInfo.MyPlayer.Id);
 
-            foreach (var unit in ServerClient.Communication.InGameInfo.UnitsInfo
-                                                        .Where(u => u.PlayerId != ServerClient.Communication.userInfo.MyPlayer.Id))
+            foreach (var unit in serverUnits)
             {
+
                 if (!Enum.TryParse(unit.Type.ToString(), out UnitTag tag))
                     continue;
 
@@ -34,7 +37,7 @@ namespace Systems.Communication
                     isUnitUpdate = true;
 
                     uComp.Object.GetComponent<NavMeshAgent>().SetDestination(unit.Position.ToUnityVector());
-                    clientUnit.Get<HealthComponent>().CurrentHp = unit.Health = unit.Health;
+                    clientUnit.Get<HealthComponent>().CurrentHp = unit.Health;
                     break;
                 }
 

@@ -30,9 +30,11 @@ namespace Systems
                 unit.Object = unitInstance;
                 unit.Tag = eventComp.UnitTag;
                 unitEntity.AddDefaultUnitComponents(unitInstance, eventComp.Health);
-                Debug.LogError(unit.Guid);
                 if (isEnemy)
-                    unitEntity.Set<EnemyUnitComponent>().PlayerId = eventComp.PlayerId;
+                {
+                    var enemyComp = unitEntity.Set<EnemyUnitComponent>();
+                    enemyComp.PlayerId = eventComp.PlayerId;
+                }
 
                 unitEvent.Destroy();
             }

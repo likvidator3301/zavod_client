@@ -37,8 +37,11 @@ namespace Systems
                 case "CreateBarraks":
                     OnGarageCreateClick();
                     break;
-                case "Warrior":
+                case "CreateWarrior":
                     CreateWarrior(btn);
+                    break;
+                case "CreateRunner":
+                    CreateRunner(btn);
                     break;
                 case "CreateKiosk":
                     CreateKiosk();
@@ -84,6 +87,25 @@ namespace Systems
             var GameObjectOfButton = GetParentGameObjectFromButton(button.button);
             world.NewEntityWith(out UnitCreateEvent unitCreate);
             unitCreate.UnitTag = UnitTag.Warrior;
+            unitCreate.PlayerId = ServerCommunication.ServerClient.Communication.userInfo.MyPlayer.Id;
+            var unitPos = GameObjectOfButton == null
+                ? throw new NullReferenceException()
+                : GameObjectOfButton.transform.position;
+            unitCreate.Position = new Vector3(unitPos.x + 5, unitPos.y, unitPos.z);
+            unitCreate.Id = Guid.NewGuid();
+            unitCreate.Health = 150;
+        }
+
+        private void CreateRunner(ButtonComponent button)
+        {
+            if (resources.Get1[0].Beer < 10)
+                return;
+
+            resources.Get1[0].Beer -= 10;
+
+            var GameObjectOfButton = GetParentGameObjectFromButton(button.button);
+            world.NewEntityWith(out UnitCreateEvent unitCreate);
+            unitCreate.UnitTag = UnitTag.Runner;
             unitCreate.PlayerId = ServerCommunication.ServerClient.Communication.userInfo.MyPlayer.Id;
             var unitPos = GameObjectOfButton == null
                 ? throw new NullReferenceException()
