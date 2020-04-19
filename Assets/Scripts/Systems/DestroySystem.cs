@@ -8,9 +8,15 @@ namespace Systems
 {
     public class DestroySystem: IEcsRunSystem
     {
-        private readonly EcsFilter<DestroyEvent, UnitComponent> destroyEvents;
+        private readonly EcsFilter<DestroyEvent> destroyEvents;
+        private readonly EcsFilter<DestroyEvent, ResourceDeliverComponent> delivers;
+        private readonly EcsWorld world;
         
-        public void Run() => DestroyEntities();
+        public void Run()
+        {
+            DropResources();
+            DestroyEntities();
+        }
 
         private void DestroyEntities()
         {
@@ -20,6 +26,14 @@ namespace Systems
                 Object.Destroy(destroyEntity.Get<DestroyEvent>().Object);
                 destroyEntity.Destroy();
             }
+        }
+
+        private void DropResources()
+        {
+            var deliversEntities = delivers.Entities
+                .Take(delivers.GetEntitiesCount());
+            foreach (var deliverEntity in deliversEntities)
+                DropResourceHelpers.CreateDropResourcesEvent(deliverEntity, world);
         }
     }
 }

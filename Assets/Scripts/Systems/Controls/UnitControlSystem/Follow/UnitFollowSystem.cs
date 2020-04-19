@@ -17,8 +17,8 @@ public class UnitFollowSystem: IEcsRunSystem
          foreach (var unit in followUnitsEntities)
          {
              var followingComponent = unit.Get<FollowingComponent>();
-             
-             if (followingComponent.TargetMovementComponent == null)
+
+             if (followingComponent?.TargetMovementComponent == null || !followingComponent.TargetMovementComponent.IsObjectAlive)
              {
                  FollowHelper.StopFollow(unit);
                  MoveHelper.Stop(unit);

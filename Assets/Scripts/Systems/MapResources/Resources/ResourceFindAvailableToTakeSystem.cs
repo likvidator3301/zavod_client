@@ -35,7 +35,7 @@ namespace Systems.Zavod
                     var resourcePosition = resourceEntity.Get<ResourceComponent>().Position;
                     if (Vector3.Distance(resourcePosition, deliverPosition) <= minTakingDistance)
                     {
-                        if (TakeResourceHelpers.CanBeTaken(deliverEntity, resourceEntity))
+                        if (TakeResourceHelpers.CanBeTaken(deliverEntity))
                         {
                             TakeResourceHelpers.CreateTakeEvent(deliverEntity, resourceEntity);
                             ResourceDestroyHelpers.CreateDestroyEvent(resourceEntity);

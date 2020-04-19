@@ -2,6 +2,7 @@
 using UnityEngine;
 using Leopotam.Ecs;
 using Systems;
+using Systems.Base;
 using Systems.Communication;
 using Systems.Controls.UnitControlSystem;
 using Systems.Zavod;
@@ -59,7 +60,8 @@ public class GameLoader : MonoBehaviour
         var resourcesSystems = new EcsSystems(world)
             .Add(new ResourceCreateSystem())
             .Add(new ResourceFindAvailableToTakeSystem())
-            .Add(new ResourceTakeSystem());
+            .Add(new ResourceTakeSystem())
+            .Add(new DropResourceAfterDeathSystem());
 
         var uiSystems = new EcsSystems(world)
             .Add(new ResoursesDisplaySystem())
@@ -78,6 +80,10 @@ public class GameLoader : MonoBehaviour
         var zavodSystems = new EcsSystems(world)
             .Add(new GenerateMoneySystem());
         
+        var baseSystems = new EcsSystems(world)
+            .Add(new FindNearDeliversToTakeResourcesSystem())
+            .Add(new TakeResourcesFromDeliverSystem());
+        
         var destroySystem = new EcsSystems(world)
             .Add(new DestroySystem());
 
@@ -88,6 +94,7 @@ public class GameLoader : MonoBehaviour
             .Add(unitControlsSystems)
             .Add(zavodSystems)
             .Add(resourcesSystems)
+            .Add(serverIntegrationSystems)
             .Add(uiSystems)
             .Add(destroySystem)
             .Add(serverSystem)

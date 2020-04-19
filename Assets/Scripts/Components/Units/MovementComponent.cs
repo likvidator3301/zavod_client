@@ -13,6 +13,7 @@ namespace Components
                                             ? Vector3.zero 
                                             : unitObject.transform.position;
         public Quaternion Rotation => unitObject.transform.rotation;
+        public bool IsObjectAlive => unitObject != null;
 
         private GameObject unitObject;
 
