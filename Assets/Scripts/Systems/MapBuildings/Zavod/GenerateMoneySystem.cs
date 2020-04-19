@@ -20,7 +20,7 @@ namespace Systems.Zavod
                 var resourceComponent = zavod.Get<ResourceGeneratorComponent>();
                 var currentTime = Time.time;
                 if (currentTime >= resourceComponent.LastGeneratedMoneyTime + resourceComponent.GenerateMoneyDelay)
-                    CreatingResourceHelpers.CreateAddingMoneyBagEvent(zavod);
+                    CreatingResourceHelpers.CreateAddingMoneyBagEventOnZavod(zavod);
             }
         }
     }

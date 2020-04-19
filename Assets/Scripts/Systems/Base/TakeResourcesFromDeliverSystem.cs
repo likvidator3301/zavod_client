@@ -2,7 +2,6 @@ using System.Linq;
 using Components;
 using Components.Base;
 using Leopotam.Ecs;
-using UnityEngine;
 
 namespace Systems.Base
 {
@@ -35,7 +34,7 @@ namespace Systems.Base
                             playerResourcesComponent.Cash += resource.ResourceCount;
                             break;
                         }
-                        case ResourceTag.Beer:
+                        case ResourceTag.Semki:
                         {
                             playerResourcesComponent.Beer += resource.ResourceCount;
                             break;

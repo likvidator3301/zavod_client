@@ -2,7 +2,6 @@ using System.Linq;
 using Components;
 using Components.Resource;
 using Leopotam.Ecs;
-using UnityEngine;
 
 namespace Systems.Zavod
 {

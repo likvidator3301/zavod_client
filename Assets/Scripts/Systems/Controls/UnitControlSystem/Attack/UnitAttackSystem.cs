@@ -22,14 +22,15 @@ public class UnitAttackSystem: IEcsRunSystem
             var unitMovementComponent = unit.Get<MovementComponent>();
             
             var targetUnit = attackingComponent.TargetEntity;
-            if (!targetUnit.IsNotNullAndAlive())
+            var targetMovementComponent = targetUnit.Get<MovementComponent>();
+            var targetHealthComponent = targetUnit.Get<HealthComponent>();
+            
+            if (!targetUnit.IsNotNullAndAlive() || targetMovementComponent == null || !targetMovementComponent.IsObjectAlive)
             {
                 AttackHelper.StopAttack(unit);
                 return;
             }
             
-            var targetMovementComponent = targetUnit.Get<MovementComponent>();
-            var targetHealthComponent = targetUnit.Get<HealthComponent>();
             
             if (AttackHelper.CanAttack(unitAttackComponent, unitMovementComponent, targetMovementComponent))
             {

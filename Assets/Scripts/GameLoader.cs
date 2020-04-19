@@ -59,7 +59,8 @@ public class GameLoader : MonoBehaviour
         var resourcesSystems = new EcsSystems(world)
             .Add(new ResourceCreateSystem())
             .Add(new ResourceFindAvailableToTakeSystem())
-            .Add(new ResourceTakeSystem());
+            .Add(new ResourceTakeSystem())
+            .Add(new DropResourceAfterDeathSystem());
 
         var serverIntegrationSystems = new EcsSystems(world)
             .Add(new ClientSystem());
