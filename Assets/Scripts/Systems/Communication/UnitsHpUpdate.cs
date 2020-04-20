@@ -11,7 +11,7 @@ namespace Systems.Communication
 {
     public class UnitsHpUpdate : IEcsRunSystem
     {
-        private readonly EcsFilter<UnitComponent>.Exclude<EnemyUnitComponent> myUnits = null;
+        private readonly EcsFilter<UnitComponent, MyUnitComponent> myUnits = null;
 
         public void Run()
         {

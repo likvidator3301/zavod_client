@@ -35,6 +35,10 @@ namespace Systems
                     var enemyComp = unitEntity.Set<EnemyUnitComponent>();
                     enemyComp.PlayerId = eventComp.PlayerId;
                 }
+                else
+                {
+                    unitEntity.Set<MyUnitComponent>();
+                }
 
                 unitEvent.Destroy();
             }

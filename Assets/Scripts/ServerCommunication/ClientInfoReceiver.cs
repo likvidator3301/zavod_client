@@ -27,7 +27,6 @@ namespace ServerCommunication
             ToServerUnitStates = new Dictionary<Guid, InputUnitState>();
 
             var unitsDto = unitsInfo.Values.ToArray();
-
             await ServerClient.Communication.Client.Unit.SendUnitsState(unitsDto);
         }
     }
