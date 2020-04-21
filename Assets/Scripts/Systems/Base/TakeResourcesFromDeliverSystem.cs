@@ -2,6 +2,7 @@ using System.Linq;
 using Components;
 using Components.Base;
 using Leopotam.Ecs;
+using UnityEngine;
 
 namespace Systems.Base
 {
@@ -26,7 +27,6 @@ namespace Systems.Base
 
                 foreach (var resource in resources)
                 {
-
                     switch (resource.Tag)
                     {
                         case ResourceTag.Money:

@@ -13,8 +13,8 @@ namespace Systems.Zavod
 
         private void FindAvailableGenerateMoneyZavods()
         {
-            var zavodsEntities = zavods.Entities.Take(
-                zavods.GetEntitiesCount());
+            var zavodsEntities = zavods.Entities
+                .Take(zavods.GetEntitiesCount());
             foreach (var zavod in zavodsEntities)
             {
                 var resourceComponent = zavod.Get<ResourceGeneratorComponent>();
