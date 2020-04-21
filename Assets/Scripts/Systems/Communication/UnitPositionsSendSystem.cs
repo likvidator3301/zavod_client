@@ -5,12 +5,14 @@ using System.Linq;
 using ServerCommunication;
 using Models;
 using Components;
+using System.IO;
+using UnityEngine;
 
 namespace Systems.Communication
 {
     public class UnitPositionsSendSystem : IEcsRunSystem
     {
-        private readonly EcsFilter<UnitComponent>.Exclude<EnemyUnitComponent> myUnits = null;
+        private readonly EcsFilter<UnitComponent, MyUnitComponent> myUnits = null;
 
         public void Run()
         {

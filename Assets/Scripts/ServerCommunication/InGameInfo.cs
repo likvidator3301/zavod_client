@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
+using Systems;
 using System.Timers;
 using Models;
 
@@ -15,7 +16,7 @@ namespace ServerCommunication
 
         public InGameInfo()
         {
-            unitsStateUpd = new Timer(100);
+            unitsStateUpd = new Timer(70);
             unitsStateUpd.Elapsed += (e, o) => UpdateUnits();
             unitsStateUpd.Start();
         }

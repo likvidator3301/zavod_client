@@ -5,6 +5,8 @@ using System.Linq;
 using Components;
 using ServerCommunication;
 using UnityEngine.AI;
+using System.IO;
+using Models;
 
 namespace Systems.Communication
 {
@@ -16,38 +18,48 @@ namespace Systems.Communication
         public void Run()
         {
             var unitsEntity = units.Entities.Where(e => e.IsNotNullAndAlive());
+            var serverEnemyUnits = ServerClient.Communication.InGameInfo.UnitsInfo
+                                                        .Where(u => u.PlayerId != ServerClient.Communication.userInfo.MyPlayer.Id);
 
-            foreach (var unit in ServerClient.Communication.InGameInfo.UnitsInfo
-                                                        .Where(u => u.PlayerId != ServerClient.Communication.userInfo.MyPlayer.Id))
+            foreach (var serverUnit in serverEnemyUnits)
             {
-                if (!Enum.TryParse(unit.Type.ToString(), out UnitTag tag))
+
+                if (!Enum.TryParse(serverUnit.Type.ToString(), out UnitTag tag)
+                    || TryUpdateClientUnit(serverUnit, unitsEntity))
                     continue;
 
-                var isUnitUpdate = false;
-
-                foreach (var clientUnit in unitsEntity)
-                {
-                    var uComp = clientUnit.Get<UnitComponent>();
-                    if (uComp.Guid != unit.Id)
-                        continue;
-
-                    isUnitUpdate = true;
-
-                    uComp.Object.GetComponent<NavMeshAgent>().SetDestination(unit.Position.ToUnityVector());
-                    clientUnit.Get<HealthComponent>().CurrentHp = unit.Health = unit.Health;
-                    break;
-                }
-
-                if (isUnitUpdate)
-                    continue;
-
-                var unitEnt = world.NewEntityWith(out UnitCreateEvent unitEvent);
-                unitEvent.Position = unit.Position.ToUnityVector();
-                unitEvent.UnitTag = tag;
-                unitEvent.PlayerId = unit.PlayerId;
-                unitEvent.Id = unit.Id;
-                unitEvent.Health = unit.Health;
+                CreateNotFoundUnit(tag, serverUnit);
             }
+        }
+
+        private void CreateNotFoundUnit(UnitTag tag, OutputUnitState serverUnit)
+        {
+            world.NewEntityWith(out UnitCreateEvent unitEvent);
+            unitEvent.Position = serverUnit.Position.ToUnityVector();
+            unitEvent.UnitTag = tag;
+            unitEvent.PlayerId = serverUnit.PlayerId;
+            unitEvent.Id = serverUnit.Id;
+            unitEvent.Health = serverUnit.Health;
+        }
+
+        private bool TryUpdateClientUnit(OutputUnitState serverUnit, IEnumerable<EcsEntity> clientUnits)
+        {
+            var isUnitUpdate = false;
+
+            foreach (var clientUnit in clientUnits)
+            {
+                var uComp = clientUnit.Get<UnitComponent>();
+                if (uComp.Guid != serverUnit.Id)
+                    continue;
+
+                isUnitUpdate = true;
+
+                uComp.Object.GetComponent<NavMeshAgent>().SetDestination(serverUnit.Position.ToUnityVector());
+                clientUnit.Get<HealthComponent>().CurrentHp = serverUnit.Health;
+                break;
+            }
+
+            return isUnitUpdate;
         }
     }
 }

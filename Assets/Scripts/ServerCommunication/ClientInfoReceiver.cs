@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Systems;
 using System.Timers;
 using Models;
+using System.IO;
 
 namespace ServerCommunication
 {
@@ -15,7 +16,7 @@ namespace ServerCommunication
 
         public ClientInfoReceiver()
         {
-            unitsInfoSender = new Timer(100);
+            unitsInfoSender = new Timer(60);
             unitsInfoSender.Elapsed += (e, o) => SendUnitsInfo();
             unitsInfoSender.Start();
         }
@@ -25,7 +26,8 @@ namespace ServerCommunication
             var unitsInfo = ToServerUnitStates;
             ToServerUnitStates = new Dictionary<Guid, InputUnitState>();
 
-            await ServerClient.Communication.Client.Unit.SendUnitsState(unitsInfo.Values.ToArray());
+            var unitsDto = unitsInfo.Values.ToArray();
+            await ServerClient.Communication.Client.Unit.SendUnitsState(unitsDto);
         }
     }
 }
