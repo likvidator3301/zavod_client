@@ -29,7 +29,7 @@ namespace Systems
             foreach (var hardEntity in hardBuildingEntities)
             {
                 buildingEntityComponent.isCanInstall = 
-                    !hardEntity.Get<BuildingComponent>().obj.GetComponent<Collider>().bounds.Intersects(new Bounds(buildingEntityComponent.Position, buildingEntityComponent.Size));
+                    !hardEntity.Get<BuildingComponent>().Object.GetComponent<Collider>().bounds.Intersects(new Bounds(buildingEntityComponent.Position, buildingEntityComponent.Size));
 
                 if (!buildingEntityComponent.isCanInstall)
                     break;

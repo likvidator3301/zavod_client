@@ -37,7 +37,7 @@ namespace Systems
 
                 for (var i = 0; i < buildings.GetEntitiesCount(); i++)
                 {
-                    if (buildings.Entities[i].Get<BuildingComponent>().obj.GetComponent<Collider>().Raycast(ray, out hitInfo, 400))
+                    if (buildings.Entities[i].Get<BuildingComponent>().Object.GetComponent<Collider>().Raycast(ray, out hitInfo, 400))
                     {
                         buildings.Entities[i].Get<BuildingComponent>().InBuildCanvas.enabled = true;
                     }

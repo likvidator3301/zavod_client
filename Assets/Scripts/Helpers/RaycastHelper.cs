@@ -50,7 +50,7 @@ namespace Systems
             return buildings
                 .FirstOrDefault(u => !u.IsNull()
                                      && u.IsAlive()
-                                     && u.Get<BuildingComponent>().obj.Equals(hitInfo.collider.gameObject));
+                                     && u.Get<BuildingComponent>().Object.Equals(hitInfo.collider.gameObject));
         }
     }
 }

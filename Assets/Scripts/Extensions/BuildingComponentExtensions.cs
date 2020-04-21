@@ -16,7 +16,7 @@ namespace Components.Buildings
             Canvas canvas,
             EcsWorld world)
         {
-            buildingComponent.obj = obj;
+            buildingComponent.Object = obj;
             buildingComponent.Tag = buildingType;
             buildingComponent.AllButtons = buildingComponent.InBuildCanvas.GetComponentsInChildren<Button>();
             buildingComponent.InBuildCanvas = GuiHelper.InstantiateAllButtons(canvas, world);

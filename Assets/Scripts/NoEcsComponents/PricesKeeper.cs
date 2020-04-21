@@ -7,7 +7,7 @@ namespace Systems
         public static Dictionary<string, int> PricesFromTag = new Dictionary<string, int>
         {
             { "Garage", 300 },
-            { "Kiosk", 250 }
+            { "Stall", 250 }
         };
     }
 }

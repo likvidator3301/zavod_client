@@ -122,7 +122,7 @@ namespace Systems
                 foreach (var inBuildButton in builds.Entities[i].Get<BuildingComponent>().AllButtons)
                 {
                     if (inBuildButton.GetInstanceID() == button.GetInstanceID())
-                        return builds.Get1[i].obj;
+                        return builds.Get1[i].Object;
                 }
             }
 

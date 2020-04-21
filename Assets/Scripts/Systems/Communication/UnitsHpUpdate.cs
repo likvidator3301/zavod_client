@@ -1,5 +1,6 @@
 ﻿using Components;
 using Leopotam.Ecs;
+using Models;
 using ServerCommunication;
 using System;
 using System.Collections.Generic;
@@ -17,15 +18,22 @@ namespace Systems.Communication
         {
             foreach (var clientUnit in myUnits.Entities.Where(u => u.IsNotNullAndAlive()))
             {
-                var clientUnitComp = clientUnit.Get<UnitComponent>(); 
-
-                foreach (var serverUnit in ServerClient.Communication.InGameInfo.UnitsInfo)
-                {
-                    if (serverUnit.Id != clientUnitComp.Guid)
-                        continue;
+                var clientUnitComp = clientUnit.Get<UnitComponent>();
 
 
-                }
+                UpdateLocalUnit(clientUnitComp);
+            }
+        }
+
+        private void UpdateLocalUnit(UnitComponent clientUnitComp)
+        {
+
+            foreach (var serverUnit in ServerClient.Communication.InGameInfo.UnitsInfo)
+            {
+                if (serverUnit.Id != clientUnitComp.Guid)
+                    continue;
+
+
             }
         }
     }

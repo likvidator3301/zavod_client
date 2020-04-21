@@ -10,7 +10,7 @@ namespace Components
         public BuildingTag Tag;
 
         [EcsIgnoreNullCheck]
-        public GameObject obj;
+        public GameObject Object;
 
         [EcsIgnoreNullCheck]
         public Canvas InBuildCanvas;

@@ -12,7 +12,7 @@ namespace Systems
     public class BuildExitSystem : IEcsRunSystem
     {
         private readonly EcsFilter<BuildingCreateComponent> builds = null;
-        private readonly EcsFilter<AssetsComponent> assets = null;
+        private readonly EcsFilter<BuildingAssetsComponent> assets = null;
 
         public void Run()
         {

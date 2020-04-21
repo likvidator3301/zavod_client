@@ -65,7 +65,7 @@ namespace Systems
             playerAsset.Cash = 1000;
             playerAsset.ResoursesUiDisplay = GameObject.Instantiate(Resources.Load<Canvas>(@"Prefabs/GUI/PlayerInfo"));
 
-            var assets = resoursesEntity.Set<AssetsComponent>();
+            var assets = resoursesEntity.Set<BuildingAssetsComponent>();
             assets.InBuildingCanvasesAssets = GetInBuildingCanvasesAssets();
             assets.BuildingsAssets = GetAllBuildingAssets();
         }
@@ -77,7 +77,10 @@ namespace Systems
             foreach (BuildingTag tag in Enum.GetValues(typeof(BuildingTag)))
             {
                 var type = tag.ToString();
-                assets.Add(type, Resources.Load<GameObject>(@"Prefabs\Buildings\" + type));
+                var path = @"Prefabs\Buildings\" + type;
+                var enemyPath = @"Prefabs\Buildings\Enemy" + type;
+                assets.Add(type, Resources.Load<GameObject>(path));
+                assets.Add("Enemy" + type, Resources.Load<GameObject>(enemyPath));
             }
 
             return assets;
@@ -87,6 +90,7 @@ namespace Systems
         {
             var assets = new Dictionary<string, Canvas>();
 
+            assets.Add("None", Resources.Load<Canvas>(@"Prefabs\GUI\BuildingsMenu\None"));
             foreach (BuildingTag tag in Enum.GetValues(typeof(BuildingTag)))
             {
                 var type = tag.ToString();

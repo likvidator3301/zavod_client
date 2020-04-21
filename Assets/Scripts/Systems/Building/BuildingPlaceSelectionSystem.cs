@@ -14,7 +14,7 @@ namespace Systems
     {
         private readonly EcsFilter<BuildingCreateComponent> eBuildings = null;
         private readonly EcsFilter<CameraComponent> cameras = null;
-        private readonly EcsFilter<AssetsComponent> assets = null;
+        private readonly EcsFilter<BuildingAssetsComponent> assets = null;
 
         private Ray ray;
         private RaycastHit hitInfo;
