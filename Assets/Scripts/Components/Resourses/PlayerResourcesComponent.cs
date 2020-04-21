@@ -6,7 +6,7 @@ namespace Components
 {
     public class PlayerResourcesComponent
     {
-        public int Beer;
+        public int Semki;
 
         public float Cash;
 

@@ -79,10 +79,10 @@ namespace Systems
 
         private void CreateWarrior(ButtonComponent button)
         {
-            if (resources.Get1[0].Beer < 10)
+            if (resources.Get1[0].Semki < 10)
                 return;
 
-            resources.Get1[0].Beer -= 10;
+            resources.Get1[0].Semki -= 10;
                 
             var GameObjectOfButton = GetParentGameObjectFromButton(button.button);
             world.NewEntityWith(out UnitCreateEvent unitCreate);
@@ -98,10 +98,10 @@ namespace Systems
 
         private void CreateRunner(ButtonComponent button)
         {
-            if (resources.Get1[0].Beer < 10)
+            if (resources.Get1[0].Semki < 10)
                 return;
 
-            resources.Get1[0].Beer -= 10;
+            resources.Get1[0].Semki -= 10;
 
             var GameObjectOfButton = GetParentGameObjectFromButton(button.button);
             world.NewEntityWith(out UnitCreateEvent unitCreate);

@@ -6,8 +6,5 @@ using System.Threading.Tasks;
 
 namespace Components
 {
-    public class EnemyUnitComponent
-    {
-        public Guid PlayerId;
-    }
+    public class EnemyUnitComponent{ }
 }

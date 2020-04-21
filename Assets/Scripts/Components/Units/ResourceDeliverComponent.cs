@@ -5,6 +5,6 @@ namespace Components
     public class ResourceDeliverComponent
     {
         public List<ResourceComponent> Resources = new List<ResourceComponent>();
-        public int MaxResourcesTakenCount { get; set; }
+        public int MaxResourcesTakenCount { get; set; } = 3;
     }
 }

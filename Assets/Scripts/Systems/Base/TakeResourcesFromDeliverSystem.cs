@@ -36,7 +36,7 @@ namespace Systems.Base
                         }
                         case ResourceTag.Semki:
                         {
-                            playerResourcesComponent.Beer += resource.ResourceCount;
+                            playerResourcesComponent.Semki += resource.ResourceCount;
                             break;
                         }
                     }
