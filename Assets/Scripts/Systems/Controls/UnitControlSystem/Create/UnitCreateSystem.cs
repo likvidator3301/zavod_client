@@ -21,7 +21,7 @@ namespace Systems
                 var eventComp = unitEvent.Get<UnitCreateEvent>();
                 var isEnemy = ServerClient.Communication.userInfo.MyPlayer.Id != eventComp.PlayerId;
                 var unitName = (isEnemy ? "Enemy" : "")
-                                + eventComp.UnitTag.ToString();
+                                + eventComp.UnitTag;
 
                 var unitInstance = GameObject.Instantiate(unitAssets.Get1[0].assetsByName[unitName], eventComp.Position, Quaternion.Euler(0, 0, 0));
 

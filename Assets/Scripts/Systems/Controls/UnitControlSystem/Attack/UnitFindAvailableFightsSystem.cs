@@ -22,7 +22,7 @@ public class UnitFindAvailableFightsSystem: IEcsRunSystem
             .Take(unitsPositions.GetEntitiesCount())
             .Where(u => u.Get<AttackingComponent>() == null);
         var allyUnitsPositionsEntities = unitsPositionsEntities;
-        
+
         foreach (var allyUnit in allyUnitsPositionsEntities)
         {
             foreach (var enemyUnit in enemyUnitsPositionsEntities)
