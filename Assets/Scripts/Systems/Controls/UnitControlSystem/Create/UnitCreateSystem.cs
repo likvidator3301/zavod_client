@@ -31,14 +31,12 @@ namespace Systems
                 unit.Tag = eventComp.UnitTag;
                 unitEntity.AddDefaultUnitComponents(unitInstance, eventComp.Health);
                 if (isEnemy)
-                {
-                    var enemyComp = unitEntity.Set<EnemyUnitComponent>();
-                    enemyComp.PlayerId = eventComp.PlayerId;
-                }
+                    unitEntity.Set<EnemyUnitComponent>();
                 else
-                {
                     unitEntity.Set<MyUnitComponent>();
-                }
+
+                if (unit.Tag == UnitTag.Runner)
+                    unitEntity.Set<ResourceDeliverComponent>();
 
                 unitEvent.Destroy();
             }

@@ -6,7 +6,5 @@ using System.Threading.Tasks;
 
 namespace Components
 {
-    public class MyUnitComponent
-    {
-    }
+    public class MyUnitComponent { }
 }

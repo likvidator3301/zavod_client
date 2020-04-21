@@ -61,7 +61,7 @@ namespace Systems
         private void LoadUiAssets()
         {
             resoursesEntity = world.NewEntityWith(out PlayerResourcesComponent playerAsset);
-            playerAsset.Beer = 50;
+            playerAsset.Semki = 50;
             playerAsset.Cash = 1000;
             playerAsset.ResoursesUiDisplay = GameObject.Instantiate(Resources.Load<Canvas>(@"Prefabs/GUI/PlayerInfo"));
 

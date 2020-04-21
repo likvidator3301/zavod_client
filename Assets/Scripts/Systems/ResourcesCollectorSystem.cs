@@ -19,7 +19,7 @@ namespace Systems
                 if (kioskEntity.Get<KioskComponent>() != null 
                     && DateTime.Now - kioskEntity.Get<KioskComponent>().LastBeerGeneration >= kioskEntity.Get<KioskComponent>().BeerGeneratingTiming)
                 {
-                    resources.Get1[0].Beer += kioskEntity.Get<KioskComponent>().BeerPerTiming;
+                    resources.Get1[0].Semki += kioskEntity.Get<KioskComponent>().BeerPerTiming;
                     kioskEntity.Get<KioskComponent>().LastBeerGeneration = DateTime.Now;
                 }
             }

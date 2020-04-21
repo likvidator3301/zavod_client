@@ -23,7 +23,7 @@ namespace Systems
             {
                 var resComponent = res.Get<PlayerResourcesComponent>();
                 var formattedCash = cashText + String.Format("{0:F1}", resComponent.Cash);
-                var formattedBeer = beerText + resComponent.Beer;
+                var formattedBeer = beerText + resComponent.Semki;
                 
                 foreach (var child in resComponent.ResoursesUiDisplay.GetComponentsInChildren<TextMeshProUGUI>())
                 {
