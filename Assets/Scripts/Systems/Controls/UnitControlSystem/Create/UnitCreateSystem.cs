@@ -29,7 +29,7 @@ namespace Systems
                 unit.Guid = eventComp.Id;
                 unit.Object = unitInstance;
                 unit.Tag = eventComp.UnitTag;
-                unitEntity.AddDefaultUnitComponents(unitInstance, eventComp.Health);
+                unitEntity.AddDefaultUnitComponents(unitInstance, eventComp.Health, eventComp.UnitTag);
                 if (isEnemy)
                     unitEntity.Set<EnemyUnitComponent>();
                 else

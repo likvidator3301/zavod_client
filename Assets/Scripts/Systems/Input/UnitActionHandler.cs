@@ -56,6 +56,5 @@ namespace Systems
 
             return sumAllUnitsPositions / player.SelectedUnits.Count;
         }
-
     }
 }

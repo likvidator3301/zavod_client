@@ -4,6 +4,8 @@ using Components;
 using Components.Attack;
 using Components.Follow;
 using Leopotam.Ecs;
+using ServerCommunication;
+using System;
 
 public class UnitAttackSystem: IEcsRunSystem
 {
@@ -14,7 +16,9 @@ public class UnitAttackSystem: IEcsRunSystem
     private void Attack()
     {
         var attackingUnitsEntities = attackingUnits.Entities
+            .Where(u => u.IsNotNullAndAlive())
             .Take(attackingUnits.GetEntitiesCount());
+
         foreach (var unit in attackingUnitsEntities)
         {
             var attackingComponent = unit.Get<AttackingComponent>();
@@ -22,10 +26,16 @@ public class UnitAttackSystem: IEcsRunSystem
             var unitMovementComponent = unit.Get<MovementComponent>();
             
             var targetUnit = attackingComponent.TargetEntity;
+            if (!targetUnit.IsNotNullAndAlive())
+            {
+                AttackHelper.StopAttack(unit);
+                return;
+            }
+
             var targetMovementComponent = targetUnit.Get<MovementComponent>();
             var targetHealthComponent = targetUnit.Get<HealthComponent>();
             
-            if (!targetUnit.IsNotNullAndAlive() || targetMovementComponent == null || !targetMovementComponent.IsObjectAlive)
+            if (targetMovementComponent == null || !targetMovementComponent.IsObjectAlive)
             {
                 AttackHelper.StopAttack(unit);
                 return;
@@ -36,6 +46,11 @@ public class UnitAttackSystem: IEcsRunSystem
             {
                 var newHp = targetHealthComponent.CurrentHp - unitAttackComponent.AttackDamage;
                 HealthHelper.CreateChangeHpEvent(targetUnit, newHp);
+                unitAttackComponent.LastAttackTime = DateTime.Now;
+
+                ServerClient.Communication.AttackSender.attacks.Add(
+                    new AttackInfo(unit.Get<UnitComponent>().Guid, 
+                                   attackingComponent.TargetEntity.Get<UnitComponent>().Guid, (int)unitAttackComponent.AttackDamage));
             }
         }
     }

@@ -14,6 +14,7 @@ namespace Systems.Communication
         {
             ServerClient.Communication.ClientInfoReceiver = new ClientInfoReceiver();
             ServerClient.Communication.InGameInfo = new InGameInfo();
+            ServerClient.Communication.AttackSender = new AttackSender();
         }
     }
 }

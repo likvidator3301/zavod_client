@@ -21,9 +21,10 @@ namespace Systems
         
         public static void AddDefaultUnitComponents(this EcsEntity unitEntity, GameObject unitObject, int health)
         {
-            unitEntity.Set<AttackComponent>().InitializeComponent(UnitType.Warrior);
+            unitEntity.Set<AttackComponent>().InitializeComponent(unitEntity.Get<UnitComponent>().Tag.ToString().ToUnitType());
             //unitEntity.Set<DefenseComponent>().InitializeComponent(UnitType.Warrior);
             unitEntity.Set<HealthComponent>().InitializeComponent(health);
+            unitEntity.Set<HealthBarComponent>().InitializeComponent(unitObject);
             unitEntity.Set<MovementComponent>().InitializeComponent(unitObject);
             unitEntity.Set<NavMeshComponent>();
             unitEntity.Get<NavMeshComponent>().Agent = unitObject.GetComponent<NavMeshAgent>();

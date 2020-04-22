@@ -23,19 +23,20 @@ namespace Systems
             {
                 var resComponent = res.Get<PlayerResourcesComponent>();
                 var formattedCash = cashText + String.Format("{0:F1}", resComponent.Cash);
-                var formattedBeer = beerText + resComponent.Semki;
+                var formattedSeeds = beerText + resComponent.Semki;
                 
                 foreach (var child in resComponent.ResoursesUiDisplay.GetComponentsInChildren<TextMeshProUGUI>())
                 {
                     UpdateUnityText(child, formattedCash, cash);
-                    UpdateUnityText(child, formattedBeer, seeds);
+                    UpdateUnityText(child, formattedSeeds, seeds);
                 }
             }
         }
 
         private void UpdateUnityText(TextMeshProUGUI textComponent, string formattedNewText, string nameComponentForUpdating)
         {
-            if (textComponent.name.Equals(nameComponentForUpdating) && !textComponent.text.Equals(formattedNewText))
+            if (textComponent.name.Equals(nameComponentForUpdating) 
+                && !textComponent.text.Equals(formattedNewText))
             {
                 textComponent.text = formattedNewText;
             }

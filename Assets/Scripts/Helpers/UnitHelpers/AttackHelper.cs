@@ -1,6 +1,7 @@
 using Components;
 using Components.Attack;
 using Leopotam.Ecs;
+using System;
 using UnityEngine;
 
 namespace Systems
@@ -22,7 +23,7 @@ namespace Systems
             MovementComponent unitMovementComponent,
             MovementComponent targetMovementComponent)
         {
-            return unitAttackComponent.LastAttackTime + unitAttackComponent.AttackDelay <= Time.time
+            return unitAttackComponent.LastAttackTime + unitAttackComponent.AttackDelay <= DateTime.Now
                 && Vector3.Distance(
                     unitMovementComponent.CurrentPosition, 
                     targetMovementComponent.CurrentPosition) <= unitAttackComponent.AttackRange;

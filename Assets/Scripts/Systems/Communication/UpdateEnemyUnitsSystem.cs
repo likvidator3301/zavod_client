@@ -25,7 +25,8 @@ namespace Systems.Communication
             {
 
                 if (!Enum.TryParse(serverUnit.Type.ToString(), out UnitTag tag)
-                    || TryUpdateClientUnit(serverUnit, unitsEntity))
+                    || TryUpdateClientUnit(serverUnit, unitsEntity)
+                    || serverUnit.Health <= 0)
                     continue;
 
                 CreateNotFoundUnit(tag, serverUnit);
@@ -55,7 +56,6 @@ namespace Systems.Communication
                 isUnitUpdate = true;
 
                 uComp.Object.GetComponent<NavMeshAgent>().SetDestination(serverUnit.Position.ToUnityVector());
-                clientUnit.Get<HealthComponent>().CurrentHp = serverUnit.Health;
                 break;
             }
 

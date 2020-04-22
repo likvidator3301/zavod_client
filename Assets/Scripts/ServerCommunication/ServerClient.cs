@@ -22,6 +22,7 @@ namespace ServerCommunication
 
         public InGameInfo InGameInfo;
         public ClientInfoReceiver ClientInfoReceiver;
+        public AttackSender AttackSender;
 
         private SessionUpdater sessionUpdater = new SessionUpdater();
         private UserUpdater userUpdater = new UserUpdater();

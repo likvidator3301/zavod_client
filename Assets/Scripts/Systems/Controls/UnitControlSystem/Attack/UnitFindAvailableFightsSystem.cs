@@ -6,7 +6,7 @@ using Leopotam.Ecs;
 
 public class UnitFindAvailableFightsSystem: IEcsRunSystem
 {
-    private readonly EcsFilter<UnitComponent, MovementComponent>.Exclude<EnemyUnitComponent, AttackingComponent> unitsPositions;
+    private readonly EcsFilter<UnitComponent, MovementComponent, MyUnitComponent>.Exclude<AttackingComponent> unitsPositions;
     private readonly EcsFilter<UnitComponent, MovementComponent, EnemyUnitComponent> enemyUnits;
     
     public void Run() => FindAvailableFights();
@@ -15,11 +15,9 @@ public class UnitFindAvailableFightsSystem: IEcsRunSystem
     {
         var unitsPositionsEntities = unitsPositions.Entities
             .Where(e => e.IsNotNullAndAlive())
-            .Take(unitsPositions.GetEntitiesCount())
             .Where(u => u.Get<AttackingComponent>() == null);
         var enemyUnitsPositionsEntities = enemyUnits.Entities
             .Where(e => e.IsNotNullAndAlive())
-            .Take(unitsPositions.GetEntitiesCount())
             .Where(u => u.Get<AttackingComponent>() == null);
         var allyUnitsPositionsEntities = unitsPositionsEntities;
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Components;
 using Extensions;
 using Leopotam.Ecs;
@@ -21,6 +22,9 @@ namespace Systems
         
         private async void HandleSelection()
         {
+            selectedUnits = selectedUnits.Where(u => u.IsNotNullAndAlive()).ToList();
+            player.SelectedUnits = player.SelectedUnits.Where(u => u.IsNotNullAndAlive()).ToList();
+
             if (EventSystem.current.IsPointerOverGameObject())
             {
                 if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoStart))

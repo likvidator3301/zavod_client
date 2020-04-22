@@ -55,7 +55,7 @@ public class GameLoader : MonoBehaviour
             .Add(new UnitFindAvailableFightsSystem())
             .Add(new UnitStartAttackSystem())
             .Add(new UnitAttackSystem())
-            .Add(new UnitChangeHealthSystem());
+            .Add(new FindDeathUnitsSystem());
 
         var resourcesSystems = new EcsSystems(world)
             .Add(new ResourceCreateSystem())
@@ -77,7 +77,8 @@ public class GameLoader : MonoBehaviour
             .Add(new UpdateEnemyUnitsSystem())
             .Add(new UnitPositionsSendSystem())
             .Add(new BuildingsPositionSendSystem())
-            .Add(new UpdateEnemyBuildingsSystem());
+            .Add(new UpdateEnemyBuildingsSystem())
+            .Add(new UnitsHpUpdate());
         
         var zavodSystems = new EcsSystems(world)
             .Add(new GenerateMoneySystem());

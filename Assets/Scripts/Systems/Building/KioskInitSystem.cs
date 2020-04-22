@@ -2,12 +2,13 @@
 using Leopotam.Ecs;
 using System;
 using System.Linq;
+using ServerCommunication;
 
 namespace Systems
 {
     public class KioskInitSystem : IEcsRunSystem
     {
-        private EcsFilter<BuildingComponent, MyBuildingComponent>.Exclude<KioskComponent> builds = null;
+        private EcsFilter<BuildingComponent, MyBuildingComponent> builds = null;
 
         public void Run()
         {
@@ -17,7 +18,8 @@ namespace Systems
             {
                 var buildComponent = build.Get<BuildingComponent>();
 
-                if (buildComponent.Tag != BuildingTag.Stall)
+                if (buildComponent.Tag != BuildingTag.Stall
+                    || build.Get<KioskComponent>() != null)
                     continue;
 
                 var kioskComponent = build.Set<KioskComponent>();
