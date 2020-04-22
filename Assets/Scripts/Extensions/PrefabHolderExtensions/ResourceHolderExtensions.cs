@@ -19,7 +19,7 @@ namespace Systems
             ResourceTag tag,
             int resourceCount = -1)
         {
-            var newMoneyBagObject = prefab.InstantiateNewObject(position, Quaternion.identity);
+            var newMoneyBagObject = prefab.InstantiateNewObject(new Vector3(position.x, 0, position.z), Quaternion.identity);
             world.NewEntityWith<ResourceComponent>(out var resourceComponent);
             
             resourceComponent.Object = newMoneyBagObject;

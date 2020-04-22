@@ -10,6 +10,6 @@ namespace Components
     {
         public DateTime LastBeerGeneration;
         public TimeSpan BeerGeneratingTiming = TimeSpan.FromSeconds(3);
-        public int BeerPerTiming = 10;
+        public int SeedsPerTiming = 10;
     }
 }

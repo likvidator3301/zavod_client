@@ -7,7 +7,7 @@ namespace Systems
 {
     public class KioskInitSystem : IEcsRunSystem
     {
-        private EcsFilter<BuildingComponent> builds = null;
+        private EcsFilter<BuildingComponent, MyBuildingComponent>.Exclude<KioskComponent> builds = null;
 
         public void Run()
         {
@@ -20,13 +20,10 @@ namespace Systems
                 if (buildComponent.Tag != BuildingTag.Stall)
                     continue;
 
-                if (build.GetComponentsCount() == 1)
-                {
-                    var kioskComponent = build.Set<KioskComponent>();
-                    kioskComponent.BeerGeneratingTiming = TimeSpan.FromSeconds(5);
-                    kioskComponent.BeerPerTiming = 6;
-                    kioskComponent.LastBeerGeneration = DateTime.Now;
-                }
+                var kioskComponent = build.Set<KioskComponent>();
+                kioskComponent.BeerGeneratingTiming = TimeSpan.FromSeconds(4);
+                kioskComponent.SeedsPerTiming = 6;
+                kioskComponent.LastBeerGeneration = DateTime.Now;
             }
         }
     }
