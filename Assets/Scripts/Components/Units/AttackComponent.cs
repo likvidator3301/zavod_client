@@ -17,7 +17,7 @@ namespace Components
             {
                 AttackDamage = 10;
                 AttackDelay = TimeSpan.FromMilliseconds(800);
-                AttackRange = 1;
+                AttackRange = 1.5f;
             }
 
             if (unitType == UnitType.Runner)

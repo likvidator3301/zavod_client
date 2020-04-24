@@ -33,7 +33,6 @@ public class UnitAttackSystem: IEcsRunSystem
             }
 
             var targetMovementComponent = targetUnit.Get<MovementComponent>();
-            var targetHealthComponent = targetUnit.Get<HealthComponent>();
             
             if (targetMovementComponent == null || !targetMovementComponent.IsObjectAlive)
             {
