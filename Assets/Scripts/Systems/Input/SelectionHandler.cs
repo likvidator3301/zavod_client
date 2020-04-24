@@ -11,7 +11,7 @@ namespace Systems
 {
     public class SelectionHandler : IEcsRunSystem
     {
-        private readonly EcsFilter<UnitComponent> units = null;
+        private readonly EcsFilter<UnitComponent, MyUnitComponent> myUnits = null;
         private List<EcsEntity> selectedUnits = new List<EcsEntity>();
         private Vector3 startPosition = Vector3.zero;
         private Vector3 endPosition = Vector3.zero;
@@ -47,7 +47,7 @@ namespace Systems
                     endPosition = hitInfoEnd.point;
                     var selectionInfo = new SelectionRectangle(startPosition, endPosition);
                     var selectionFrame = selectionInfo.GetSelectionFrame();
-                    selectedUnits = selectionInfo.GetUnitsInFrame(units);
+                    selectedUnits = selectionInfo.GetUnitsInFrame(myUnits.Entities.Take(myUnits.GetEntitiesCount()));
                     selectedUnits.HighlightObjects();
                     await selectionFrame.DestroyObjectWithDelay(selectionDeletingDelayWhileSelecting);
                 }
@@ -57,12 +57,12 @@ namespace Systems
             {
                 if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoUnit, UnitTag.Warrior.ToString()))
                 {
-                    var selectedUnit = RaycastHelper.GetUnitEntityByRaycastHit(hitInfoUnit, units.Entities);
+                    var selectedUnit = RaycastHelper.GetUnitEntityByRaycastHit(hitInfoUnit, myUnits.Entities);
                     selectedUnits.Add(selectedUnit);
                 }
                 else if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoDeliver, UnitTag.Runner.ToString()))
                 {
-                    var selectedUnit = RaycastHelper.GetUnitEntityByRaycastHit(hitInfoDeliver, units.Entities);
+                    var selectedUnit = RaycastHelper.GetUnitEntityByRaycastHit(hitInfoDeliver, myUnits.Entities);
                     selectedUnits.Add(selectedUnit);
                 }
                 player.SelectedUnits = selectedUnits;

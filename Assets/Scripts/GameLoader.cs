@@ -55,7 +55,7 @@ public class GameLoader : MonoBehaviour
             .Add(new UnitFindAvailableFightsSystem())
             .Add(new UnitStartAttackSystem())
             .Add(new UnitAttackSystem())
-            .Add(new FindDeathUnitsSystem());
+            .Add(new FindDeadUnitsSystem());
 
         var resourcesSystems = new EcsSystems(world)
             .Add(new ResourceCreateSystem())

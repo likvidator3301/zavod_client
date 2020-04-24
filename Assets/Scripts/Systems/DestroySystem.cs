@@ -20,7 +20,8 @@ namespace Systems
 
         private void DestroyEntities()
         {
-            var destroyEntities = destroyEvents.Entities.Where(e => e.IsNotNullAndAlive());
+            var destroyEntities = destroyEvents.Entities
+                .Take(destroyEvents.GetEntitiesCount());
             foreach (var destroyEntity in destroyEntities)
             {
                 Object.Destroy(destroyEntity.Get<DestroyEvent>().Object);

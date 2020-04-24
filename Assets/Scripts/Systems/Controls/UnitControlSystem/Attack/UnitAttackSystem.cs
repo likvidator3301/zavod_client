@@ -44,13 +44,13 @@ public class UnitAttackSystem: IEcsRunSystem
             
             if (AttackHelper.CanAttack(unitAttackComponent, unitMovementComponent, targetMovementComponent))
             {
-                var newHp = targetHealthComponent.CurrentHp - unitAttackComponent.AttackDamage;
-                HealthHelper.CreateChangeHpEvent(targetUnit, newHp);
                 unitAttackComponent.LastAttackTime = DateTime.Now;
 
                 ServerClient.Communication.AttackSender.attacks.Add(
-                    new AttackInfo(unit.Get<UnitComponent>().Guid, 
-                                   attackingComponent.TargetEntity.Get<UnitComponent>().Guid, (int)unitAttackComponent.AttackDamage));
+                    new AttackInfo(
+                        unit.Get<UnitComponent>().Guid,
+                        attackingComponent.TargetEntity.Get<UnitComponent>().Guid,
+                        (int)unitAttackComponent.AttackDamage));
             }
         }
     }

@@ -4,7 +4,7 @@ using Components.Health;
 using Leopotam.Ecs;
 using Systems;
 
-public class FindDeathUnitsSystem: IEcsRunSystem
+public class FindDeadUnitsSystem: IEcsRunSystem
 {
     private readonly EcsFilter<UnitComponent> changingHpUnits;
 

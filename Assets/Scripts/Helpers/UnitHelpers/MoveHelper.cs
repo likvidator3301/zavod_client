@@ -14,13 +14,6 @@ namespace Systems
         public static void Stop(EcsEntity unit)
         {
             unit.Unset<MovingComponent>();
-            StopUnitOnHisPosition(unit);
-        }
-
-        private static void StopUnitOnHisPosition(EcsEntity unit)
-        {
-            var currentPosition = unit.Get<MovementComponent>().CurrentPosition;
-            unit.Get<NavMeshComponent>().Agent.SetDestination(currentPosition);
         }
     }
 }

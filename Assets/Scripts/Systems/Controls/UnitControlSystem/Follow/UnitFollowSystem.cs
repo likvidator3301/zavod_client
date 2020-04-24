@@ -19,14 +19,14 @@ public class UnitFollowSystem: IEcsRunSystem
              var followingComponent = unit.Get<FollowingComponent>();
 
              if (followingComponent?.TargetMovementComponent == null 
-                || !followingComponent.TargetMovementComponent. IsObjectAlive)
+                || !followingComponent.TargetMovementComponent.IsObjectAlive)
              {
                  FollowHelper.StopFollow(unit);
                  MoveHelper.Stop(unit);
              }
              else
              {
-                 unit.Get<MovingComponent>().Destination = followingComponent.TargetMovementComponent.CurrentPosition;
+                 unit.Set<MovingComponent>().Destination = followingComponent.TargetMovementComponent.CurrentPosition;
              }
          }
      }

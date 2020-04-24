@@ -21,15 +21,11 @@ namespace Systems.Controls.UnitControlSystem
                 var agent = unit.Get<NavMeshComponent>().Agent;
                 var agentDestinationPosition = agent.destination;
                 var destinationPosition = unit.Get<MovingComponent>().Destination;
-                
-                if (agent.isStopped)
-                {
-                    MoveHelper.Stop(unit);
-                }
-                else if (destinationPosition != agentDestinationPosition)
-                {
+
+                if (destinationPosition != agentDestinationPosition)
                     agent.SetDestination(destinationPosition);
-                }
+                
+                unit.Unset<MovingComponent>();
             }
         }
     }

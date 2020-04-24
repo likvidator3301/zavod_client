@@ -1,13 +1,7 @@
 ﻿using Components;
 using Leopotam.Ecs;
-using Models;
 using ServerCommunication;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 
 namespace Systems.Communication
 {
@@ -18,9 +12,7 @@ namespace Systems.Communication
         public void Run()
         {
             foreach (var clientUnit in myUnits.Entities.Where(u => u.IsNotNullAndAlive()))
-            {
                 UpdateLocalUnit(clientUnit);
-            }
         }
 
         private void UpdateLocalUnit(EcsEntity clientUnit)

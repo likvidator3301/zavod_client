@@ -1,6 +1,7 @@
 using System.Linq;
 using Systems;
 using Components;
+using Components.Follow;
 using Leopotam.Ecs;
 
 public class UnitStartMoveSystem: IEcsRunSystem
@@ -15,14 +16,15 @@ public class UnitStartMoveSystem: IEcsRunSystem
             .Take(startMovingUnits.GetEntitiesCount());
         foreach (var unit in startMovingUnitsEntities)
         {
-            FollowHelper.StopFollow(unit);
+            if (unit.Get<FollowingComponent>() != null)
+                FollowHelper.StopFollow(unit);
+            if (unit.Get<MovementComponent>() != null)
+                MoveHelper.Stop(unit);
+            
             var destinationPosition = unit.Get<StartMovingEvent>().Destination;
-            var agent = unit.Get<NavMeshComponent>();
-            var movementComponent = unit.Get<MovementComponent>();
-            agent.Agent.SetDestination(destinationPosition);
 
-            unit.Unset<StartMovingEvent>();
             unit.Set<MovingComponent>().Destination = destinationPosition;
+            unit.Unset<StartMovingEvent>();
         }
     }
 }

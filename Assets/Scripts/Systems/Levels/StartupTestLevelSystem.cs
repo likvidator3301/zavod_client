@@ -17,9 +17,6 @@ namespace Systems
         private EcsGrowList<UnitComponent> units;
         private readonly Vector3 zavodPosition = new Vector3(60, minZavodHeight, 42.5f);
         private readonly Vector3 basePosition = new Vector3(80, minHeight, 35f);
-        private readonly Vector3 moneyBag1Position = new Vector3(60, minHeight, 35f);
-        private readonly Vector3 moneyBag2Position = new Vector3(65, minHeight, 35f);
-        private readonly Vector3 deliverPosition = new Vector3(42, minHeight, 35);
 
         public void Init() => InitializeLevel();
 
@@ -27,8 +24,6 @@ namespace Systems
         {
             MapBuildingsPrefabsHolder.ZavodPrefab.AddNewZavodEntityOnPosition(ecsWorld, zavodPosition);
             MapBuildingsPrefabsHolder.BasePrefab.AddNewBaseEntityOnPosition(ecsWorld, basePosition);
-            MoneyBagPrefabHolder.MoneyBagPrefab.AddResourceEntityOnPosition(ecsWorld, moneyBag1Position, ResourceTag.Money);
-            MoneyBagPrefabHolder.MoneyBagPrefab.AddResourceEntityOnPosition(ecsWorld, moneyBag2Position, ResourceTag.Money);
         }
     }
 }

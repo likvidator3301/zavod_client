@@ -13,7 +13,7 @@ namespace ServerCommunication
 
     public class ServerCommunication
     {
-        private static string url = "http://localhost:5000";
+        private static string url = "http://25.141.133.182:5000";
 
         public ZavodClient.ZavodClient Client { get; }
         public AutorizationAgent AuthAgent { get; }
