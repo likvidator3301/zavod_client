@@ -1,5 +1,6 @@
 using System.Linq;
 using Components;
+using Components.Health;
 using Components.Resource;
 using Leopotam.Ecs;
 
@@ -40,7 +41,7 @@ namespace Systems
                 }
 
                 dropEntity.Unset<ResourceDropEvent>();
-                dropEntity.Destroy();
+                dropEntity.Set<DestroyEvent>();
             }
         }
     }

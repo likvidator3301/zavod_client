@@ -24,7 +24,10 @@ namespace Systems
                 .Take(destroyEvents.GetEntitiesCount());
             foreach (var destroyEntity in destroyEntities)
             {
-                Object.Destroy(destroyEntity.Get<DestroyEvent>().Object);
+                var objectToDestroy = destroyEntity.Get<DestroyEvent>().Object;
+                if (objectToDestroy != null)
+                    Object.Destroy(objectToDestroy);
+                
                 destroyEntity.Destroy();
             }
         }
@@ -32,7 +35,8 @@ namespace Systems
         private void DropResources()
         {
             var deliversEntities = delivers.Entities
-                .Take(delivers.GetEntitiesCount());
+                .Take(delivers.GetEntitiesCount())
+                .Where(e => e.Get<MovementComponent>().IsObjectAlive);
             foreach (var deliverEntity in deliversEntities)
                 DropResourceHelpers.CreateDropResourcesEvent(deliverEntity, world);
         }

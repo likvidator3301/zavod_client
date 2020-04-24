@@ -14,9 +14,11 @@ public class UnitFindAvailableFightsSystem: IEcsRunSystem
     private void FindAvailableFights()
     {
         var unitsPositionsEntities = unitsPositions.Entities
-            .Where(e => e.IsNotNullAndAlive());
+            .Where(e => e.IsNotNullAndAlive()
+                        && e.Get<MovementComponent>().IsObjectAlive);
         var enemyUnitsPositionsEntities = enemyUnits.Entities
-            .Where(e => e.IsNotNullAndAlive());
+            .Where(e => e.IsNotNullAndAlive()
+                        && e.Get<MovementComponent>().IsObjectAlive);
         var allyUnitsPositionsEntities = unitsPositionsEntities;
 
         foreach (var allyUnit in allyUnitsPositionsEntities)
@@ -26,7 +28,7 @@ public class UnitFindAvailableFightsSystem: IEcsRunSystem
                 var allyUnitAttackComponent = allyUnit.Get<AttackComponent>();
                 var allyUnitMovementComponent = allyUnit.Get<MovementComponent>();
                 var enemyUnitMovementComponent = enemyUnit.Get<MovementComponent>();
-
+                
                 if (AttackHelper.CanAttack(
                     allyUnitAttackComponent,
                     allyUnitMovementComponent,
