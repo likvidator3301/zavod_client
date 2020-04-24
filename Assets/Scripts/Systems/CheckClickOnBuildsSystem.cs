@@ -8,7 +8,6 @@ namespace Systems
 {
     public class CheckClickOnBuildsSystem : IEcsRunSystem
     {
-        private readonly EcsFilter<ClickEvent> clickEvents = null;
         private readonly EcsFilter<BuildingComponent> buildings = null;
         private readonly EcsFilter<ButtonComponent> buttons = null;
         private readonly EcsFilter<ButtonClickEvent> btnClicks = null;
@@ -27,7 +26,7 @@ namespace Systems
 
             ray = camera.ScreenPointToRay(Input.mousePosition);
 
-            if (MouseClickHelper.IsPressClick(clickEvents, 0))
+            if (Input.GetMouseButtonDown(0))
             {
                 for (var i = 0; i < buttons.GetEntitiesCount(); i++)
                 {
