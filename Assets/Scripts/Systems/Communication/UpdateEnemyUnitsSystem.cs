@@ -17,6 +17,9 @@ namespace Systems.Communication
 
         public void Run()
         {
+            if (ServerClient.Communication.InGameInfo == null)
+                return;
+
             var unitsEntity = units.Entities.Where(e => e.IsNotNullAndAlive());
             var serverEnemyUnits = ServerClient.Communication.InGameInfo.UnitsInfo
                                                         .Where(u => u.PlayerId != ServerClient.Communication.userInfo.MyPlayer.Id);

@@ -53,7 +53,7 @@ namespace Systems
                     ToMainMenu();
                     break;
                 case "Exit":
-                    Application.Quit();
+                    world.NewEntityWith(out ExitGameEvent exit);
                     break;
                 default:
                     break;
@@ -62,7 +62,7 @@ namespace Systems
 
         private void ToMainMenu()
         {
-            SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
+            world.NewEntityWith(out ExitToMainMenuEvent exitMenuEvent);
         }
 
         private void CreateKiosk()

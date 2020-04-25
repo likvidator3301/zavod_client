@@ -65,7 +65,7 @@ namespace Systems
                     TryAcceptNickname();
                     break;
                 case "Exit":
-                    Application.Quit();
+                    world.NewEntityWith(out ExitGameEvent exit);
                     break;
                 default:
                     break;
@@ -122,12 +122,14 @@ namespace Systems
 
             if (goodSessions.Count() > 0)
             {
+                ServerClient.Communication.Sessions.IsCreator = false;
                 sessionReq.SessionId = goodSessions.First().Id;
                 await ServerClient.Communication.Client.Session.EnterSessions(sessionReq);
                 world.NewEntityWith(out WaitingSessionStartEvent playerWaiting);
             } 
             else
             {
+                ServerClient.Communication.Sessions.IsCreator = true;
                 sessionReq.SessionId = await ServerClient.Communication.Client.Session.CreateSession("SomeMap");
                 await ServerClient.Communication.Client.Session.EnterSessions(sessionReq);
                 world.NewEntityWith(out StartSessionEvent playerWaiting);
@@ -140,9 +142,14 @@ namespace Systems
         {
             foreach (var e in waitEvents.Entities.Where(ent => ent.IsNotNullAndAlive()))
                 e.Destroy();
+            var sessionId = ServerClient.Communication.Sessions.CurrentSessionGuid;
             ServerClient.Communication.Sessions.CurrentSessionGuid = Guid.Empty;
             ServerClient.Communication.Sessions.CurrentSessionInfo = null;
 
+            if (ServerClient.Communication.Sessions.IsCreator)
+                ServerClient.Communication.Client.Session.DeleteSession(ServerClient.Communication.Sessions.CurrentSessionGuid);
+
+            ServerClient.Communication.Sessions.IsCreator = false;
             menu.Get1[0].SessionCreateWindow.enabled = false;
         }
 

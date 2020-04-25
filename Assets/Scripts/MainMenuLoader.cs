@@ -19,7 +19,8 @@ public class MainMenuLoader : MonoBehaviour
             .Add(new MainMenuButttonsSystem())
             .Add(new AutorizationCheckSystem())
             .Add(new SessionStartSystem())
-            .Add(new WaitingStartSessionSystem());
+            .Add(new WaitingStartSessionSystem())
+            .Add(new ExitGameSystem());
 
         systems.Init();
 

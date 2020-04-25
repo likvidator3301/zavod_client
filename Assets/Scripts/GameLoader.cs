@@ -42,7 +42,10 @@ public class GameLoader : MonoBehaviour
 
         var levelSystems = new EcsSystems(world)
             .Add(new StartupTestLevelSystem())
-            .Add(new LoadSystem());
+            .Add(new LoadSystem())
+            .Add(new ExitGameSystem())
+            .Add(new ExitToMainMenuSystem())
+            .Add(new CheckSessionExistSystem());
 
         var unitSystems = new EcsSystems(world)
             .Add(new UnitCreateSystem());

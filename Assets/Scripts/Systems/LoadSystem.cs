@@ -23,6 +23,13 @@ namespace Systems
             LoadBuildingsSwitches();
             InitConsole();
             LoadUnitsAssets();
+            InitTime();
+        }
+
+        private void InitTime()
+        {
+            world.NewEntityWith(out TimeComponent time);
+            time.GameStartTime = DateTime.Now;
         }
 
         private void InitConsole()

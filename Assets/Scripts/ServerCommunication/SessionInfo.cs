@@ -9,6 +9,7 @@ namespace ServerCommunication
 {
     public class SessionInfo
     {
+        public bool IsCreator = false;
         public SessionDto CurrentSessionInfo;
         public Guid CurrentSessionGuid = Guid.Empty;
         public List<SessionDto> AllSessions = new List<SessionDto>();
