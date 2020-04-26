@@ -20,21 +20,18 @@ namespace Systems
             var zavodComponent = zavod.Get<ZavodComponent>();
             var resourceComponent = zavod.Get<ResourceGeneratorComponent>();
             resourceComponent.LastGeneratedMoneyTime = Time.time;
-            var createMoneyBagEvent = zavod.Set<CreateResourceEvent>();
-            createMoneyBagEvent.Count = resourceComponent.GenerateMoneyCount;
             var randAngle = UnityEngine.Random.Range(0, 360 / bagSpawnersCount) * bagSpawnersCount;
-            createMoneyBagEvent.Position = zavodComponent.Position
-                                           + new UnityEngine.Vector3(xZavodScale * Mathf.Sin(randAngle), 0, zZavodScale * Mathf.Cos(randAngle));
-            createMoneyBagEvent.Tag = ResourceTag.Money;
-            createMoneyBagEvent.Id = Guid.NewGuid();
+            var bagPosition = zavodComponent.Position
+                                    + new UnityEngine.Vector3(xZavodScale * Mathf.Sin(randAngle), 0, zZavodScale * Mathf.Cos(randAngle));
+
             var bagDto = new BagDto()
             {
-                Id = createMoneyBagEvent.Id,
-                GoldCount = createMoneyBagEvent.Count,
-                Position = createMoneyBagEvent.Position.ToModelsVector()
+                Id = Guid.NewGuid(),
+                GoldCount = resourceComponent.GenerateMoneyCount,
+                Position = bagPosition.ToModelsVector()
             };
 
-            ServerClient.Communication.ClientInfoReceiver.ToServerCreateBag.Add(createMoneyBagEvent.Id, bagDto);
+            ServerClient.Communication.ClientInfoReceiver.ToServerCreateBag.Add(bagDto.Id, bagDto);
         }
     }
 }

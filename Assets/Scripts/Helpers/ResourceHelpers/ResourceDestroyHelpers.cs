@@ -1,6 +1,7 @@
 using Components;
 using Components.Health;
 using Leopotam.Ecs;
+using ServerCommunication;
 
 namespace Systems
 {
@@ -8,7 +9,7 @@ namespace Systems
     {
         public static void CreateDestroyEvent(EcsEntity resourceEntity)
         {
-            resourceEntity.Set<DestroyEvent>().Object = resourceEntity.Get<ResourceComponent>().Object;
+            ServerClient.Communication.ClientInfoReceiver.ToServerRemoveBag.Add(resourceEntity.Get<ResourceComponent>().Guid);
         }
     }
 }

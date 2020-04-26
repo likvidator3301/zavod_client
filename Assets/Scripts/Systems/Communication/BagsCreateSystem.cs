@@ -9,7 +9,7 @@ using Models;
 
 namespace Systems.Communication
 {
-    public class BagsCreatorSystem : IEcsRunSystem
+    public class BagsCreateSystem : IEcsRunSystem
     {
         private readonly EcsFilter<ResourceComponent> resourcesFilter = null;
         private readonly EcsWorld world = null;
@@ -22,8 +22,7 @@ namespace Systems.Communication
             {
                 if (resources
                     .Select(b => b.Get<ResourceComponent>())
-                    .All(r => r.Guid != serverBag.Id 
-                              && !ServerClient.Communication.ClientInfoReceiver.ToServerRemoveBag.Contains(r.Guid)))
+                    .All(r => r.Guid != serverBag.Id))
                     CreateClientBag(serverBag);
             }
         }

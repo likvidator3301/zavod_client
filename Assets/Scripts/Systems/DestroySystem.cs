@@ -9,7 +9,7 @@ namespace Systems
     public class DestroySystem: IEcsRunSystem
     {
         private readonly EcsFilter<DestroyEvent> destroyEvents;
-        private readonly EcsFilter<DestroyEvent, ResourceDeliverComponent> delivers;
+        private readonly EcsFilter<DestroyEvent, ResourceDeliverComponent, MyUnitComponent> delivers;
         private readonly EcsWorld world;
         
         public void Run()

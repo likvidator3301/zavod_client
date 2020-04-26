@@ -7,11 +7,13 @@ using Components;
 using ServerCommunication;
 using Models;
 using Components.Health;
+using UnityEngine;
 
 namespace Systems.Communication
 {
-    public class BagsUpdaterSystem : IEcsRunSystem
+    public class BagsRemoveSystem : IEcsRunSystem
     {
+        private readonly EcsWorld world = null;
         private readonly EcsFilter<ResourceComponent> resourceFilter = null;
 
         public void Run()
@@ -22,11 +24,10 @@ namespace Systems.Communication
             {
                 var bag = res.Get<ResourceComponent>();
 
-                if (!ServerClient.Communication.InGameInfo.Bags.ContainsKey(bag.Guid)
-                    && !ServerClient.Communication.ClientInfoReceiver.ToServerCreateBag.ContainsKey(bag.Guid))
+                if (!ServerClient.Communication.InGameInfo.Bags.ContainsKey(bag.Guid))
                 {
-                    var destroy = res.Set<DestroyEvent>();
-                    destroy.Object = bag.Object;
+                    GameObject.Destroy(bag.Object);
+                    res.Destroy();
                 }
             }
         }
