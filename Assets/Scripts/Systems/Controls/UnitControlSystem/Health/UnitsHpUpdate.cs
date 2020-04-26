@@ -17,20 +17,19 @@ namespace Systems.Communication
 
         private void UpdateLocalUnit(EcsEntity clientUnit)
         {
-            foreach (var serverUnit in ServerClient.Communication.InGameInfo.UnitsInfo)
-            {
-                if (serverUnit.Id != clientUnit.Get<UnitComponent>().Guid)
-                    continue;
+            if (!ServerClient.Communication.InGameInfo.UnitsInfo.ContainsKey(clientUnit.Get<UnitComponent>().Guid))
+                return;
 
-                var healthComponent = clientUnit.Get<HealthComponent>();
-                healthComponent.CurrentHp = serverUnit.Health;
-                if (healthComponent.MaxHp == null)
-                    healthComponent.MaxHp = serverUnit.Health;
+            var serverUnit = ServerClient.Communication.InGameInfo.UnitsInfo[clientUnit.Get<UnitComponent>().Guid];
 
-                clientUnit
-                    .Get<HealthBarComponent>().HealthBar.transform.localScale
-                        = new UnityEngine.Vector3(healthComponent.CurrentHp / healthComponent.MaxHp.Value, 1, 1);
-            }
+            var healthComponent = clientUnit.Get<HealthComponent>();
+            healthComponent.CurrentHp = serverUnit.Health;
+            if (healthComponent.MaxHp == null)
+                healthComponent.MaxHp = serverUnit.Health;
+
+            clientUnit
+                .Get<HealthBarComponent>().HealthBar.transform.localScale
+                    = new UnityEngine.Vector3(healthComponent.CurrentHp / healthComponent.MaxHp.Value, 1, 1);
         }
     }
 }

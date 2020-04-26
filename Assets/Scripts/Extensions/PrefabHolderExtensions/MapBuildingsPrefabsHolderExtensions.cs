@@ -9,7 +9,7 @@ namespace Systems
 {
     public static class MapBuildingsPrefabsHolderExtensions
     {
-        private static readonly Vector3 buildingRotation = new Vector3(-90, 0, 0);
+        private static readonly Vector3 buildingRotation = new Vector3(0, 90, 0);
         
         public static void AddNewZavodEntityOnPosition(
             this GameObject prefab,

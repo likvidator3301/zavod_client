@@ -11,12 +11,13 @@ namespace Systems
         private static readonly int moneyCount = 50;
         private static readonly int semkiCount = 10;
         private static readonly float minHeight = 0f;
-        
+
         public static void AddResourceEntityOnPosition(
             this GameObject prefab,
             EcsWorld world,
             Vector3 position,
             ResourceTag tag,
+            Guid id,
             int resourceCount = -1)
         {
             var newMoneyBagObject = prefab.InstantiateNewObject(new Vector3(position.x, 0, position.z), Quaternion.identity);
@@ -25,7 +26,7 @@ namespace Systems
             resourceComponent.Object = newMoneyBagObject;
             resourceComponent.Position = position;
             resourceComponent.Tag = tag;
-            resourceComponent.Guid = Guid.NewGuid();
+            resourceComponent.Guid = id;
             if (resourceCount == -1)
                 resourceComponent.ResourceCount = tag == ResourceTag.Money ? moneyCount : semkiCount;
             else

@@ -23,6 +23,7 @@ namespace Systems.Zavod
                     world,
                     createResourceComponent.Position,
                     createResourceComponent.Tag,
+                    createResourceComponent.Id,
                     createResourceComponent.Count);
                 
                 createResourceEntity.Unset<CreateResourceEvent>();

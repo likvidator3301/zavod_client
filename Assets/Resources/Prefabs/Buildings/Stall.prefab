@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1469563628309891396}
   - component: {fileID: 9194891104197363234}
+  - component: {fileID: 6628913693995159224}
   m_Layer: 9
   m_Name: Stall
   m_TagString: Kiosk
@@ -46,6 +47,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 7.5, y: 4, z: 3.76}
   m_Center: {x: 0, y: 2, z: 0}
+--- !u!208 &6628913693995159224
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2467877546422188887}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.5, y: 2, z: 1.75}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 2, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &2966874917293824888
 GameObject:
   m_ObjectHideFlags: 0

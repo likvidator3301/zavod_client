@@ -81,7 +81,9 @@ public class GameLoader : MonoBehaviour
             .Add(new UnitPositionsSendSystem())
             .Add(new BuildingsPositionSendSystem())
             .Add(new UpdateEnemyBuildingsSystem())
-            .Add(new UnitsHpUpdate());
+            .Add(new UnitsHpUpdate())
+            .Add(new BagsCreatorSystem())
+            .Add(new BagsUpdaterSystem());
         
         var zavodSystems = new EcsSystems(world)
             .Add(new GenerateMoneySystem());

@@ -21,7 +21,7 @@ namespace Systems.Communication
                 return;
 
             var unitsEntity = units.Entities.Where(e => e.IsNotNullAndAlive());
-            var serverEnemyUnits = ServerClient.Communication.InGameInfo.UnitsInfo
+            var serverEnemyUnits = ServerClient.Communication.InGameInfo.UnitsInfo.Values
                                                         .Where(u => u.PlayerId != ServerClient.Communication.userInfo.MyPlayer.Id);
 
             foreach (var serverUnit in serverEnemyUnits)

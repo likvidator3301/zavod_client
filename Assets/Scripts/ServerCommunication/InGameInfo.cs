@@ -10,7 +10,8 @@ namespace ServerCommunication
 {
     public class InGameInfo
     {
-        public List<OutputUnitState> UnitsInfo = new List<OutputUnitState>();
+        public Dictionary<Guid, OutputUnitState> UnitsInfo = new Dictionary<Guid, OutputUnitState>();
+        public Dictionary<Guid, BagDto> Bags = new Dictionary<Guid, BagDto>();
 
         private Timer unitsStateUpd;
 
@@ -18,13 +19,20 @@ namespace ServerCommunication
         {
             unitsStateUpd = new Timer(70);
             unitsStateUpd.Elapsed += (e, o) => UpdateUnits();
+            unitsStateUpd.Elapsed += (e, o) => UpdateBags();
             unitsStateUpd.Start();
         }
 
         private async void UpdateUnits()
         {
             var units = await ServerClient.Communication.Client.Unit.GetAllUnitStates();
-            UnitsInfo = units;
+            UnitsInfo = units.ToDictionary(d => d.Id); ;
+        }
+
+        private async void UpdateBags()
+        {
+            var bags = await ServerClient.Communication.Client.Bag.GetAll();
+            Bags = bags.ToDictionary(d => d.Id);
         }
     }
 }

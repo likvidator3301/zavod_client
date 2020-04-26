@@ -9,7 +9,7 @@ namespace Systems.Zavod
 {
     public class ResourceFindAvailableToTakeSystem: IEcsRunSystem
     {
-        private readonly EcsFilter<MovementComponent, ResourceDeliverComponent> delivers;
+        private readonly EcsFilter<MovementComponent, ResourceDeliverComponent, MyUnitComponent> delivers;
         private readonly EcsFilter<ResourceComponent> resources;
         private const float minTakingDistance = 1.5f;
         

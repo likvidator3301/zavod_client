@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Components.Zavod
@@ -7,5 +8,6 @@ namespace Components.Zavod
         public Vector3 Position { get; set; }
         public int Count { get; set; }
         public ResourceTag Tag { get; set; }
+        public Guid Id { get; set; }
     }
 }

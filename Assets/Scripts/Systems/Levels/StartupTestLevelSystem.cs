@@ -16,7 +16,7 @@ namespace Systems
         private EcsWorld ecsWorld;
         private EcsGrowList<UnitComponent> units;
         private readonly Vector3 zavodPosition = new Vector3(60, minZavodHeight, 42.5f);
-        private readonly Vector3 basePosition = new Vector3(80, minHeight, 35f);
+        private readonly Vector3 basePosition = new Vector3(10, minHeight, 10);
 
         public void Init() => InitializeLevel();
 

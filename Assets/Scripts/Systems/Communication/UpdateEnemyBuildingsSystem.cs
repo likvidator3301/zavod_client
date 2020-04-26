@@ -23,21 +23,21 @@ namespace Systems.Communication
                 return;
 
             var buildingsEntity = buildings.Entities.Where(e => e.IsNotNullAndAlive());
-            var serverEnemyBuildings = ServerClient.Communication.InGameInfo.UnitsInfo
+            var serverEnemyBuildings = ServerClient.Communication.InGameInfo.UnitsInfo.Values
                                                         .Where(u => u.PlayerId != ServerClient.Communication.userInfo.MyPlayer.Id);
 
-            foreach (var serverUnit in serverEnemyBuildings)
+            foreach (var serverBuilding in serverEnemyBuildings)
             {
 
-                if (!Enum.TryParse(serverUnit.Type.ToString(), out BuildingTag tag)
-                    || TryUpdateClientUnit(serverUnit, buildingsEntity))
+                if (!Enum.TryParse(serverBuilding.Type.ToString(), out BuildingTag tag)
+                    || TryUpdateClientBuilding(serverBuilding, buildingsEntity))
                     continue;
 
-                CreateNotFoundUnit(tag, serverUnit);
+                CreateNotFoundBuilding(tag, serverBuilding);
             }
         }
 
-        private void CreateNotFoundUnit(BuildingTag tag, OutputUnitState serverBuilding)
+        private void CreateNotFoundBuilding(BuildingTag tag, OutputUnitState serverBuilding)
         {
             var enemyBuild = BuildingHelper.CreateBuilding(world, 
                 buildingAssets.Get1[0].BuildingsAssets["Enemy" + tag.ToString()],
@@ -49,7 +49,7 @@ namespace Systems.Communication
             enemyBuild.Set<EnemyBuildingComponent>();
         }
 
-        private bool TryUpdateClientUnit(OutputUnitState serverBuild, IEnumerable<EcsEntity> clientBuildings)
+        private bool TryUpdateClientBuilding(OutputUnitState serverBuild, IEnumerable<EcsEntity> clientBuildings)
         {
             var isUnitUpdate = false;
 

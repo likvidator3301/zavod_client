@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b45fce595b81a104da1863c69a1cc1db, type: 3}
   m_Name: CameraDefinitions
   m_EditorClassIdentifier: 
-  speed: 30
+  speed: 50
   verticalMoveStepFactor: 150
   rotateSpeed: 2
-  maxHeigth: 35
+  maxHeigth: 55
   minHeigth: 2
-  verticalMoveSpeed: 0.18
+  verticalMoveSpeed: 0.24
   mainCameraPrefab: {fileID: 7734954885208448484, guid: 81cbff34fb4936f488b4a76399df3024,
     type: 3}
