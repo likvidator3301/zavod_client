@@ -11,19 +11,26 @@ namespace Systems
 {
     class FindDeathBuildingSystem : IEcsRunSystem
     {
-        private readonly EcsFilter<BuildingComponent> changingHpBuildigs = null;
+        private readonly EcsFilter<BuildingComponent> buildings = null;
+        private readonly EcsWorld world = null;
 
         public void Run()
         {
-            var changingHpUnitsEntities = changingHpBuildigs.Entities
+            var buildingEntities = buildings.Entities
             .Where(u => u.IsNotNullAndAlive());
 
-            foreach (var unit in changingHpUnitsEntities)
+            foreach (var building in buildingEntities)
             {
-                var unitHealthComponent = unit.Get<HealthComponent>();
-                if (unitHealthComponent.CurrentHp <= 0)
+                var buildingHealthComponent = building.Get<HealthComponent>();
+                if (buildingHealthComponent.CurrentHp <= 0)
                 {
-                    unit.Set<DestroyEvent>().Object = unit.Get<BuildingComponent>().Object;
+                    if (building.Get<BuildingComponent>().Tag == BuildingTag.Base)
+                    {
+                        world.NewEntityWith(out EndGameEvent endEvent);
+                        endEvent.IsWin = building.Get<EnemyBuildingComponent>() != null;
+                    }
+
+                    building.Set<DestroyEvent>().Object = building.Get<BuildingComponent>().Object;
                     return;
                 }
             }

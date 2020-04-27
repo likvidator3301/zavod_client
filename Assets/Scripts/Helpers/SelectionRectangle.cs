@@ -3,9 +3,6 @@ using System.Linq;
 using Components;
 using Leopotam.Ecs;
 using UnityEngine;
-using UnityEngine.Diagnostics;
-using UnityEngine.Experimental.PlayerLoop;
-using UnityEngine.WSA;
 
 namespace Systems
 {

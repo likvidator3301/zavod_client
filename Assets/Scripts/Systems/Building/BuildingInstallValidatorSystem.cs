@@ -1,5 +1,6 @@
 ﻿using Components;
 using Leopotam.Ecs;
+using ServerCommunication;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,10 +27,29 @@ namespace Systems
             var buildingEntityComponent = buildingEntities.First().Get<BuildingCreateComponent>();
             var hardBuildingEntities = hardBuildings.Entities.Where(e => e.IsNotNullAndAlive());
 
+            var buildingInMyHalf = true;
+
+            if (ServerClient.Communication.Sessions.IsCreator)
+            {
+                buildingInMyHalf = buildingEntityComponent.Position.x + buildingEntityComponent.Position.z < 180;
+            }
+            else
+            {
+                buildingInMyHalf = (200 - buildingEntityComponent.Position.x) + (200 - buildingEntityComponent.Position.z) < 180;
+            }
+
+            buildingEntityComponent.isCanInstall = buildingEntityComponent.Position.x > 10
+                                                && buildingEntityComponent.Position.z > 10
+                                                && buildingEntityComponent.Position.x < 190
+                                                && buildingEntityComponent.Position.z < 190
+                                                && buildingInMyHalf;
+
             foreach (var hardEntity in hardBuildingEntities)
             {
-                buildingEntityComponent.isCanInstall = 
-                    !hardEntity.Get<BuildingComponent>().Object.GetComponent<Collider>().bounds.Intersects(new Bounds(buildingEntityComponent.Position, buildingEntityComponent.Size));
+                buildingEntityComponent.isCanInstall = buildingEntityComponent.isCanInstall
+                    && !hardEntity.Get<BuildingComponent>()
+                        .Object.GetComponents<Collider>()
+                            .Any(b => b.bounds.Intersects(new Bounds(buildingEntityComponent.Position, buildingEntityComponent.Size)));
 
                 if (!buildingEntityComponent.isCanInstall)
                     break;

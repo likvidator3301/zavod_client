@@ -10,5 +10,11 @@ namespace Components
 
         [EcsIgnoreNullCheck]
         public Canvas PauseMenu;
+
+        [EcsIgnoreNullCheck]
+        public Canvas WonMenu;
+
+        [EcsIgnoreNullCheck]
+        public Canvas LoseMenu;
     }
 }

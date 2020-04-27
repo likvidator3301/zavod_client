@@ -6,6 +6,7 @@ using Components.Follow;
 using Leopotam.Ecs;
 using ServerCommunication;
 using System;
+using UnityEngine;
 
 public class UnitAttackSystem: IEcsRunSystem
 {
@@ -55,10 +56,14 @@ public class UnitAttackSystem: IEcsRunSystem
             if (attackingComponent.TargetEntity.Get<BuildingComponent>() != null) 
             {
                 var enemyBuildTransform = attackingComponent.TargetEntity.Get<BuildingComponent>().Object.transform;
+                var attackRange = Math.Max(enemyBuildTransform.lossyScale.x, enemyBuildTransform.lossyScale.z) * 5;
+                if (attackingComponent.TargetEntity.Get<BuildingComponent>().Tag == BuildingTag.Base)
+                    attackRange *= 6;
+
                 if (AttackHelper.CanBuildingAttack(unitAttackComponent,
                                                     unitMovementComponent,
                                                     targetMovementComponent,
-                                                    (int)Math.Max(enemyBuildTransform.lossyScale.x, enemyBuildTransform.lossyScale.z) * 5))
+                                                    (int)attackRange))
                 {
                     unitAttackComponent.LastAttackTime = DateTime.Now;
                     ServerClient.Communication.AttackSender.attacks.Add(new AttackInfo(unit.Get<UnitComponent>().Guid,

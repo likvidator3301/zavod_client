@@ -54,7 +54,8 @@ public class GameLoader : MonoBehaviour
             .Add(new LoadSystem())
             .Add(new ExitGameSystem())
             .Add(new ExitToMainMenuSystem())
-            .Add(new CheckSessionExistSystem());
+            .Add(new CheckSessionExistSystem())
+            .Add(new EndGameSystem());
 
         var unitSystems = new EcsSystems(world)
             .Add(new UnitCreateSystem());

@@ -43,6 +43,9 @@ namespace Systems
                 case "CreateRunner":
                     CreateRunner(btn);
                     break;
+                case "CreateBase":
+                    CreateBase(btn);
+                    break;
                 case "CreateKiosk":
                     CreateKiosk();
                     break;
@@ -60,6 +63,13 @@ namespace Systems
             }
         }
 
+        private void CreateBase(ButtonComponent btn)
+        {
+            world.NewEntityWith(out BuildingCreateComponent buildEvent);
+            buildEvent.Tag = BuildingTag.Base;
+            btn.button.interactable = false;
+        }
+
         private void ToMainMenu()
         {
             world.NewEntityWith(out ExitToMainMenuEvent exitMenuEvent);
@@ -68,13 +78,13 @@ namespace Systems
         private void CreateKiosk()
         {
             world.NewEntityWith(out BuildingCreateComponent buildEvent);
-            buildEvent.Type = BuildingTag.Stall;
+            buildEvent.Tag = BuildingTag.Stall;
         }
 
         private void OnGarageCreateClick()
         {
             world.NewEntityWith(out BuildingCreateComponent buildEvent);
-            buildEvent.Type = BuildingTag.Garage;
+            buildEvent.Tag = BuildingTag.Garage;
         }
 
         private void CreateWarrior(ButtonComponent button)

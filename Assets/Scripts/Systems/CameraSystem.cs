@@ -41,6 +41,7 @@ namespace Systems
             }
 
             CalculateAndMoveCamera(rotateDirection, leftRightDirection, aheadBackDirection, verticalDirection, cameraComponent);
+            CorrectCamera(cameraComponent, 0, 200, 0, 200);
         }
 
         private int CalculateDirection(KeyCode positiveKey, KeyCode negativeKey, KeyCode inputKey)
@@ -104,6 +105,24 @@ namespace Systems
             cameraComponent.Camera.transform.Translate(0, movement.y, 0, Space.World);
             cameraComponent.Camera.transform.Rotate(Vector3.right,
                 movement.y * CameraComponent.rotateCameraMultiplier / (cameraComponent.maxHeigth - cameraComponent.minHeigth));
+        }
+
+        private void CorrectCamera(CameraComponent cameraComponent, int minX, int maxX, int minZ, int maxZ)
+        {
+            var cameraTransform = cameraComponent.Camera.transform;
+            var camX = cameraTransform.position.x;
+            var camZ = cameraTransform.position.z;
+
+            if (camX < minX)
+                camX = minX;
+            if (camX > maxX)
+                camX = maxX;
+            if (camZ < minZ)
+                camZ = minZ;
+            if (camZ > maxZ)
+                camZ = maxZ;
+
+            cameraTransform.position = new Vector3(camX, cameraTransform.position.y, camZ);
         }
     }
 }

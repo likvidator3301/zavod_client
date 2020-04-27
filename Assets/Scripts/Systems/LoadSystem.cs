@@ -63,6 +63,9 @@ namespace Systems
             cameraComponent.verticalMoveSpeed = definitions.CameraDefinitions.verticalMoveSpeed;
             cameraComponent.verticalMoveStepFactor = definitions.CameraDefinitions.verticalMoveStepFactor;
             cameraComponent.Camera = UnityEngine.Object.Instantiate(definitions.CameraDefinitions.mainCameraPrefab);
+            cameraComponent.Camera.transform.position = ServerClient.Communication.Sessions.IsCreator
+                                                            ? new Vector3(20, cameraComponent.Camera.transform.position.y, 20)
+                                                            : new Vector3(180, cameraComponent.Camera.transform.position.y, 180);
         }
 
         private void LoadUiAssets()
@@ -127,6 +130,10 @@ namespace Systems
             var uiCanvases = resoursesEntity.Set<UiCanvasesComponent>();
             uiCanvases.UserInterface = GuiHelper.InstantiateAllButtons(Resources.Load<Canvas>(@"Prefabs/GUI/UserInterface"), world);
             uiCanvases.PauseMenu = GuiHelper.InstantiateAllButtons(Resources.Load<Canvas>("Prefabs/GUI/PauseMenu"), world);
+            uiCanvases.LoseMenu = GuiHelper.InstantiateAllButtons(Resources.Load<Canvas>("Prefabs/GUI/LoseMenu"), world);
+            uiCanvases.WonMenu = GuiHelper.InstantiateAllButtons(Resources.Load<Canvas>("Prefabs/GUI/WonMenu"), world);
+            uiCanvases.LoseMenu.enabled = false;
+            uiCanvases.WonMenu.enabled = false;
             uiCanvases.PauseMenu.enabled = false;
         }
     }

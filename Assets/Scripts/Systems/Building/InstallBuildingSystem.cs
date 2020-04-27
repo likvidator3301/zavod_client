@@ -34,7 +34,7 @@ namespace Systems
             var buildingCreateEntity = buildEntities.First();
             var assetsEntity = assets.Entities.First();
             var currentBuildComponent = buildingCreateEntity.Get<BuildingCreateComponent>();
-            var type = currentBuildComponent.Type.ToString();
+            var type = currentBuildComponent.Tag.ToString();
 
             if (!currentBuildComponent.isCanInstall)
             {
@@ -59,10 +59,8 @@ namespace Systems
                                             buildingAssetsComponent.InBuildingCanvasesAssets[type],
                                             currentBuildComponent.Position, 
                                             currentBuildComponent.Rotation,
-                                            currentBuildComponent.Type);
+                                            currentBuildComponent.Tag);
 
-            buildEntity.Set<MyBuildingComponent>();
-            buildEntity.Set<MovementComponent>().InitializeComponent(buildEntity.Get<BuildingComponent>().Object);
 
             MessageHelper.SendMessageToConsole("Строительство завершено", 8, world);
             BuildingHelper.ResetBuildingSwitch(assetsEntity.Get<BuildingSwitchesComponent>().buildingsSwitch[type]);

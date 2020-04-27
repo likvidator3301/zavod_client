@@ -10,7 +10,7 @@ namespace Systems.Base
     public class FindNearDeliversToTakeResourcesSystem: IEcsRunSystem
     {
         private EcsFilter<MovementComponent, ResourceDeliverComponent> delivers;
-        private EcsFilter<BaseComponent> baseComponents;
+        private EcsFilter<BaseComponent, BuildingComponent> baseComponents;
         
         
         public void Run() => FindNearDeliversToTakeResources();
@@ -29,7 +29,7 @@ namespace Systems.Base
 
                 foreach (var baseEntity in baseEntities)
                 {
-                    var basePosition = baseEntity.Get<BaseComponent>().Position;
+                    var basePosition = baseEntity.Get<MovementComponent>().CurrentPosition;
 
                     if (BaseTakeResourcesHelpers.CanTakeResourcesFromDeliver(
                         deliverComponent,

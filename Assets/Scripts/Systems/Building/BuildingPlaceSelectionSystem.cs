@@ -33,7 +33,7 @@ namespace Systems
             {
                 BuildingHelper.ResetBuildingSwitch(assetsEntity.Get<BuildingSwitchesComponent>()
                                                                .buildingsSwitch[e.Get<BuildingCreateComponent>()
-                                                                                 .Type
+                                                                                 .Tag
                                                                                  .ToString()]);
                 e.Destroy();
             }

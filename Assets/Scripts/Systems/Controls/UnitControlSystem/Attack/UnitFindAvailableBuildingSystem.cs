@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Components;
 using Components.Attack;
+using UnityEngine;
 
 namespace Systems
 {
@@ -32,11 +33,16 @@ namespace Systems
                     var enemyBuildingMovementComponent = enemyBuilding.Get<MovementComponent>();
                     var enemyBuildTransform = enemyBuilding.Get<BuildingComponent>().Object.transform;
 
+                    var attackRange = Math.Max(enemyBuildTransform.lossyScale.x, enemyBuildTransform.lossyScale.z * 5);
+
+                    if (enemyBuilding.Get<BuildingComponent>().Tag == BuildingTag.Base)
+                        attackRange *= 6;
+
                     if (AttackHelper.CanBuildingAttack(
                         allyBuildingAttackComponent,
                         allyBuildingMovementComponent,
                         enemyBuildingMovementComponent,
-                        (int)Math.Max(enemyBuildTransform.lossyScale.x, enemyBuildTransform.lossyScale.z) * 5))
+                        (int)attackRange))
                     {
                         AttackHelper.CreateAttackEvent(myUnit, enemyBuilding);
                         break;

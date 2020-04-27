@@ -4,6 +4,7 @@ using Components.Zavod;
 using Extensions;
 using Leopotam.Ecs;
 using UnityEngine;
+using Components;
 
 namespace Systems
 {
@@ -32,12 +33,8 @@ namespace Systems
             Vector3 position)
         {
             var newBaseObject = prefab.InstantiateNewObject(position, Quaternion.Euler(buildingRotation));
-            world.NewEntityWith<BaseComponent>(
+            var baseEntity = world.NewEntityWith<BaseComponent>(
                 out var baseComponent);
-            baseComponent.Position = position;
-            baseComponent.Guid = Guid.NewGuid();
-            baseComponent.Object = newBaseObject;
-            baseComponent.Tag = MapBuildingTag.Base;
         }
     }
 }

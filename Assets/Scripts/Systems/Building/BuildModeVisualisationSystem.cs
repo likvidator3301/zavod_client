@@ -22,7 +22,7 @@ namespace Systems
             {
                 var buildingComponent = ent.Get<BuildingCreateComponent>();
 
-                var buildingSwitch = buildingSwitches.Entities.First().Get<BuildingSwitchesComponent>().buildingsSwitch[buildingComponent.Type.ToString()];
+                var buildingSwitch = buildingSwitches.Entities.First().Get<BuildingSwitchesComponent>().buildingsSwitch[buildingComponent.Tag.ToString()];
                 BuildingHelper.ResetBuildingSwitch(buildingSwitch);
 
                 buildingComponent.Size = buildingSwitch.instancedGreenBuilding.GetComponent<Collider>().bounds.size;

@@ -1,5 +1,6 @@
 public enum BuildingTag
 {
     Garage,
-    Stall
+    Stall,
+    Base
 }

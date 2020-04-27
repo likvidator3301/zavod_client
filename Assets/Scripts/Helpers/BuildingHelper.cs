@@ -1,4 +1,5 @@
 ﻿using Components;
+using Components.Base;
 using Leopotam.Ecs;
 using System;
 using UnityEngine;
@@ -41,6 +42,13 @@ namespace Systems
 
             buildingEntity.Set<HealthComponent>().InitializeComponent(200);
             buildingEntity.Set<HealthBarComponent>().InitializeComponent(building.Object);
+            buildingEntity.Set<MyBuildingComponent>();
+            buildingEntity.Set<MovementComponent>().InitializeComponent(building.Object);
+
+            if (tag == BuildingTag.Base)
+            {
+                buildingEntity.Set<BaseComponent>();
+            }
 
             return buildingEntity;
         }

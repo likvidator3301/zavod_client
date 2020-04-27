@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Systems
 {
@@ -13,6 +14,7 @@ namespace Systems
     {
         private readonly EcsFilter<BuildingCreateComponent> builds = null;
         private readonly EcsFilter<BuildingAssetsComponent> assets = null;
+        private readonly EcsFilter<UiCanvasesComponent> canvases = null;
 
         public void Run()
         {
@@ -30,8 +32,17 @@ namespace Systems
             {
                 BuildingHelper.ResetBuildingSwitch(assetsEntity.Get<BuildingSwitchesComponent>()
                                                                .buildingsSwitch[e.Get<BuildingCreateComponent>()
-                                                                                 .Type
+                                                                                 .Tag
                                                                                  .ToString()]);
+
+                if (e.Get<BuildingCreateComponent>().Tag == BuildingTag.Base)
+                {
+                    canvases.Get1[0].UserInterface.GetComponentsInChildren<Button>()
+                        .Where(b => b.name.Equals("CreateBase"))
+                        .First()
+                        .interactable = true;
+                }
+
                 e.Destroy();
             }
         }
