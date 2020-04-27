@@ -28,5 +28,16 @@ namespace Systems
                     unitMovementComponent.CurrentPosition, 
                     targetMovementComponent.CurrentPosition) <= unitAttackComponent.AttackRange;
         }
+
+        public static bool CanBuildingAttack(AttackComponent unitAttackComponent,
+            MovementComponent unitMovementComponent,
+            MovementComponent targetMovementComponent,
+            int buildScale)
+        {
+            return unitAttackComponent.LastAttackTime + unitAttackComponent.AttackDelay <= DateTime.Now
+                && Vector3.Distance(
+                    unitMovementComponent.CurrentPosition,
+                    targetMovementComponent.CurrentPosition) <= buildScale;
+        }
     }
 }

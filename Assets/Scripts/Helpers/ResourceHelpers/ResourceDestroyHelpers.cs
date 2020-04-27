@@ -9,6 +9,7 @@ namespace Systems
     {
         public static void CreateDestroyEvent(EcsEntity resourceEntity)
         {
+            resourceEntity.Set<EntityDestroyedSoonComponent>();
             ServerClient.Communication.ClientInfoReceiver.ToServerRemoveBag.Add(resourceEntity.Get<ResourceComponent>().Guid);
         }
     }

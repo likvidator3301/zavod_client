@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Components;
 using Components.Health;
@@ -28,17 +29,16 @@ namespace Systems
                 {
                     DropResource(resource);
                 }
+            }
 
-                //dropEntity.Unset<ResourceDropEvent>();
+            foreach (var dropEntity in dropResourceEntities)
+            {
                 dropEntity.Destroy();
             }
         }
 
         private void DropResource(ResourceComponent resource)
         {
-            //if (ServerClient.Communication.ClientInfoReceiver.ToServerCreateBag.ContainsKey(resource.Guid))
-            //    return;
-
             switch (resource.Tag)
             {
                 //TODO: Add semek's prefab
@@ -50,15 +50,12 @@ namespace Systems
                     {
                         var bagDto = new BagDto()
                         {
-                            Id = resource.Guid,
+                            Id = Guid.NewGuid(),
                             GoldCount = resource.ResourceCount,
                             Position = resource.Position.ToModelsVector()
                         };
 
-                        ServerClient.Communication.ClientInfoReceiver.ToServerCreateBag.Add(resource.Guid, bagDto);
-                        MoneyBagPrefabHolder.MoneyBagPrefab.AddResourceEntityFromResourceComponent(
-                            world,
-                            resource);
+                        ServerClient.Communication.ClientInfoReceiver.ToServerCreateBag.Add(bagDto.Id, bagDto);
                         break;
                     }
             }

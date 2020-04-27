@@ -11,6 +11,7 @@ namespace Systems
         private readonly PlayerComponent player = null;
         private readonly GameDefinitions gameDefinitions = null;
         private readonly EcsFilter<UnitComponent> units = null;
+        private readonly EcsFilter<BuildingComponent> builds = null;
 
         public void Run() => HandleMovingUnits();
 
@@ -40,6 +41,14 @@ namespace Systems
                 foreach (var unit in player.SelectedUnits)
                 {
                     var unitTarget = RaycastHelper.GetUnitEntityByRaycastHit(hitInfo, units.Entities);
+                    if (unitTarget.IsNull())
+                        break;
+                    FollowHelper.CreateFollowEvent(unit, unitTarget);
+                }
+
+                foreach (var unit in player.SelectedUnits)
+                {
+                    var unitTarget = RaycastHelper.GetBuildingEntityByRaycastHit(hitInfo, builds.Entities);
                     if (unitTarget.IsNull())
                         break;
                     FollowHelper.CreateFollowEvent(unit, unitTarget);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Components;
 using Leopotam.Ecs;
+using ServerCommunication;
 using UnityEngine;
 
 namespace Systems.Zavod
@@ -10,7 +11,7 @@ namespace Systems.Zavod
     public class ResourceFindAvailableToTakeSystem: IEcsRunSystem
     {
         private readonly EcsFilter<MovementComponent, ResourceDeliverComponent, MyUnitComponent> delivers;
-        private readonly EcsFilter<ResourceComponent> resources;
+        private readonly EcsFilter<ResourceComponent>.Exclude<EntityDestroyedSoonComponent> resources;
         private const float minTakingDistance = 1.5f;
         
         public void Run() => FindAvailableToTakeResources();

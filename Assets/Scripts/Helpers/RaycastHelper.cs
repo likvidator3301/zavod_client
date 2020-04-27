@@ -41,7 +41,7 @@ namespace Systems
                                      && u.IsAlive()
                                      && u.Get<UnitComponent>().Object.Equals(hitInfo.collider.gameObject));
         }
-        
+
         public static EcsEntity GetBuildingEntityByRaycastHit(RaycastHit hitInfo, EcsEntity[] buildings)
         {
             if (buildings == null)

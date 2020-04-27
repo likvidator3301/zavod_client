@@ -39,6 +39,9 @@ namespace Systems
             building.AllButtons = building.InBuildCanvas.GetComponentsInChildren<Button>();
             building.Guid = Id;
 
+            buildingEntity.Set<HealthComponent>().InitializeComponent(200);
+            buildingEntity.Set<HealthBarComponent>().InitializeComponent(building.Object);
+
             return buildingEntity;
         }
     }

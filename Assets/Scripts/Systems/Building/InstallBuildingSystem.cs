@@ -62,6 +62,7 @@ namespace Systems
                                             currentBuildComponent.Type);
 
             buildEntity.Set<MyBuildingComponent>();
+            buildEntity.Set<MovementComponent>().InitializeComponent(buildEntity.Get<BuildingComponent>().Object);
 
             MessageHelper.SendMessageToConsole("Строительство завершено", 8, world);
             BuildingHelper.ResetBuildingSwitch(assetsEntity.Get<BuildingSwitchesComponent>().buildingsSwitch[type]);

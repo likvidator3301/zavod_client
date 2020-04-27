@@ -38,7 +38,10 @@ public class GameLoader : MonoBehaviour
             .Add(new UnitActionHandler())
             .Add(new SelectionHandler())
             .Add(new CheckClickOnBuildsSystem())
-            .Add(new ButtonsClickSystem());
+            .Add(new ButtonsClickSystem())
+            .Add(new UnitFindAvailableBuildingSystem())
+            .Add(new BuildHpUpdateSystem())
+            .Add(new FindDeathBuildingSystem());
 
         var levelSystems = new EcsSystems(world)
             .Add(new StartupTestLevelSystem())

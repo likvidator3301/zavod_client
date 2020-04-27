@@ -19,9 +19,8 @@ public class UnitFindAvailableFightsSystem: IEcsRunSystem
         var enemyUnitsPositionsEntities = enemyUnits.Entities
             .Where(e => e.IsNotNullAndAlive()
                         && e.Get<MovementComponent>().IsObjectAlive);
-        var allyUnitsPositionsEntities = unitsPositionsEntities;
 
-        foreach (var allyUnit in allyUnitsPositionsEntities)
+        foreach (var allyUnit in unitsPositionsEntities)
         {
             foreach (var enemyUnit in enemyUnitsPositionsEntities)
             {

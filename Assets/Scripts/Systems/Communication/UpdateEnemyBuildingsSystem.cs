@@ -30,7 +30,8 @@ namespace Systems.Communication
             {
 
                 if (!Enum.TryParse(serverBuilding.Type.ToString(), out BuildingTag tag)
-                    || TryUpdateClientBuilding(serverBuilding, buildingsEntity))
+                    || TryUpdateClientBuilding(serverBuilding, buildingsEntity)
+                    || serverBuilding.Health <= 0)
                     continue;
 
                 CreateNotFoundBuilding(tag, serverBuilding);
@@ -47,6 +48,10 @@ namespace Systems.Communication
                 tag,
                 serverBuilding.Id);
             enemyBuild.Set<EnemyBuildingComponent>();
+            var hb = enemyBuild.Get<HealthComponent>();
+            hb.MaxHp = serverBuilding.Health;
+            hb.CurrentHp = serverBuilding.Health;
+            enemyBuild.Set<MovementComponent>().InitializeComponent(enemyBuild.Get<BuildingComponent>().Object);
         }
 
         private bool TryUpdateClientBuilding(OutputUnitState serverBuild, IEnumerable<EcsEntity> clientBuildings)
@@ -62,7 +67,7 @@ namespace Systems.Communication
                 isUnitUpdate = true;
 
                 uComp.Object.transform.position = serverBuild.Position.ToUnityVector();
-                //clientUnit.Get<HealthComponent>().CurrentHp = serverUnit.Health;
+                clientBuild.Get<HealthComponent>().CurrentHp = serverBuild.Health;
                 break;
             }
 
