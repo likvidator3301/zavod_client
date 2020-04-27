@@ -22,13 +22,16 @@ namespace Systems
             
             return Physics.Raycast(ray, out hitInfo, range) && hitInfo.collider.gameObject.CompareTag(collisionTagName);
         }
-        
-        public static bool TryGetHitInfoFor(
-            Ray ray, out RaycastHit hitInfo,
-            string tagName = defaultCollisionTag,
-            int range = defaultRange)
+
+        public static bool TryGetHitInfoForPosition(
+            out RaycastHit hitInfo, Vector3 position, string collisionTagName = defaultCollisionTag, int range = defaultRange)
         {
-            return Physics.Raycast(ray, out hitInfo, range) && hitInfo.collider.gameObject.CompareTag(tagName);
+            hitInfo = default;
+            if (Camera.main == null)
+                return false;
+            var ray = Camera.main.ScreenPointToRay(position);
+            
+            return Physics.Raycast(ray, out hitInfo, range) && hitInfo.collider.gameObject.CompareTag(collisionTagName);
         }
         
         public static EcsEntity GetUnitEntityByRaycastHit(RaycastHit hitInfo, EcsEntity[] units)
@@ -40,17 +43,6 @@ namespace Systems
                 .FirstOrDefault(u => !u.IsNull()
                                      && u.IsAlive()
                                      && u.Get<UnitComponent>().Object.Equals(hitInfo.collider.gameObject));
-        }
-        
-        public static EcsEntity GetBuildingEntityByRaycastHit(RaycastHit hitInfo, EcsEntity[] buildings)
-        {
-            if (buildings == null)
-                return default;
-            
-            return buildings
-                .FirstOrDefault(u => !u.IsNull()
-                                     && u.IsAlive()
-                                     && u.Get<BuildingComponent>().Object.Equals(hitInfo.collider.gameObject));
         }
     }
 }
