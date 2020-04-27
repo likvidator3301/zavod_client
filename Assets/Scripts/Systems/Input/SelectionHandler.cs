@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Components;
-using Extensions;
 using Leopotam.Ecs;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 namespace Systems
@@ -13,44 +11,33 @@ namespace Systems
     {
         private readonly EcsFilter<UnitComponent, MyUnitComponent> myUnits = null;
         private List<EcsEntity> selectedUnits = new List<EcsEntity>();
-        private Vector3 startPosition = Vector3.zero;
-        private Vector3 endPosition = Vector3.zero;
+        private Vector3 mouseStartPosition = Vector3.zero;
+        private Vector3 mouseEndPosition = Vector3.zero;
         private readonly PlayerComponent player = null;
-        private const int selectionDeletingDelayWhileSelecting = 20;
+        private readonly SelectionRectangle selectionRectangle = new SelectionRectangle();
 
         public void Run() => HandleSelection();
         
-        private async void HandleSelection()
+        private void HandleSelection()
         {
             selectedUnits = selectedUnits.Where(u => u.IsNotNullAndAlive()).ToList();
             player.SelectedUnits = player.SelectedUnits.Where(u => u.IsNotNullAndAlive()).ToList();
 
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
-                if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoStart))
-                    startPosition = hitInfoStart.point;
-                return;
-            }
-
             if (Input.GetMouseButtonDown((int)MouseButton.LeftMouse))
-            {
-                if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoStart))
-                    startPosition = hitInfoStart.point;
-            }
+                mouseStartPosition = Input.mousePosition;
 
             if (Input.GetMouseButton((int)MouseButton.LeftMouse))
             {
                 selectedUnits.DehighlightObjects();
                 selectedUnits.Clear();
-                if (RaycastHelper.TryGetHitInfoForMousePosition(out var hitInfoEnd))
-                {
-                    endPosition = hitInfoEnd.point;
-                    var selectionInfo = new SelectionRectangle(startPosition, endPosition);
-                    var selectionFrame = selectionInfo.GetSelectionFrame();
-                    selectedUnits = selectionInfo.GetUnitsInFrame(myUnits.Entities.Take(myUnits.GetEntitiesCount()));
-                    selectedUnits.HighlightObjects();
-                    await selectionFrame.DestroyObjectWithDelay(selectionDeletingDelayWhileSelecting);
-                }
+                mouseEndPosition = Input.mousePosition;
+                selectionRectangle.UpdateSelectionRectangle(mouseStartPosition, mouseEndPosition);
+                
+                selectedUnits = selectionRectangle.GetUnitsInFrame(
+                    mouseStartPosition,
+                    mouseEndPosition,
+                    myUnits.Entities.Take(myUnits.GetEntitiesCount()));
+                selectedUnits.HighlightObjects();
             }
 
             if (Input.GetMouseButtonUp((int)MouseButton.LeftMouse))

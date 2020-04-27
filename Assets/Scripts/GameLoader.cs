@@ -14,6 +14,7 @@ public class GameLoader : MonoBehaviour
 
     private EcsWorld world;
     private EcsSystems systems;
+    private EcsSystems guiSystems;
 
 
     public void Start()
@@ -24,7 +25,13 @@ public class GameLoader : MonoBehaviour
 
 #if UNITY_EDITOR
         Leopotam.Ecs.UnityIntegration.EcsWorldObserver.Create(world);
-#endif  
+#endif
+
+        guiSystems = new EcsSystems(world)
+            .Add(new SelectionHandler())
+            .Inject(gameDefinitions)
+            .Inject(playerComponent)
+            .ProcessInjects();
 
         var controlsSystems = new EcsSystems(world)
             .Add(new BuildingPlaceSelectionSystem())
@@ -36,7 +43,6 @@ public class GameLoader : MonoBehaviour
             .Add(new InputSystem())
             .Add(new CameraSystem())
             .Add(new UnitActionHandler())
-            .Add(new SelectionHandler())
             .Add(new CheckClickOnBuildsSystem())
             .Add(new ButtonsClickSystem())
             .Add(new UnitFindAvailableBuildingSystem())
@@ -114,6 +120,7 @@ public class GameLoader : MonoBehaviour
             .ProcessInjects();
 
         systems.Init();
+        guiSystems.Init();
 #if UNITY_EDITOR
         Leopotam.Ecs.UnityIntegration.EcsSystemsObserver.Create(systems);
 #endif
@@ -122,6 +129,12 @@ public class GameLoader : MonoBehaviour
     void Update()
     {
         systems.Run();
+        world.EndFrame();
+    }
+
+    void OnGUI()
+    {
+        guiSystems.Run();
         world.EndFrame();
     }
 
