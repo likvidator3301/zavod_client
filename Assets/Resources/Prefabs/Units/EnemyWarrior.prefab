@@ -2666,7 +2666,7 @@ Transform:
   - {fileID: 4107246378167918}
   - {fileID: 4624027451746760}
   - {fileID: 4112788959041076}
-  - {fileID: 107558661562649202}
+  - {fileID: 6123792281476891501}
   - {fileID: 76396045263655497}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -2714,10 +2714,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 4
+  m_Speed: 6
   m_Acceleration: 15
   avoidancePriority: 50
-  m_AngularSpeed: 160
+  m_AngularSpeed: 200
   m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -4972,16 +4972,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4161788898430874}
     m_Modifications:
-    - target: {fileID: 24946082752321481, guid: 181d2622f9cc13e47bcd0262bb6e9f28,
-        type: 3}
-      propertyPath: m_Name
-      value: HealthBar
-      objectReference: {fileID: 0}
-    - target: {fileID: 24946082752321481, guid: 181d2622f9cc13e47bcd0262bb6e9f28,
-        type: 3}
-      propertyPath: m_TagString
-      value: HealthBar
-      objectReference: {fileID: 0}
     - target: {fileID: 6161545145369019251, guid: 181d2622f9cc13e47bcd0262bb6e9f28,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5052,6 +5042,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 24946082752321481, guid: 181d2622f9cc13e47bcd0262bb6e9f28,
+        type: 3}
+      propertyPath: m_Name
+      value: HealthBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 24946082752321481, guid: 181d2622f9cc13e47bcd0262bb6e9f28,
+        type: 3}
+      propertyPath: m_TagString
+      value: HealthBar
+      objectReference: {fileID: 0}
     - target: {fileID: 2375442488679734108, guid: 181d2622f9cc13e47bcd0262bb6e9f28,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -5084,7 +5084,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 181d2622f9cc13e47bcd0262bb6e9f28, type: 3}
---- !u!4 &107558661562649202 stripped
+--- !u!4 &6123792281476891501 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6161545145369019251, guid: 181d2622f9cc13e47bcd0262bb6e9f28,
     type: 3}

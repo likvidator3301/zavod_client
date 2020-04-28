@@ -47,11 +47,12 @@ namespace Systems.Communication
                 serverBuilding.RotationInEulerAngle.ToUnityVector(),
                 tag,
                 serverBuilding.Id);
+
             enemyBuild.Set<EnemyBuildingComponent>();
+
             var hb = enemyBuild.Get<HealthComponent>();
             hb.MaxHp = serverBuilding.Health;
             hb.CurrentHp = serverBuilding.Health;
-            enemyBuild.Set<MovementComponent>().InitializeComponent(enemyBuild.Get<BuildingComponent>().Object);
         }
 
         private bool TryUpdateClientBuilding(OutputUnitState serverBuild, IEnumerable<EcsEntity> clientBuildings)

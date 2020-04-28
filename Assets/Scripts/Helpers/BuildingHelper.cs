@@ -22,7 +22,9 @@ namespace Systems
             Vector3 rotation, 
             BuildingTag tag)
         {
-            return CreateBuilding(world, buildingAsset, canvasAsset, position, rotation, tag, Guid.NewGuid());
+            var building = CreateBuilding(world, buildingAsset, canvasAsset, position, rotation, tag, Guid.NewGuid());
+            building.Set<MyBuildingComponent>();
+            return building;
         }
 
         public static EcsEntity CreateBuilding(EcsWorld world, 
@@ -42,7 +44,6 @@ namespace Systems
 
             buildingEntity.Set<HealthComponent>().InitializeComponent(200);
             buildingEntity.Set<HealthBarComponent>().InitializeComponent(building.Object);
-            buildingEntity.Set<MyBuildingComponent>();
             buildingEntity.Set<MovementComponent>().InitializeComponent(building.Object);
 
             if (tag == BuildingTag.Base)
